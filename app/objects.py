@@ -35,7 +35,9 @@ class CelestialBody(SimulationObject):
         celestial_bodies.add(self)
 
     # Set object's surface, rect and image
-    def set_rect(self):
+    def set_rect(self, radius):
+        self.radius = radius
+        self.diameter = 2 * self.radius
         self.image = pygame.Surface((self.diameter, self.diameter)).convert_alpha()
         self.image.fill((0, 0, 0, 0))
 
@@ -51,9 +53,8 @@ class CelestialBody(SimulationObject):
 class Planet(CelestialBody):
     def __init__(self, x, y, velocity_x, velocity_y, mass, color):
         super().__init__(x, y, mass, color)
-        self.radius = 8 // K
-        self.diameter = 2 * self.radius
-        self.set_rect()
+        planet_radius = 8 // K
+        self.set_rect(radius=planet_radius)
 
         self.traces = []  # Array of dots
         self.max_trace_length = 400  # Max size of array
@@ -138,9 +139,7 @@ class Planet(CelestialBody):
 class Star(CelestialBody):
     def __init__(self, x, y, mass, color):
         super().__init__(x, y, mass, color)
-
-        self.radius = 30 // K
-        self.diameter = 2 * self.radius
-        self.set_rect()
+        star_radius = 30 // K
+        self.set_rect(radius=star_radius)
 
         stars.add(self)
