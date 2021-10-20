@@ -1,3 +1,7 @@
+"""
+Main project file, that containing game loop
+"""
+
 # Modules
 import pygame
 from pygame.math import Vector2

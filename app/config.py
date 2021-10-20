@@ -1,3 +1,6 @@
+"""
+Module containing general settings of entire project
+"""
 # Modules
 import pygame
 from math import sqrt

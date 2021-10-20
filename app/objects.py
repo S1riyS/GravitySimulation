@@ -1,3 +1,7 @@
+"""
+Module containing objects classes of simulations objects
+"""
+
 # Modules
 from math import sqrt
 
@@ -14,6 +18,11 @@ stars = pygame.sprite.Group()
 
 # Main simulation class
 class SimulationObject(pygame.sprite.Sprite):
+    """
+    Main Class of simulation.
+    Inherited from PyGame Sprite Class.
+    """
+
     __ID = 1  # Each object of simulation has ID
 
     def __init__(self, x, y, color):
@@ -29,6 +38,11 @@ class SimulationObject(pygame.sprite.Sprite):
 
 # Celestial body class
 class CelestialBody(SimulationObject):
+    """
+    Class that contains general settings of 'celestial bodies'.
+    Inherited from SimulationObject Class.
+    """
+
     def __init__(self, x, y, mass, color):
         super().__init__(x, y, color)
 
@@ -52,6 +66,11 @@ class CelestialBody(SimulationObject):
 
 # Planet class
 class Planet(CelestialBody):
+    """
+    Class that describing fields and methods of 'Planets'.
+    Inherited from CelestialBody Class.
+    """
+
     def __init__(self, x, y, velocity_x, velocity_y, mass, color):
         super().__init__(x, y, mass, color)
         planet_radius = 8 // K
@@ -138,6 +157,10 @@ class Planet(CelestialBody):
 
 # Star class
 class Star(CelestialBody):
+    """
+    Class that describing 'Stars'.
+    Inherited from CelestialBody Class.
+    """
     def __init__(self, x, y, mass, color):
         super().__init__(x, y, mass, color)
         star_radius = 30 // K
