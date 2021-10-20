@@ -31,7 +31,7 @@ To create star only thing you should do is press **Mouse2**.
 ## 💻 Modules
 * **[PyGame](https://pypi.org/project/pygame/)** -  is a free and open-source cross-platform library for 
 the development of multimedia applications like video games using Python.
-* **[PyGame GUI](https://pypi.org/project/pygame/)** - is a module to help you make graphical user interfaces in 
+* **[PyGame GUI](https://pygame-gui.readthedocs.io/en/latest/)** - is a module to help you make graphical user interfaces in 
 for games written in PyGame.
 
 ## 🎞 Preview
