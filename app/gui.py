@@ -24,7 +24,7 @@ G_label = pygame_gui.elements.UILabel(relative_rect=pygame.Rect(10, 60, 200, 20)
 K_label = pygame_gui.elements.UILabel(relative_rect=pygame.Rect(10, 85, 200, 20),
                                       text=f'Distance coef = {K_value}', manager=manager)
 
-GUI_array.extend([velocity_x_label, velocity_x_label, G_label, K_label])  # Adding elements to array
+GUI_array.extend([velocity_x_label, velocity_y_label, G_label, K_label])  # Adding elements to array
 
 # Manager rect
 manager_rect_indent = 10  # Indent
