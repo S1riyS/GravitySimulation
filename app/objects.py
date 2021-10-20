@@ -1,3 +1,4 @@
+# Modules
 from math import sqrt
 
 import pygame
@@ -19,9 +20,9 @@ class SimulationObject(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         self.id = SimulationObject.__ID
 
-        self.x = x
-        self.y = y
-        self.color = color
+        self.x = x  # X coordinate
+        self.y = y  # Y coordinate
+        self.color = color  # Color
 
         SimulationObject.__ID += 1  # Increasing ID by 1
 

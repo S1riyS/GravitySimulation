@@ -1,3 +1,4 @@
+# Modules
 import pygame
 from math import sqrt
 
@@ -26,10 +27,10 @@ G = 0.0005  # Gravitation constant
 # Distance coefficient (square root proportion)
 K_value = 1
 K = sqrt(K_value)
-max_trace_length = 400 # Max length of planet's trace
+max_trace_length = 400  # Max length of planet's trace
 
 # Planet preview
 pv_radius = 8 // K
 pv_line_length_coef = 20 / K
 pv_line_thickness = 2
-pv_velocity_value_coef = 1/80
+pv_velocity_value_coef = 1 / 80
