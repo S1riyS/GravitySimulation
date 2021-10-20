@@ -8,18 +8,7 @@ from objects import *
 
 pygame.init()
 
-manager = pygame_gui.UIManager((WIDTH, HEIGHT))  # GUI manager
-
-# GUI
-velocity_x_label = pygame_gui.elements.UILabel(relative_rect=pygame.Rect(10, 10, 200, 20),
-                                               text='X velocity: None', manager=manager)
-velocity_y_label = pygame_gui.elements.UILabel(relative_rect=pygame.Rect(10, 35, 200, 20),
-                                               text='Y velocity: None', manager=manager)
-G_label = pygame_gui.elements.UILabel(relative_rect=pygame.Rect(10, 60, 200, 20),
-                                      text='G = ' + str(G), manager=manager)
-K_label = pygame_gui.elements.UILabel(relative_rect=pygame.Rect(10, 85, 200, 20),
-                                      text='Distance coef = ' + str(K_value), manager=manager)
-
+from gui import *
 
 # Game loop
 run = True
@@ -35,15 +24,16 @@ while run:
         if event.type == pygame.MOUSEBUTTONDOWN:
             mouse_position = pygame.mouse.get_pos()
             mouse_x, mouse_y = mouse_position[0], mouse_position[1]
+            is_mouse_on_gui = manager_rect.collidepoint((mouse_x, mouse_y))
 
-            if event.button == 3:
+            if event.button == 3 and not is_mouse_on_gui:
                 Star(
                     x=mouse_x,
                     y=mouse_y,
                     mass=10000,
                     color=YELLOW)
 
-        if event.type == pygame.MOUSEBUTTONUP:
+        if event.type == pygame.MOUSEBUTTONUP and not is_mouse_on_gui:
             if event.button == 1:
                 try:
                     Planet(
@@ -62,7 +52,7 @@ while run:
                     print('Velocity vector is not defined')
 
     pressed = pygame.mouse.get_pressed()  # Pressed buttons
-    if pressed[0]:
+    if pressed[0] and not is_mouse_on_gui:
         # Mouse position (x, y)
         mouse_position = pygame.mouse.get_pos()
         current_mouse_x, current_mouse_y = mouse_position[0], mouse_position[1]
@@ -73,8 +63,8 @@ while run:
         velocity_vector = -(current_pos_vector - pressed_pos_vector) * pv_velocity_value_coef
 
         # Setting labels
-        velocity_x_label.set_text('X velocity: ' + str(round(velocity_vector.x, 4)))
-        velocity_y_label.set_text('Y velocity: ' + str(round(velocity_vector.y, 4)))
+        velocity_x_label.set_text(f'X velocity: {round(velocity_vector.x, 4)}')
+        velocity_y_label.set_text(f'Y velocity: {round(velocity_vector.y, 4)}')
 
         # Drawing preview
         pygame.draw.circle(screen, WHITE, (mouse_x, mouse_y), pv_radius)
@@ -86,6 +76,7 @@ while run:
         manager.process_events(event)
 
     # Updating screen and groups of sprites
+    pygame.draw.rect(screen, manager_rect_color, manager_rect)
     celestial_bodies.update()
     celestial_bodies.draw(screen)
     manager.update(time_delta)
