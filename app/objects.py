@@ -50,18 +50,54 @@ class CelestialBody(SimulationObject):
         celestial_bodies.add(self)
 
     # Set object's surface, rect and image
-    def set_rect(self, radius):
+    def set_rect(self, radius: int):
         self.radius = radius
-        self.diameter = 2 * self.radius
-        self.image = pygame.Surface((self.diameter, self.diameter)).convert_alpha()
+        self.image = pygame.Surface((2 * self.radius, 2 * self.radius)).convert_alpha()
         self.image.fill((0, 0, 0, 0))
 
         self.rect = self.image.get_rect()
-        self.rect.centerx = self.x
-        self.rect.centery = self.y
+        self.rect.center = (self.x, self.y)
         self.position_vector = Vector2(self.rect.centerx, self.rect.centery)
 
-        pygame.draw.circle(self.image, self.color, (self.radius, self.radius), self.radius)
+    def draw_object_body(self):
+        pygame.draw.circle(
+            self.image,  # Surface
+            self.color,  # Color
+            (self.image.get_width() // 2, self.image.get_height() // 2),  # Relative position
+            self.radius  # Object radius
+        )
+
+    def draw_object_glow(self, glow_radius: int, glow_color: pygame.Color, glow_layers: int):
+        """
+        Method in which the glow is drawn
+        :param glow_radius: Max radius of glowing
+        :param glow_color: Color of glowing
+        :param glow_layers: Number of layers of glowing
+        :return: None
+        """
+
+        # Glow surface
+        surface_side = 2 * (self.radius + glow_radius)
+        self.glow_surface = pygame.Surface((surface_side, surface_side)).convert_alpha()
+        self.glow_surface.fill((0, 0, 0, 0))
+        center_of_surface = (surface_side // 2, surface_side // 2)
+
+        for i in range(glow_layers):
+            # Calculating color of glow
+            current_glow_alpha = min(20 * (i + 1), 255)  # Calculated alpha (from 0 to 255)
+            current_glow_color = glow_color  # Setting current color
+            current_glow_color.a = current_glow_alpha  # Setting alpha to current color
+
+            pygame.draw.circle(
+                self.glow_surface,  # Surface
+                current_glow_color,  # Color
+                center_of_surface,  # Relative position
+                self.radius + glow_radius * ((glow_layers - i) / glow_layers)  # Glow radius
+            )
+
+        # Drawing glow on a screen
+        position = (self.rect.centerx - self.radius - glow_radius, self.rect.centery - self.radius - glow_radius)
+        screen.blit(self.glow_surface, position)  # Drawing glow on screen
 
 
 # Planet class
@@ -75,6 +111,7 @@ class Planet(CelestialBody):
         super().__init__(x, y, mass, color)
         planet_radius = 8 // K
         self.set_rect(radius=planet_radius)
+        self.draw_object_body()
 
         self.traces = []  # Array of dots
         self.max_trace_length = 400  # Max size of array
@@ -161,9 +198,18 @@ class Star(CelestialBody):
     Class that describing 'Stars'.
     Inherited from CelestialBody Class.
     """
+
     def __init__(self, x, y, mass, color):
         super().__init__(x, y, mass, color)
         star_radius = 30 // K
         self.set_rect(radius=star_radius)
 
+        self.glow_radius = star_radius * 0.7  # Size of glow
+        self.glow_color = pygame.Color(252, 255, 10)  # Without alpha
+
+        self.draw_object_body()  # Drawing body of Star
+
         stars.add(self)
+
+    def update(self, *args, **kwargs) -> None:
+        self.draw_object_glow(glow_radius=self.glow_radius, glow_color=self.glow_color, glow_layers=5)
