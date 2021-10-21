@@ -113,6 +113,9 @@ class Planet(CelestialBody):
         self.set_rect(radius=planet_radius)
         self.draw_object_body()
 
+        self.glow_radius = planet_radius * 1.5  # Size of glow
+        self.glow_color = pygame.Color(144, 238, 144)  # Without alpha
+
         self.traces = []  # Array of dots
         self.max_trace_length = 400  # Max size of array
         self.velocity = Vector2(velocity_x, velocity_y)  # Set initial velocity
@@ -190,6 +193,8 @@ class Planet(CelestialBody):
         self.collision_with_stars()
         self.is_out_of_system()
         self.draw_trace()
+
+        self.draw_object_glow(glow_radius=self.glow_radius, glow_color=self.glow_color, glow_layers=3)
 
 
 # Star class
