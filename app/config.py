@@ -1,27 +1,32 @@
 """
 Module containing general settings of entire project
 """
+
 # Modules
 import pygame
 from math import sqrt
 
 # Colors
-BLACK = (12, 12, 12)
-WHITE = (255, 255, 255)
-RED = (255, 0, 0)
-LIGHT_GREEN = (144, 238, 144)
-FOREST_GREEN = (0, 255, 0)
-BLUE = (0, 0, 255)
-DARK_BLUE = (0, 0, 15)
-YELLOW = (252, 255, 17)
+BLACK = pygame.Color(12, 12, 12)
+WHITE = pygame.Color(255, 255, 255)
+
+RED = pygame.Color(255, 0, 0)
+YELLOW = pygame.Color(252, 255, 17)
+
+LIGHT_GREEN = pygame.Color(144, 238, 144)
+FOREST_GREEN = pygame.Color(0, 255, 0)
+
+BLUE = pygame.Color(0, 0, 255)
+DARK_BLUE = pygame.Color(0, 6, 15)
 
 # Window
 WIDTH = 1280
 HEIGHT = 720
+WINDOW_SIZE = (WIDTH, HEIGHT)
 FPS = 120
 
 # Game settings
-screen = pygame.display.set_mode((WIDTH, HEIGHT))
+screen = pygame.display.set_mode(WINDOW_SIZE)
 pygame.display.set_caption("Gravity Simulation")
 clock = pygame.time.Clock()
 

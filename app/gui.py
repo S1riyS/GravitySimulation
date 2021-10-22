@@ -9,7 +9,7 @@ import pygame_gui
 from config import *
 
 # GUI manager
-manager = pygame_gui.UIManager((WIDTH, HEIGHT))
+manager = pygame_gui.UIManager(WINDOW_SIZE)
 
 GUI_margin = 10  # Margin of GUI
 GUI_array = []  # Array of GUI elements
