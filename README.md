@@ -29,18 +29,18 @@ To create star only thing you should do is press **Mouse2**.
 *New features will be added later...*
 
 ## ⬇ Installation
-First off all you have to install **[Python 3.x](https://www.python.org/)**.
+* First off all you have to install **[Python 3.x](https://www.python.org/)**.
 
-To get started, you should **clone repository** to your local machine. 
+* Then **clone repository** to your local machine. 
 To do this write following command in the console:
 
-`git clone https://github.com/S1riyS/GravitySimulation.git`
+    `git clone https://github.com/S1riyS/GravitySimulation.git`
 
-Then you have to install all necessary modules:
+* Install all the necessary modules: 
 
-`pip install -r requirements.txt`
+    `pip install -r requirements.txt`
 
-Then you can start `main.py` file
+Now you can start `app/main.py` file
 
 ## 💻 Modules
 * **[PyGame](https://pypi.org/project/pygame/)** -  is a free and open-source cross-platform library for 
