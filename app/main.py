@@ -7,94 +7,105 @@ import pygame
 from pygame.math import Vector2
 import pygame_gui
 
-from config import *
-from objects import *
+from app.config import *
 
 pygame.init()
 
-# PyGame screen variables
-screen = pygame.display.set_mode(WINDOW_SIZE)
-pygame.display.set_caption("Gravity Simulation")
-clock = pygame.time.Clock()
 
+class Game:
+    def __init__(self):
+        # PyGame screen variables
+        self.screen = pygame.display.set_mode(WINDOW_SIZE)  # Initialize screen
+        pygame.display.set_caption("Gravity Simulation")  # Caption
+        self.clock = pygame.time.Clock()  # Clock
 
-from gui import * # Importing entire GUI
+    def run(self):
+        # Import everything necessary from objects
+        from app.objects import simulation_surface, celestial_bodies, Planet, Star
 
-def main():
-    # Game loop
-    run = True
-    while run:
-        screen.fill(DARK_BLUE)
-        clock.tick(FPS)
-        time_delta = clock.tick(FPS) / 1000.0
+        # Game loop
+        run = True
+        while run:
+            simulation_surface.fill((0, 0, 0, 0))
+            self.screen.fill(DARK_BLUE)
 
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                run = False
+            self.clock.tick(FPS)
+            time_delta = self.clock.tick(FPS) / 1000.0
 
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                mouse_position = pygame.mouse.get_pos()
-                mouse_x, mouse_y = mouse_position[0], mouse_position[1]
-                is_mouse_on_gui = manager_rect.collidepoint((mouse_x, mouse_y))
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    run = False
 
-                if event.button == 3 and not is_mouse_on_gui:
-                    Star(
-                        x=mouse_x,
-                        y=mouse_y,
-                        mass=10000,
-                        color=YELLOW)
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    mouse_position = pygame.mouse.get_pos()
+                    mouse_x, mouse_y = mouse_position[0], mouse_position[1]
+                    is_mouse_on_gui = manager_rect.collidepoint((mouse_x, mouse_y))
 
-            if event.type == pygame.MOUSEBUTTONUP and not is_mouse_on_gui:
-                if event.button == 1:
-                    try:
-                        Planet(
+                    if event.button == 3 and not is_mouse_on_gui:
+                        Star(
                             x=mouse_x,
                             y=mouse_y,
-                            velocity_x=velocity_vector.x,
-                            velocity_y=velocity_vector.y,
-                            mass=150,
-                            color=FOREST_GREEN
+                            mass=10000,
+                            color=YELLOW
                         )
 
-                        velocity_x_label.set_text('X velocity: None')
-                        velocity_y_label.set_text('Y velocity: None')
+                if event.type == pygame.MOUSEBUTTONUP and not is_mouse_on_gui:
+                    if event.button == 1:
+                        try:
+                            Planet(
+                                x=mouse_x,
+                                y=mouse_y,
+                                velocity_x=velocity_vector.x,
+                                velocity_y=velocity_vector.y,
+                                mass=150,
+                                color=FOREST_GREEN
+                            )
 
-                    except Exception as error:
-                        print('Velocity vector is not defined')
+                            velocity_x_label.set_text('X velocity: None')
+                            velocity_y_label.set_text('Y velocity: None')
 
-        pressed = pygame.mouse.get_pressed()  # Pressed buttons
-        if pressed[0] and not is_mouse_on_gui:
-            # Mouse position (x, y)
-            mouse_position = pygame.mouse.get_pos()
-            current_mouse_x, current_mouse_y = mouse_position[0], mouse_position[1]
+                        except Exception as error:
+                            print('Velocity vector is not defined')
 
-            # Calculating velocity vector
-            current_pos_vector = Vector2(current_mouse_x, current_mouse_y)
-            pressed_pos_vector = Vector2(mouse_x, mouse_y)
-            velocity_vector = -(current_pos_vector - pressed_pos_vector) * pv_velocity_value_coef
+            pressed = pygame.mouse.get_pressed()  # Pressed buttons
+            if pressed[0] and not is_mouse_on_gui:
+                # Mouse position (x, y)
+                mouse_position = pygame.mouse.get_pos()
+                current_mouse_x, current_mouse_y = mouse_position[0], mouse_position[1]
 
-            # Setting labels
-            velocity_x_label.set_text(f'X velocity: {round(velocity_vector.x, 4)}')
-            velocity_y_label.set_text(f'Y velocity: {round(velocity_vector.y, 4)}')
+                # Calculating velocity vector
+                current_pos_vector = Vector2(current_mouse_x, current_mouse_y)
+                pressed_pos_vector = Vector2(mouse_x, mouse_y)
+                velocity_vector = -(current_pos_vector - pressed_pos_vector) * pv_velocity_value_coef
 
-            # Drawing preview
-            pygame.draw.circle(screen, WHITE, (mouse_x, mouse_y), pv_radius)
-            pygame.draw.line(screen, WHITE,
-                             (mouse_x, mouse_y),
-                             (mouse_x + velocity_vector.x * pv_line_length_coef,
-                              mouse_y + velocity_vector.y * pv_line_length_coef), pv_line_thickness)
+                # Setting labels
+                velocity_x_label.set_text(f'X velocity: {round(velocity_vector.x, 4)}')
+                velocity_y_label.set_text(f'Y velocity: {round(velocity_vector.y, 4)}')
 
-            manager.process_events(event)
+                # Drawing preview
+                pygame.draw.circle(self.screen, WHITE, (mouse_x, mouse_y), pv_radius)
+                pygame.draw.line(self.screen, WHITE,
+                                 (mouse_x, mouse_y),
+                                 (mouse_x + velocity_vector.x * pv_line_length_coef,
+                                  mouse_y + velocity_vector.y * pv_line_length_coef), pv_line_thickness)
 
-        # Updating screen and groups of sprites
-        pygame.draw.rect(screen, manager_rect_color, manager_rect)
-        celestial_bodies.update()
-        celestial_bodies.draw(screen)
-        manager.update(time_delta)
-        manager.draw_ui(screen)
-        pygame.display.flip()
+                manager.process_events(event)
 
-    pygame.quit()
+            # Updating self.screen and groups of sprites
+            celestial_bodies.update()
+            celestial_bodies.draw(self.screen)
+            self.screen.blit(simulation_surface, (0, 0))
+
+            pygame.draw.rect(self.screen, manager_rect_color, manager_rect)
+            manager.update(time_delta)
+            manager.draw_ui(self.screen)
+            pygame.display.flip()
+
+        pygame.quit()
+
 
 if __name__ == "__main__":
-    main()
+    game = Game()
+    from gui import *  # Importing entire GUI
+
+    game.run()

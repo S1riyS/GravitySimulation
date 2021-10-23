@@ -8,8 +8,11 @@ from math import sqrt
 import pygame
 from pygame.math import Vector2
 
-from config import *
-from app.main import screen
+from app.config import *
+
+# Surface with some objects of simulation
+simulation_surface = pygame.Surface(WINDOW_SIZE).convert_alpha()
+simulation_surface.fill((0, 0, 0, 0))
 
 # Sprite groups
 celestial_bodies = pygame.sprite.Group()
@@ -98,7 +101,7 @@ class CelestialBody(SimulationObject):
 
         # Drawing glow on a screen
         position = (self.rect.centerx - self.radius - glow_radius, self.rect.centery - self.radius - glow_radius)
-        screen.blit(self.glow_surface, position)  # Drawing glow on screen
+        simulation_surface.blit(self.glow_surface, position)  # Drawing glow on screen
 
 
 # Planet class
@@ -181,7 +184,7 @@ class Planet(CelestialBody):
 
         for index, pos in enumerate(self.traces):
             line_thickness = min(index // 100 + 1, 3)  # Calculated value or 3
-            pygame.draw.line(screen, LIGHT_GREEN, previous_pos, pos, line_thickness)  # Drawing line
+            pygame.draw.line(simulation_surface, LIGHT_GREEN, previous_pos, pos, line_thickness)  # Drawing line
             previous_pos = pos  # Setting previous position
 
     def update(self, *args, **kwargs) -> None:
