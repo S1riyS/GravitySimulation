@@ -7,15 +7,10 @@ import pygame
 from math import sqrt
 
 # Colors
-BLACK = pygame.Color(12, 12, 12)
 WHITE = pygame.Color(255, 255, 255)
-
-RED = pygame.Color(255, 0, 0)
 YELLOW = pygame.Color(252, 255, 17)
-
 LIGHT_GREEN = pygame.Color(144, 238, 144)
 FOREST_GREEN = pygame.Color(0, 255, 0)
-
 BLUE = pygame.Color(0, 0, 255)
 DARK_BLUE = pygame.Color(0, 6, 15)
 
@@ -24,11 +19,6 @@ WIDTH = 1280
 HEIGHT = 720
 WINDOW_SIZE = (WIDTH, HEIGHT)
 FPS = 120
-
-# Game settings
-screen = pygame.display.set_mode(WINDOW_SIZE)
-pygame.display.set_caption("Gravity Simulation")
-clock = pygame.time.Clock()
 
 # Simulation variables
 G = 0.0005  # Gravitation constant

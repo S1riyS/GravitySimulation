@@ -9,6 +9,7 @@ import pygame
 from pygame.math import Vector2
 
 from config import *
+from app.main import screen
 
 # Sprite groups
 celestial_bodies = pygame.sprite.Group()

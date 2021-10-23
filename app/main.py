@@ -12,7 +12,13 @@ from objects import *
 
 pygame.init()
 
-from gui import *
+# PyGame screen variables
+screen = pygame.display.set_mode(WINDOW_SIZE)
+pygame.display.set_caption("Gravity Simulation")
+clock = pygame.time.Clock()
+
+
+from gui import * # Importing entire GUI
 
 def main():
     # Game loop
