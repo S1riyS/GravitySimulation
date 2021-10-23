@@ -26,20 +26,22 @@ class Game:
         # Game loop
         run = True
         while run:
+            # Filling surfaces
             simulation_surface.fill((0, 0, 0, 0))
             self.screen.fill(DARK_BLUE)
 
             self.clock.tick(FPS)
             time_delta = self.clock.tick(FPS) / 1000.0
 
+            # Event loop
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     run = False
 
                 if event.type == pygame.MOUSEBUTTONDOWN:
-                    mouse_position = pygame.mouse.get_pos()
-                    mouse_x, mouse_y = mouse_position[0], mouse_position[1]
-                    is_mouse_on_gui = manager_rect.collidepoint((mouse_x, mouse_y))
+                    pressed_mouse_position = pygame.mouse.get_pos()
+                    mouse_x, mouse_y = pressed_mouse_position
+                    is_mouse_on_gui = manager_rect.collidepoint(pressed_mouse_position)  # Checking if mouse on GUI
 
                     if event.button == 3 and not is_mouse_on_gui:
                         Star(
@@ -70,8 +72,8 @@ class Game:
             pressed = pygame.mouse.get_pressed()  # Pressed buttons
             if pressed[0] and not is_mouse_on_gui:
                 # Mouse position (x, y)
-                mouse_position = pygame.mouse.get_pos()
-                current_mouse_x, current_mouse_y = mouse_position[0], mouse_position[1]
+                current_mouse_position = pygame.mouse.get_pos()
+                current_mouse_x, current_mouse_y = current_mouse_position
 
                 # Calculating velocity vector
                 current_pos_vector = Vector2(current_mouse_x, current_mouse_y)
@@ -91,14 +93,20 @@ class Game:
 
                 manager.process_events(event)
 
-            # Updating self.screen and groups of sprites
+            # --- Updating self.screen and groups of sprites --- #
+            # Celestial bodies
             celestial_bodies.update()
             celestial_bodies.draw(self.screen)
+
+            # Simulation surface
             self.screen.blit(simulation_surface, (0, 0))
 
+            # GUI
             pygame.draw.rect(self.screen, manager_rect_color, manager_rect)
             manager.update(time_delta)
             manager.draw_ui(self.screen)
+
+            # Display
             pygame.display.flip()
 
         pygame.quit()
