@@ -8,6 +8,7 @@ from pygame.math import Vector2
 import pygame_gui
 
 from app.config import *
+from app.gui import GUIManager  # Importing entire GUI
 
 pygame.init()
 
@@ -18,6 +19,13 @@ class Game:
         self.screen = pygame.display.set_mode(WINDOW_SIZE)  # Initialize screen
         pygame.display.set_caption("Gravity Simulation")  # Caption
         self.clock = pygame.time.Clock()  # Clock
+
+        # GUI
+        self.gui_manager = GUIManager()
+        # Info block
+        self.info_gui_rect = self.gui_manager.get_gui_rect(self.gui_manager.info_block, 10)
+        self.info_gui_elements = self.gui_manager.info_block['elements_dict']
+
 
     def run(self):
         # Import everything necessary from objects
@@ -41,19 +49,20 @@ class Game:
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     pressed_mouse_position = pygame.mouse.get_pos()
                     mouse_x, mouse_y = pressed_mouse_position
-                    is_mouse_on_gui = manager_rect.collidepoint(pressed_mouse_position)  # Checking if mouse on GUI
+                    is_mouse_on_gui = self.info_gui_rect.collidepoint(pressed_mouse_position)  # Checking if mouse on GUI
 
                     if event.button == 3 and not is_mouse_on_gui:
                         Star(
                             x=mouse_x,
                             y=mouse_y,
-                            mass=10000,
+                            mass=20000,
                             color=YELLOW
                         )
 
                 if event.type == pygame.MOUSEBUTTONUP and not is_mouse_on_gui:
                     if event.button == 1:
                         try:
+                            # Creating planet
                             Planet(
                                 x=mouse_x,
                                 y=mouse_y,
@@ -63,8 +72,9 @@ class Game:
                                 color=FOREST_GREEN
                             )
 
-                            velocity_x_label.set_text('X velocity: None')
-                            velocity_y_label.set_text('Y velocity: None')
+                            # Setting labels
+                            self.info_gui_elements['velocity_x_label'].set_text('X velocity: None')
+                            self.info_gui_elements['velocity_y_label'].set_text('Y velocity: None')
 
                         except Exception as error:
                             print('Velocity vector is not defined')
@@ -81,8 +91,8 @@ class Game:
                 velocity_vector = -(current_pos_vector - pressed_pos_vector) * pv_velocity_value_coef
 
                 # Setting labels
-                velocity_x_label.set_text(f'X velocity: {round(velocity_vector.x, 4)}')
-                velocity_y_label.set_text(f'Y velocity: {round(velocity_vector.y, 4)}')
+                self.info_gui_elements['velocity_x_label'].set_text(f'X velocity: {round(velocity_vector.x, 4)}')
+                self.info_gui_elements['velocity_y_label'].set_text(f'Y velocity: {round(velocity_vector.y, 4)}')
 
                 # Drawing preview
                 pygame.draw.circle(self.screen, WHITE, (mouse_x, mouse_y), pv_radius)
@@ -91,20 +101,19 @@ class Game:
                                  (mouse_x + velocity_vector.x * pv_line_length_coef,
                                   mouse_y + velocity_vector.y * pv_line_length_coef), pv_line_thickness)
 
-                manager.process_events(event)
+                self.gui_manager.manager.process_events(event)
 
-            # --- Updating self.screen and groups of sprites --- #
-            # Celestial bodies
+            # --- Updating elements of game  --- #
+
+            # Simulation objects
             celestial_bodies.update()
+            self.screen.blit(simulation_surface, (0, 0))
             celestial_bodies.draw(self.screen)
 
-            # Simulation surface
-            self.screen.blit(simulation_surface, (0, 0))
-
             # GUI
-            pygame.draw.rect(self.screen, manager_rect_color, manager_rect)
-            manager.update(time_delta)
-            manager.draw_ui(self.screen)
+            pygame.draw.rect(self.screen, self.gui_manager.manager_rect_color, self.info_gui_rect)
+            self.gui_manager.manager.update(time_delta)
+            self.gui_manager.manager.draw_ui(self.screen)
 
             # Display
             pygame.display.flip()
@@ -114,6 +123,4 @@ class Game:
 
 if __name__ == "__main__":
     game = Game()
-    from gui import *  # Importing entire GUI
-
     game.run()
