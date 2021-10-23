@@ -28,7 +28,7 @@ GUI_array.extend([velocity_x_label, velocity_y_label, G_label, K_label])  # Addi
 
 # Manager rect
 manager_rect_indent = 10  # Indent
-manager_rect_color = pygame.Color(0, 0, 11)  # Color
+manager_rect_color = pygame.Color(0, 10, 26)  # Color
 manager_rect_width = max([element.rect.width for element in GUI_array]) + manager_rect_indent + GUI_margin  # Width
 manager_rect_height = GUI_array[-1].rect.y + GUI_array[-1].rect.height + manager_rect_indent  # Height
 manager_rect = pygame.Rect(0, 0, manager_rect_width, manager_rect_height)  # Rect
