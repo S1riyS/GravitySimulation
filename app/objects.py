@@ -117,7 +117,7 @@ class Planet(CelestialBody):
         self.set_rect(radius=planet_radius)
         self.draw_object_body()
 
-        self.glow_radius = planet_radius * 1.5  # Size of glow
+        self.glow_radius = planet_radius  # Size of glow
         self.glow_color = pygame.Color(144, 238, 144)  # Without alpha
 
         self.traces = []  # Array of dots
