@@ -20,12 +20,25 @@ class Game:
         pygame.display.set_caption("Gravity Simulation")  # Caption
         self.clock = pygame.time.Clock()  # Clock
 
-        # GUI
+        # ----- GUI ----- #
         self.gui_manager = GUIManager()
+
         # Info block
         self.info_gui_rect = self.gui_manager.get_gui_rect(self.gui_manager.info_block, 10)
         self.info_gui_elements = self.gui_manager.info_block['elements_dict']
+        self.info_gui_elements['FPS_counter'].bg_colour = pygame.Color('#1b2933')
+        self.info_gui_elements['FPS_counter'].font = pygame.font.Font(None, 26)
 
+    @staticmethod
+    def mouse_collision_with_gui(mouse_position: tuple, gui_rects: list) -> bool:
+        """
+        Return True if mouse on any of GUI rects and False if it isn't
+        :param gui_rects:
+        :param mouse_position:
+        :return: bool
+        """
+
+        return any([rect.collidepoint(mouse_position) for rect in gui_rects])
 
     def run(self):
         # Import everything necessary from objects
@@ -39,7 +52,7 @@ class Game:
             self.screen.fill(DARK_BLUE)
 
             self.clock.tick(FPS)
-            time_delta = self.clock.tick(FPS) / 1000.0
+            self.time_delta = self.clock.tick(FPS) / 1000.0
 
             # Event loop
             for event in pygame.event.get():
@@ -47,9 +60,13 @@ class Game:
                     run = False
 
                 if event.type == pygame.MOUSEBUTTONDOWN:
+                    # Mouse position
                     pressed_mouse_position = pygame.mouse.get_pos()
                     mouse_x, mouse_y = pressed_mouse_position
-                    is_mouse_on_gui = self.info_gui_rect.collidepoint(pressed_mouse_position)  # Checking if mouse on GUI
+                    # Checking if mouse on GUI
+                    is_mouse_on_gui = self.mouse_collision_with_gui(
+                        mouse_position=pressed_mouse_position,
+                        gui_rects=[self.info_gui_rect])
 
                     if event.button == 3 and not is_mouse_on_gui:
                         Star(
@@ -92,7 +109,7 @@ class Game:
 
                 # Setting labels
                 self.info_gui_elements['velocity_x_label'].set_text(f'X velocity: {round(velocity_vector.x, 4)}')
-                self.info_gui_elements['velocity_y_label'].set_text(f'Y velocity: {round(velocity_vector.y, 4)}')
+                self.info_gui_elements['velocity_y_label'].set_text(f'Y velocity: {-round(velocity_vector.y, 4)}')
 
                 # Drawing preview
                 pygame.draw.circle(self.screen, WHITE, (mouse_x, mouse_y), pv_radius)
@@ -111,8 +128,9 @@ class Game:
             celestial_bodies.draw(self.screen)
 
             # GUI
-            pygame.draw.rect(self.screen, self.gui_manager.manager_rect_color, self.info_gui_rect)
-            self.gui_manager.manager.update(time_delta)
+            pygame.draw.rect(self.screen, self.gui_manager.gui_rect_color, self.info_gui_rect)
+            self.info_gui_elements['FPS_counter'].set_text(f'FPS: {int(self.clock.get_fps())}') # FPS
+            self.gui_manager.manager.update(self.time_delta)
             self.gui_manager.manager.draw_ui(self.screen)
 
             # Display
