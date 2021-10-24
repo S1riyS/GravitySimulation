@@ -3,8 +3,6 @@ Module containing objects classes of simulations objects
 """
 
 # Modules
-from math import sqrt
-
 import pygame
 from pygame.math import Vector2
 
@@ -113,7 +111,7 @@ class Planet(CelestialBody):
 
     def __init__(self, x, y, velocity_x, velocity_y, mass, color):
         super().__init__(x, y, mass, color)
-        planet_radius = 8 // K
+        planet_radius = 8 // K * (self.mass / 150)**(1/3) # Radius of planet
         self.set_rect(radius=planet_radius)
         self.draw_object_body()
 
