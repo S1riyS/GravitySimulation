@@ -20,14 +20,51 @@ class Game:
         pygame.display.set_caption("Gravity Simulation")  # Caption
         self.clock = pygame.time.Clock()  # Clock
 
+        self.init_gui()
+
+    def init_gui(self):
+        # Statements of window
+        self.is_dialogue_open = False
+        self.is_planet_window_open = False
+        self.is_star_window_open = False
+
         # ----- GUI ----- #
         self.gui_manager = GUIManager()
 
-        # Info block
-        self.info_gui_rect = self.gui_manager.get_gui_rect(self.gui_manager.info_block, 10)
-        self.info_gui_elements = self.gui_manager.info_block['elements_dict']
-        self.info_gui_elements['FPS_counter'].bg_colour = pygame.Color('#1b2933')
-        self.info_gui_elements['FPS_counter'].font = pygame.font.Font(None, 26)
+        # Rects
+        self.info_gui_rect = self.gui_manager.get_gui_rect(self.gui_manager.info_block, 5)
+        self.settings_gui_rect = self.gui_manager.get_gui_rect(self.gui_manager.settings_block, 5)
+
+        # --- Info block --- #
+        self.info_gui_elements = self.gui_manager.info_block['elements']
+
+        fps_counter = self.info_gui_elements['FPS_counter']
+        fps_counter.bg_colour = pygame.Color('#1b2933')
+        fps_counter.font = pygame.font.Font(None, 26)
+
+        # --- Settings block --- #
+        # Elements
+        self.settings_gui_elements = self.gui_manager.settings_block['elements']
+        self.settings_gui_windows = self.gui_manager.settings_block['windows']
+
+        title = self.settings_gui_elements['title']
+        title.bg_colour = pygame.Color('#1b2933')
+        title.font = pygame.font.Font(None, 34)
+        title.rebuild()
+
+        planet_title = self.settings_gui_elements['planet_title']
+        planet_title.bg_colour = pygame.Color(0, 0, 0, 0)
+        planet_title.font = pygame.font.Font(None, 28)
+        planet_title.rebuild()
+
+        mass_label = self.settings_gui_elements['mass_label']
+        mass_label.bg_colour = pygame.Color(0, 0, 0, 0)
+        mass_label.rebuild()
+
+        # Windows
+        self.planet_color_picker = self.settings_gui_windows['planet_color_picker']
+        self.planet_color_picker.hide()
+        print(self.planet_color_picker.is_focused)
 
     @staticmethod
     def mouse_collision_with_gui(mouse_position: tuple, gui_rects: list) -> bool:
@@ -45,8 +82,12 @@ class Game:
         from app.objects import simulation_surface, celestial_bodies, Planet, Star
 
         # Game loop
-        run = True
-        while run:
+        self.is_running = True
+        while self.is_running:
+            # Checking if any of windows are open
+            self.is_dialogue_open = self.is_planet_window_open or self.is_star_window_open
+            print(self.is_planet_window_open)
+
             # Filling surfaces
             simulation_surface.fill((0, 0, 0, 0))
             self.screen.fill(DARK_BLUE)
@@ -56,19 +97,36 @@ class Game:
 
             # Event loop
             for event in pygame.event.get():
+                # Quit event
                 if event.type == pygame.QUIT:
-                    run = False
+                    self.is_running = False
 
+                # User events
+                if event.type == pygame.USEREVENT:
+                    if event.user_type == pygame_gui.UI_BUTTON_PRESSED:
+                        if event.ui_element == self.settings_gui_elements['planet_color_button']:
+                            if not self.is_planet_window_open:
+                                self.planet_color_picker.show()
+
+                            self.is_planet_window_open = True
+
+                    if event.user_type == pygame_gui.UI_WINDOW_CLOSE:
+                        if event.ui_element == self.planet_color_picker:
+                            self.is_planet_window_open = False
+
+                # Mouse events
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     # Mouse position
                     pressed_mouse_position = pygame.mouse.get_pos()
                     mouse_x, mouse_y = pressed_mouse_position
+
                     # Checking if mouse on GUI
                     is_mouse_on_gui = self.mouse_collision_with_gui(
                         mouse_position=pressed_mouse_position,
-                        gui_rects=[self.info_gui_rect])
+                        gui_rects=[self.info_gui_rect, self.settings_gui_rect]) or self.is_dialogue_open
 
                     if event.button == 3 and not is_mouse_on_gui:
+                        # Creating a star
                         Star(
                             x=mouse_x,
                             y=mouse_y,
@@ -79,13 +137,13 @@ class Game:
                 if event.type == pygame.MOUSEBUTTONUP and not is_mouse_on_gui:
                     if event.button == 1:
                         try:
-                            # Creating planet
+                            # Creating a planet
                             Planet(
                                 x=mouse_x,
                                 y=mouse_y,
                                 velocity_x=velocity_vector.x,
                                 velocity_y=velocity_vector.y,
-                                mass=150,
+                                mass=self.settings_gui_elements['mass_slider'].get_current_value(),
                                 color=FOREST_GREEN
                             )
 
@@ -94,8 +152,11 @@ class Game:
                             self.info_gui_elements['velocity_y_label'].set_text('Y velocity: None')
 
                         except Exception as error:
-                            print('Velocity vector is not defined')
+                            print(f'Velocity vector is not defined. Error: {error}')
 
+                self.gui_manager.manager.process_events(event)
+
+            # Drawing line of velocity of new planet
             pressed = pygame.mouse.get_pressed()  # Pressed buttons
             if pressed[0] and not is_mouse_on_gui:
                 # Mouse position (x, y)
@@ -118,9 +179,7 @@ class Game:
                                  (mouse_x + velocity_vector.x * pv_line_length_coef,
                                   mouse_y + velocity_vector.y * pv_line_length_coef), pv_line_thickness)
 
-                self.gui_manager.manager.process_events(event)
-
-            # --- Updating elements of game  --- #
+            # --- Updating elements of game --- #
 
             # Simulation objects
             celestial_bodies.update()
@@ -129,7 +188,8 @@ class Game:
 
             # GUI
             pygame.draw.rect(self.screen, self.gui_manager.gui_rect_color, self.info_gui_rect)
-            self.info_gui_elements['FPS_counter'].set_text(f'FPS: {int(self.clock.get_fps())}') # FPS
+            pygame.draw.rect(self.screen, self.gui_manager.gui_rect_color, self.settings_gui_rect)
+            self.info_gui_elements['FPS_counter'].set_text(f'FPS: {int(self.clock.get_fps())}')  # FPS
             self.gui_manager.manager.update(self.time_delta)
             self.gui_manager.manager.draw_ui(self.screen)
 
