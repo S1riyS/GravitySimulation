@@ -13,19 +13,21 @@ class GUIManager:
     def __init__(self):
         # GUI manager
         self.manager = pygame_gui.UIManager(WINDOW_SIZE)
-        self.manager_rect_color = pygame.Color(0, 10, 26)  # Color
+        self.gui_rect_color = pygame.Color('#0d1419')  # Color
 
         self.info_block = {
             'elements_dict': {
-                # GUI
-                'velocity_x_label': pygame_gui.elements.UILabel(relative_rect=pygame.Rect(10, 10, 200, 20),
+
+                'FPS_counter': pygame_gui.elements.UILabel(relative_rect=pygame.Rect(10, 10, 200, 40),
+                                                           text='FPS: None', manager=self.manager),
+                'velocity_x_label': pygame_gui.elements.UILabel(relative_rect=pygame.Rect(10, 55, 200, 20),
                                                                 text='X velocity: None', manager=self.manager),
-                'velocity_y_label': pygame_gui.elements.UILabel(relative_rect=pygame.Rect(10, 35, 200, 20),
+                'velocity_y_label': pygame_gui.elements.UILabel(relative_rect=pygame.Rect(10, 80, 200, 20),
                                                                 text='Y velocity: None', manager=self.manager),
-                'G_label': pygame_gui.elements.UILabel(relative_rect=pygame.Rect(10, 60, 200, 20),
+                'G_label': pygame_gui.elements.UILabel(relative_rect=pygame.Rect(10, 105, 200, 20),
                                                        text=f'G = {G}', manager=self.manager),
-                'K_label': pygame_gui.elements.UILabel(relative_rect=pygame.Rect(10, 85, 200, 20),
-                                                       text=f'Distance coef = {K_value}', manager=self.manager)
+                'K_label': pygame_gui.elements.UILabel(relative_rect=pygame.Rect(10, 130, 200, 20),
+                                                       text=f'Distance coef = {K_value}', manager=self.manager),
             }
         }
 
@@ -41,18 +43,19 @@ class GUIManager:
 
         elements_array = gui_dictionary['elements_dict'].values()  # Array of GUI elements
 
-        # GUI rect with biggest Y value
-        last_rect = sorted(
-            [element.rect for element in elements_array],
-            key=lambda x: x[1]
-        )[-1]
+        # Array of rectangles of  GUI
+        rect_array = [element.rect for element in elements_array]
+        # GUI rect with biggest (Y + height) value
+        max_y_rect = sorted(rect_array, key=lambda x: x[1] + x[3])[-1]
+        # GUI rect with biggest (X + width) value
+        max_x_rect = sorted(rect_array, key=lambda x: x[0] + x[2])[-1]
 
         rect_x = min([element.rect.x for element in elements_array])  # Top left X
         rect_y = min([element.rect.y for element in elements_array])  # Top left Y
-        rect_width = max([element.rect.width for element in elements_array])  # Width
-        rect_height = last_rect.y - rect_y + last_rect.height  # Height
+        rect_width = max_x_rect.x - rect_x + max_x_rect.width  # Width
+        rect_height = max_y_rect.y - rect_y + max_y_rect.height  # Height
 
-        # Rect
+        # GUI Rect
         gui_rect = pygame.Rect(rect_x - padding,  # X
                                rect_y - padding,  # Y
                                rect_width + 2 * padding,  # Width
