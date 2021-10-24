@@ -50,7 +50,7 @@ for games written in PyGame.
 
 
 ## 🎞 Preview
-![GIF 1](https://i.postimg.cc/X7KMYCvn/Gravity-Simulation.gif)
+![GIF 1](https://i.postimg.cc/pV1b9kpg/Gravity-Simulation-24-10.gif)
 
 ## 👨‍ Developer
 * **[GitHub Profile](https://github.com/S1riyS)**
