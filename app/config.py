@@ -8,8 +8,8 @@ from math import sqrt
 
 # Colors
 WHITE = pygame.Color(255, 255, 255)
-YELLOW = pygame.Color(252, 255, 17)
-LIGHT_GREEN = pygame.Color(144, 238, 144)
+YELLOW = pygame.Color(255, 255, 17)
+LIGHT_GREEN = pygame.Color(144, 238, 154)
 FOREST_GREEN = pygame.Color(0, 255, 0)
 BLUE = pygame.Color(0, 0, 255)
 DARK_BLUE = pygame.Color(0, 6, 15)
