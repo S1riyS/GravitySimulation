@@ -111,7 +111,7 @@ class Planet(CelestialBody):
 
     def __init__(self, x, y, velocity_x, velocity_y, mass, color):
         super().__init__(x, y, mass, color)
-        planet_radius = 8 // K * (self.mass / 150)**(1/3) # Radius of planet
+        planet_radius = 8 // K * (self.mass / 150) ** (1 / 3)  # Radius of planet
         self.set_rect(radius=planet_radius)
         self.draw_object_body()
 
@@ -208,7 +208,7 @@ class Star(CelestialBody):
 
     def __init__(self, x, y, mass, color):
         super().__init__(x, y, mass, color)
-        star_radius = (30 // K) * (self.mass / 20000)**(1/2)
+        star_radius = (30 // K) * (self.mass / 20000) ** (1 / 2)
         self.set_rect(radius=star_radius)
 
         self.glow_radius = star_radius * 0.7  # Size of glow
