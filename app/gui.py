@@ -4,6 +4,7 @@ Module containing GUI elements and other settings
 
 # Modules
 import pygame
+
 from pygame_gui import UIManager
 from pygame_gui.elements import UILabel, UIButton, UIHorizontalSlider
 from pygame_gui.windows import UIColourPickerDialog
@@ -35,29 +36,38 @@ class GUIManager:
 
         self.settings_block = {
             'elements': {
-
+                # Planet
                 'title': UILabel(relative_rect=pygame.Rect(10, 180, 200, 40),
                                  text='Settings', manager=self.manager),
                 'planet_title': UILabel(relative_rect=pygame.Rect(10, 225, 200, 30),
                                         text='Planet:', manager=self.manager),
-                'mass_label': UILabel(relative_rect=pygame.Rect(10, 254, 50, 30),
-                                      text='Mass:', manager=self.manager),
-                'mass_slider': UIHorizontalSlider(relative_rect=pygame.Rect(65, 260, 145, 20),
-                                                  start_value=150,
-                                                  value_range=(50, 450),
-                                                  manager=self.manager),
-                'planet_color_button': UIButton(relative_rect=pygame.Rect(10, 295, 200, 30),
+                'planet_mass_label': UILabel(relative_rect=pygame.Rect(10, 254, 50, 30),
+                                             text='Mass:', manager=self.manager),
+                'planet_mass_slider': UIHorizontalSlider(relative_rect=pygame.Rect(65, 260, 145, 20),
+                                                         start_value=150,
+                                                         value_range=(50, 450),
+                                                         manager=self.manager),
+                'planet_color_button': UIButton(relative_rect=pygame.Rect(10, 290, 160, 30),
                                                 text='Choose color',
-                                                manager=self.manager)
+                                                manager=self.manager),
+                'planet_color_surface': UILabel(relative_rect=pygame.Rect(177, 290, 30, 30),
+                                                text='', manager=self.manager),
 
-            },
+                # Star
+                'star_title': UILabel(relative_rect=pygame.Rect(10, 335, 200, 30),
+                                      text='Star:', manager=self.manager),
+                'star_mass_label': UILabel(relative_rect=pygame.Rect(10, 365, 50, 30),
+                                           text='Mass:', manager=self.manager),
+                'star_mass_slider': UIHorizontalSlider(relative_rect=pygame.Rect(65, 370, 145, 20),
+                                                       start_value=20000,
+                                                       value_range=(10000, 30000),
+                                                       manager=self.manager),
+                'star_color_button': UIButton(relative_rect=pygame.Rect(10, 400, 160, 30),
+                                              text='Choose color',
+                                              manager=self.manager),
+                'star_color_surface': UILabel(relative_rect=pygame.Rect(177, 400, 30, 30),
+                                              text='', manager=self.manager),
 
-            'windows': {
-
-                'planet_color_picker': UIColourPickerDialog(pygame.Rect(10, 295, 200, 200),
-                                                            window_title='Planet color ...',
-                                                            initial_colour=FOREST_GREEN,
-                                                            manager=self.manager)
             }
         }
 
