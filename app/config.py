@@ -32,3 +32,8 @@ pv_radius = 8 // K
 pv_line_length_coef = 20 / K
 pv_line_thickness = 2
 pv_velocity_value_coef = 1 / 80
+
+# Grid settings
+grid_distance = 40
+grid_opacity = 32
+grid_color = pygame.Color(155, 155, 155, grid_opacity)

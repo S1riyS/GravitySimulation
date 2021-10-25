@@ -8,7 +8,6 @@ from typing import Optional
 
 import pygame
 from pygame.math import Vector2
-
 import pygame_gui
 from pygame_gui.windows import UIColourPickerDialog
 
@@ -29,11 +28,14 @@ class Game:
         self.current_planet_color = copy.copy(FOREST_GREEN)
         self.current_star_color = copy.copy(YELLOW)
 
+        # Grid surface
+        self.grid_surface = pygame.Surface(WINDOW_SIZE).convert_alpha()
+        self.grid_surface.fill((0, 0, 0, 0))
+
         self.init_gui()  # Initiating GUI
 
     @staticmethod
-    def set_style(element: pygame_gui.elements,
-                  bg_color: Optional[pygame.Color] = None,
+    def set_style(element: pygame_gui.elements, bg_color: Optional[pygame.Color] = None,
                   font_size: Optional[int] = None) -> None:
         """
         Static method that applying style to element of GUI
@@ -60,6 +62,13 @@ class Game:
         """
 
         return any([rect.collidepoint(mouse_position) for rect in gui_rects])
+
+    @staticmethod
+    def draw_grid(surface: pygame.Surface, color: pygame.Color, distance: int):
+        for x in range(WIDTH // distance + 2):
+            pygame.draw.line(surface, color, (x * distance, 0), (x * distance, HEIGHT), 1)
+        for y in range(HEIGHT // distance + 2):
+            pygame.draw.line(surface, color, (0, y * distance), (WIDTH, y * distance), 1)
 
     def init_gui(self):
         # Statements of window
@@ -114,7 +123,11 @@ class Game:
 
             # Filling surfaces
             simulation_surface.fill((0, 0, 0, 0))
+            self.grid_surface.fill((0, 0, 0, 0))
             self.screen.fill(DARK_BLUE)
+
+            # Drawing grid
+            self.draw_grid(self.grid_surface, grid_color, grid_distance)
 
             self.clock.tick(FPS)
             self.time_delta = self.clock.tick(FPS) / 1000.0
@@ -237,6 +250,7 @@ class Game:
 
             # --- Updating elements of game --- #
 
+            self.screen.blit(self.grid_surface, (0, 0))
             # Simulation objects
             celestial_bodies.update()
             self.screen.blit(simulation_surface, (0, 0))
