@@ -120,6 +120,7 @@ class Planet(CelestialBody):
         self.draw_object_body()
 
         self.glow_radius = planet_radius  # Size of glow
+        self.trace_color = copy.copy(self.color)
 
         self.traces = []  # Array of dots
         self.max_trace_length = 400  # Max size of array
@@ -185,7 +186,7 @@ class Planet(CelestialBody):
 
         for index, pos in enumerate(self.traces):
             line_thickness = min(index // 100 + 1, 3)  # Calculated value or 3
-            pygame.draw.line(simulation_surface, LIGHT_GREEN, previous_pos, pos, line_thickness)  # Drawing line
+            pygame.draw.line(simulation_surface, self.trace_color, previous_pos, pos, line_thickness)  # Drawing line
             previous_pos = pos  # Setting previous position
 
     def update(self, *args, **kwargs) -> None:
