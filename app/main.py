@@ -29,6 +29,7 @@ class Game:
         self.current_star_color = copy.copy(YELLOW)
 
         # Grid surface
+        self.is_drawing_grid = True
         self.grid_surface = pygame.Surface(WINDOW_SIZE).convert_alpha()
         self.grid_surface.fill((0, 0, 0, 0))
 
@@ -64,11 +65,16 @@ class Game:
         return any([rect.collidepoint(mouse_position) for rect in gui_rects])
 
     @staticmethod
-    def draw_grid(surface: pygame.Surface, color: pygame.Color, distance: int):
-        for x in range(WIDTH // distance + 2):
-            pygame.draw.line(surface, color, (x * distance, 0), (x * distance, HEIGHT), 1)
-        for y in range(HEIGHT // distance + 2):
-            pygame.draw.line(surface, color, (0, y * distance), (WIDTH, y * distance), 1)
+    def set_button_color(button: pygame_gui.elements.UIButton, color: pygame.Color):
+        button.colours['normal_bg'] = color
+        button.rebuild()
+
+    def draw_grid(self, surface: pygame.Surface, color: pygame.Color, distance: int):
+        if self.is_drawing_grid:
+            for x in range(int(WIDTH / distance) + 2):
+                pygame.draw.line(surface, color, (x * distance, 0), (x * distance, HEIGHT), 1)
+            for y in range(int(HEIGHT / distance) + 2):
+                pygame.draw.line(surface, color, (0, y * distance), (WIDTH, y * distance), 1)
 
     def init_gui(self):
         # Statements of window
@@ -110,6 +116,12 @@ class Game:
         # Star windows
         self.star_color_button = self.settings_gui_elements['star_color_button']
         self.star_color_picker = None
+
+        # -- General -- #
+        self.set_style(self.settings_gui_elements['general_title'], pygame.Color(0, 0, 0, 0), 28)
+        self.set_style(self.settings_gui_elements['grid_label'], pygame.Color(0, 0, 0, 0))
+
+        self.set_button_color(self.settings_gui_elements['grid_button'], pygame.Color(121, 190, 112))
 
     def run(self):
         # Import everything necessary from objects
@@ -159,16 +171,28 @@ class Game:
                                                                           manager=self.gui_manager.manager)
                             self.star_color_button.disable()
 
+                        if event.ui_element == self.settings_gui_elements['grid_button']:
+                            if self.is_drawing_grid:
+                                self.set_button_color(self.settings_gui_elements['grid_button'],
+                                                      pygame.Color(231, 60, 62))
+                            else:
+                                self.set_button_color(self.settings_gui_elements['grid_button'],
+                                                      pygame.Color(121, 190, 112))
+
+                            self.is_drawing_grid = not self.is_drawing_grid
+
                     if event.user_type == pygame_gui.UI_COLOUR_PICKER_COLOUR_PICKED:
                         # If picked color of planet
                         if event.ui_element == self.planet_color_picker:
                             self.current_planet_color = event.colour
-                            self.set_style(self.settings_gui_elements['planet_color_surface'], self.current_star_color)
+                            self.set_style(self.settings_gui_elements['planet_color_surface'],
+                                           self.current_planet_color)
 
                         # If picked color of star
                         if event.ui_element == self.star_color_picker:
                             self.current_star_color = event.colour
-                            self.set_style(self.settings_gui_elements['star_color_surface'], self.current_star_color)
+                            self.set_style(self.settings_gui_elements['star_color_surface'],
+                                           self.current_star_color)
 
                     if event.user_type == pygame_gui.UI_WINDOW_CLOSE:
                         # If closed planet's "Colour Picker Dialog"

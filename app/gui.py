@@ -40,7 +40,7 @@ class GUIManager:
                 'title': UILabel(relative_rect=pygame.Rect(10, 180, 200, 40),
                                  text='Settings', manager=self.manager),
                 'planet_title': UILabel(relative_rect=pygame.Rect(10, 225, 200, 30),
-                                        text='Planet:', manager=self.manager),
+                                        text='Planet', manager=self.manager),
                 'planet_mass_label': UILabel(relative_rect=pygame.Rect(10, 254, 50, 30),
                                              text='Mass:', manager=self.manager),
                 'planet_mass_slider': UIHorizontalSlider(relative_rect=pygame.Rect(65, 260, 145, 20),
@@ -55,7 +55,7 @@ class GUIManager:
 
                 # Star
                 'star_title': UILabel(relative_rect=pygame.Rect(10, 335, 200, 30),
-                                      text='Star:', manager=self.manager),
+                                      text='Star', manager=self.manager),
                 'star_mass_label': UILabel(relative_rect=pygame.Rect(10, 365, 50, 30),
                                            text='Mass:', manager=self.manager),
                 'star_mass_slider': UIHorizontalSlider(relative_rect=pygame.Rect(65, 370, 145, 20),
@@ -68,6 +68,14 @@ class GUIManager:
                 'star_color_surface': UILabel(relative_rect=pygame.Rect(177, 400, 30, 30),
                                               text='', manager=self.manager),
 
+                # General
+                'general_title': UILabel(relative_rect=pygame.Rect(10, 445, 200, 30),
+                                         text='General', manager=self.manager),
+                'grid_label': UILabel(relative_rect=pygame.Rect(10, 482.5, 50, 20),
+                                      text='Grid: ', manager=self.manager),
+                'grid_button': UIButton(relative_rect=pygame.Rect(60, 480, 25, 25),
+                                        text='',
+                                        manager=self.manager),
             }
         }
 
