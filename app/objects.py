@@ -3,6 +3,8 @@ Module containing objects classes of simulations objects
 """
 
 # Modules
+import copy
+
 import pygame
 from pygame.math import Vector2
 
@@ -49,6 +51,8 @@ class CelestialBody(SimulationObject):
         super().__init__(x, y, color)
 
         self.mass = mass
+        self.glow_color = copy.copy(self.color)  # Without alpha
+
         celestial_bodies.add(self)
 
     # Set object's surface, rect and image
@@ -116,7 +120,6 @@ class Planet(CelestialBody):
         self.draw_object_body()
 
         self.glow_radius = planet_radius  # Size of glow
-        self.glow_color = pygame.Color(144, 238, 144)  # Without alpha
 
         self.traces = []  # Array of dots
         self.max_trace_length = 400  # Max size of array
@@ -212,7 +215,6 @@ class Star(CelestialBody):
         self.set_rect(radius=star_radius)
 
         self.glow_radius = star_radius * 0.7  # Size of glow
-        self.glow_color = pygame.Color(252, 255, 10)  # Without alpha
 
         self.draw_object_body()  # Drawing body of Star
 
