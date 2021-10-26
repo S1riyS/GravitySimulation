@@ -1,5 +1,9 @@
 [![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
 
+![License](https://img.shields.io/github/license/S1riyS/GravitySimulation)
+![Quality](https://img.shields.io/lgtm/grade/python/github/S1riyS/GravitySimulation)
+![Alerts](https://img.shields.io/lgtm/alerts/github/S1riyS/GravitySimulation)
+
      ██████╗ ██████╗  █████╗ ██╗   ██╗██╗████████╗██╗   ██╗
     ██╔════╝ ██╔══██╗██╔══██╗██║   ██║██║╚══██╔══╝╚██╗ ██╔╝
     ██║  ██╗ ██████╔╝███████║╚██╗ ██╔╝██║   ██║    ╚████╔╝ 
@@ -25,6 +29,9 @@ that indicates the direction and speed at which the "planet" will fly.
 Also in the upper right corner it is written with what specific speed the object will fly.
 
 To create star only thing you should do is press **Mouse2**.
+
+In the middle of left side of window you can set mass and color of stars and planets.
+Also there you can turn on/off background grid.
 
 *New features will be added later...*
 
