@@ -7,7 +7,6 @@ import pygame
 
 from pygame_gui import UIManager
 from pygame_gui.elements import UILabel, UIButton, UIHorizontalSlider
-from pygame_gui.windows import UIColourPickerDialog
 
 from config import *
 
