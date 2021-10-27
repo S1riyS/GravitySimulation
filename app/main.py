@@ -12,7 +12,7 @@ import pygame_gui
 from pygame_gui.windows import UIColourPickerDialog
 
 from app.config import *
-from app.gui import GUIManager  # Importing entire GUI
+from app.gui import GUI  # Importing entire GUI
 
 pygame.init()
 
@@ -36,7 +36,8 @@ class Game:
         self.init_gui()  # Initiating GUI
 
     @staticmethod
-    def set_style(element: pygame_gui.elements, bg_color: Optional[pygame.Color] = None,
+    def set_style(element: pygame_gui.elements,
+                  bg_color: Optional[pygame.Color] = None,
                   font_size: Optional[int] = None) -> None:
         """
         Static method that applying style to element of GUI
@@ -82,20 +83,19 @@ class Game:
         self.is_planet_window_open = False
         self.is_star_window_open = False
 
-        # ----- GUI ----- #
-        self.gui_manager = GUIManager()
+        self.gui = GUI()  # Creating object of GUI class
 
         # Rects
-        self.info_gui_rect = self.gui_manager.get_gui_rect(self.gui_manager.info_block, 5)
-        self.settings_gui_rect = self.gui_manager.get_gui_rect(self.gui_manager.settings_block, 5)
+        self.info_gui_rect = self.gui.get_gui_rect(self.gui.info_block, 5)
+        self.settings_gui_rect = self.gui.get_gui_rect(self.gui.settings_block, 5)
 
         # --- Info block --- #
-        self.info_gui_elements = self.gui_manager.info_block['elements']
+        self.info_gui_elements = self.gui.info_block['elements']
         self.set_style(self.info_gui_elements['FPS_counter'], pygame.Color('#1b2933'), 26)
 
         # --- Settings block --- #
         # Elements
-        self.settings_gui_elements = self.gui_manager.settings_block['elements']
+        self.settings_gui_elements = self.gui.settings_block['elements']
 
         self.set_style(self.settings_gui_elements['title'], pygame.Color('#1b2933'), 34)
 
@@ -121,7 +121,8 @@ class Game:
         self.set_style(self.settings_gui_elements['general_title'], pygame.Color(0, 0, 0, 0), 28)
         self.set_style(self.settings_gui_elements['grid_label'], pygame.Color(0, 0, 0, 0))
 
-        self.set_button_color(self.settings_gui_elements['grid_button'], pygame.Color(121, 190, 112))
+        self.grid_button = self.settings_gui_elements['grid_button']
+        self.set_button_color(self.grid_button, pygame.Color(121, 190, 112))
 
     def run(self):
         # Import everything necessary from objects
@@ -159,7 +160,7 @@ class Game:
                             self.planet_color_picker = UIColourPickerDialog(pygame.Rect(210, 0, 390, 390),
                                                                             window_title='Planet color ...',
                                                                             initial_colour=self.current_planet_color,
-                                                                            manager=self.gui_manager.manager)
+                                                                            manager=self.gui.manager)
                             self.planet_color_button.disable()
 
                         # If pressed star's "choose color" button
@@ -168,16 +169,14 @@ class Game:
                             self.star_color_picker = UIColourPickerDialog(pygame.Rect(230, 30, 390, 390),
                                                                           window_title='Star color ...',
                                                                           initial_colour=self.current_star_color,
-                                                                          manager=self.gui_manager.manager)
+                                                                          manager=self.gui.manager)
                             self.star_color_button.disable()
 
-                        if event.ui_element == self.settings_gui_elements['grid_button']:
+                        if event.ui_element == self.grid_button:
                             if self.is_drawing_grid:
-                                self.set_button_color(self.settings_gui_elements['grid_button'],
-                                                      pygame.Color(231, 60, 62))
+                                self.set_button_color(self.grid_button, pygame.Color(231, 60, 62))
                             else:
-                                self.set_button_color(self.settings_gui_elements['grid_button'],
-                                                      pygame.Color(121, 190, 112))
+                                self.set_button_color(self.grid_button, pygame.Color(121, 190, 112))
 
                             self.is_drawing_grid = not self.is_drawing_grid
 
@@ -216,7 +215,7 @@ class Game:
                     # Checking if mouse on GUI
                     is_mouse_on_gui = self.mouse_collision_with_gui(
                         mouse_position=pressed_mouse_position,
-                        gui_rects=[self.info_gui_rect, self.settings_gui_rect]) or self.is_dialogue_open
+                        gui_rects=self.gui.gui_rects) or self.is_dialogue_open
 
                     if event.button == 3 and not is_mouse_on_gui:
                         # Creating a star
@@ -247,7 +246,7 @@ class Game:
                         except Exception as error:
                             print(f'Velocity vector is not defined. Error: {error}')
 
-                self.gui_manager.manager.process_events(event)
+                self.gui.manager.process_events(event)
 
             # Drawing line of velocity of new planet
             pressed = pygame.mouse.get_pressed()  # Pressed buttons
@@ -273,19 +272,20 @@ class Game:
                                   mouse_y + velocity_vector.y * pv_line_length_coef), pv_line_thickness)
 
             # --- Updating elements of game --- #
+            self.screen.blit(self.grid_surface, (0, 0))  # Drawing grid
 
-            self.screen.blit(self.grid_surface, (0, 0))
             # Simulation objects
             celestial_bodies.update()
             self.screen.blit(simulation_surface, (0, 0))
             celestial_bodies.draw(self.screen)
 
             # GUI
-            pygame.draw.rect(self.screen, self.gui_manager.gui_rect_color, self.info_gui_rect)
-            pygame.draw.rect(self.screen, self.gui_manager.gui_rect_color, self.settings_gui_rect)
+            for rect in self.gui.gui_rects:
+                pygame.draw.rect(self.screen, self.gui.gui_rect_color, rect)
+
             self.info_gui_elements['FPS_counter'].set_text(f'FPS: {int(self.clock.get_fps())}')  # FPS
-            self.gui_manager.manager.update(self.time_delta)
-            self.gui_manager.manager.draw_ui(self.screen)
+            self.gui.manager.update(self.time_delta)
+            self.gui.manager.draw_ui(self.screen)
 
             # Display
             pygame.display.flip()
@@ -294,5 +294,7 @@ class Game:
 
 
 if __name__ == "__main__":
+    print('Simulation has been started!')
+    print('Logs:')
     game = Game()
     game.run()

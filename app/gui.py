@@ -11,11 +11,12 @@ from pygame_gui.elements import UILabel, UIButton, UIHorizontalSlider
 from config import *
 
 
-class GUIManager:
+class GUI:
     def __init__(self):
         # GUI manager
         self.manager = UIManager(WINDOW_SIZE)
         self.gui_rect_color = pygame.Color('#0d1419')  # Color
+        self.gui_rects = []  # Array with all rects
 
         self.info_block = {
             'elements': {
@@ -79,8 +80,7 @@ class GUIManager:
         }
 
     # GUI rect
-    @staticmethod
-    def get_gui_rect(gui_dictionary: dict, padding: int) -> pygame.Rect:
+    def get_gui_rect(self, gui_dictionary: dict, padding: int) -> pygame.Rect:
         """
         Static method that returns Rect of block of GUI.
         :param gui_dictionary: Dictionary with GUI elements
@@ -108,4 +108,6 @@ class GUIManager:
                                rect_width + 2 * padding,  # Width
                                rect_height + 2 * padding  # Height
                                )
+
+        self.gui_rects.append(gui_rect)
         return gui_rect
