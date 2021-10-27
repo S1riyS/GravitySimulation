@@ -24,8 +24,8 @@ class Game:
         self.clock = pygame.time.Clock()  # Clock
 
         # Initiating beginning colors
-        self.current_planet_color = copy.copy(FOREST_GREEN)
-        self.current_star_color = copy.copy(YELLOW)
+        self.current_planet_color = copy.copy(PLANET_COLOR)
+        self.current_star_color = copy.copy(STAR_COLOR)
 
         # Grid surface
         self.is_drawing_grid = True
@@ -104,7 +104,7 @@ class Game:
 
         # General
         self.grid_button = self.settings_gui_elements['grid_button']
-        self.set_button_color(self.grid_button, pygame.Color(121, 190, 112))
+        self.set_button_color(self.grid_button, GRID_BUTTON_GREEN)
 
     def run(self):
         # Import everything necessary from objects
@@ -156,9 +156,9 @@ class Game:
 
                         if event.ui_element == self.grid_button:
                             if self.is_drawing_grid:
-                                self.set_button_color(self.grid_button, pygame.Color(231, 60, 62))
+                                self.set_button_color(self.grid_button, GRID_BUTTON_RED)
                             else:
-                                self.set_button_color(self.grid_button, pygame.Color(121, 190, 112))
+                                self.set_button_color(self.grid_button, GRID_BUTTON_GREEN)
 
                             self.is_drawing_grid = not self.is_drawing_grid
 

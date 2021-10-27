@@ -8,11 +8,12 @@ from math import sqrt
 
 # Colors
 WHITE = pygame.Color(255, 255, 255)
-YELLOW = pygame.Color(255, 255, 17)
-LIGHT_GREEN = pygame.Color(144, 238, 154)
-FOREST_GREEN = pygame.Color(0, 255, 0)
-BLUE = pygame.Color(0, 0, 255)
+STAR_COLOR = pygame.Color(255, 255, 17)
+PLANET_COLOR = pygame.Color(0, 255, 0)
 DARK_BLUE = pygame.Color(0, 6, 15)
+
+GRID_BUTTON_GREEN = pygame.Color(121, 190, 112)
+GRID_BUTTON_RED = pygame.Color(231, 60, 62)
 
 # Window
 WIDTH = 1280
