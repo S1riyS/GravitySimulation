@@ -4,7 +4,6 @@ Main project file, that containing game loop
 
 # Modules
 import copy
-from typing import Optional
 
 from pygame.math import Vector2
 import pygame_gui
@@ -35,9 +34,7 @@ class Game:
         self.init_gui()  # Initiating GUI
 
     @staticmethod
-    def set_style(element: pygame_gui.elements,
-                  bg_color: Optional[pygame.Color] = None,
-                  font_size: Optional[int] = None) -> None:
+    def set_style(element: pygame_gui.elements, bg_color: pygame.Color) -> None:
         """
         Static method that applying style to element of GUI
         :param element: element of GUI
@@ -46,12 +43,13 @@ class Game:
         :return: None
         """
 
-        if bg_color is not None:
-            element.bg_colour = pygame.Color(bg_color)
-        if font_size is not None:
-            element.font = pygame.font.Font(None, font_size)
-
+        element.bg_colour = pygame.Color(bg_color)
         element.rebuild()
+
+    @staticmethod
+    def set_button_color(button: pygame_gui.elements.UIButton, color: pygame.Color):
+        button.colours['normal_bg'] = color
+        button.rebuild()
 
     @staticmethod
     def mouse_collision_with_gui(mouse_position: tuple, gui_rects: list) -> bool:
@@ -63,11 +61,6 @@ class Game:
         """
 
         return any([rect.collidepoint(mouse_position) for rect in gui_rects])
-
-    @staticmethod
-    def set_button_color(button: pygame_gui.elements.UIButton, color: pygame.Color):
-        button.colours['normal_bg'] = color
-        button.rebuild()
 
     def draw_grid(self, surface: pygame.Surface, color: pygame.Color, distance: int):
         if self.is_drawing_grid:
