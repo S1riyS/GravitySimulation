@@ -1,0 +1,52 @@
+{
+  "#transparent": {
+    "colours": {
+      "dark_bg": "#00000000"
+    }
+  },
+  "label": {
+    "font": {
+      "name": "montserrat",
+      "size": "14",
+      "regular_path": "data/fonts/Montserrat-Regular.ttf"
+    }
+  },
+  "button": {
+    "font": {
+      "name": "montserrat",
+      "size": "14",
+      "regular_path": "data/fonts/Montserrat-Regular.ttf"
+    }
+  },
+  "#fps_counter": {
+    "colours": {
+      "dark_bg": "#1b2933"
+    },
+    "font": {
+      "name": "montserrat",
+      "size": "16",
+      "bold": "0",
+      "bold_path": "data/fonts/Montserrat-Regular.ttf"
+    }
+  },
+  "#title": {
+    "prototype": "#transparent",
+    "font": {
+      "name": "montserrat",
+      "size": "24",
+      "bold": "1",
+      "bold_path": "data/fonts/Montserrat-SemiBold.ttf"
+    }
+  },
+  "#subtitle": {
+    "prototype": "#transparent",
+    "font": {
+      "name": "montserrat",
+      "size": "20",
+      "regular_path": "data/fonts/Montserrat-Regular.ttf"
+    }
+  },
+  "#settings_label": {
+    "prototype": "#transparent"
+  }
+}

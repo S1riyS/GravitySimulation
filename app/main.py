@@ -6,7 +6,6 @@ Main project file, that containing game loop
 import copy
 from typing import Optional
 
-import pygame
 from pygame.math import Vector2
 import pygame_gui
 from pygame_gui.windows import UIColourPickerDialog
@@ -85,42 +84,25 @@ class Game:
 
         self.gui = GUI()  # Creating object of GUI class
 
-        # Rects
+        # GUI rects
         self.info_gui_rect = self.gui.get_gui_rect(self.gui.info_block, 5)
         self.settings_gui_rect = self.gui.get_gui_rect(self.gui.settings_block, 5)
 
-        # --- Info block --- #
+        # GUI elements
         self.info_gui_elements = self.gui.info_block['elements']
-        self.set_style(self.info_gui_elements['FPS_counter'], pygame.Color('#1b2933'), 26)
-
-        # --- Settings block --- #
-        # Elements
         self.settings_gui_elements = self.gui.settings_block['elements']
 
-        self.set_style(self.settings_gui_elements['title'], pygame.Color('#1b2933'), 34)
-
-        # -- Planet -- #
-        self.set_style(self.settings_gui_elements['planet_title'], pygame.Color(0, 0, 0, 0), 28)
-        self.set_style(self.settings_gui_elements['planet_mass_label'], pygame.Color(0, 0, 0, 0))
+        # Planet
         self.set_style(self.settings_gui_elements['planet_color_surface'], self.current_planet_color)
-
-        # Planet windows
         self.planet_color_button = self.settings_gui_elements['planet_color_button']
         self.planet_color_picker = None
 
-        # -- Star -- #
-        self.set_style(self.settings_gui_elements['star_title'], pygame.Color(0, 0, 0, 0), 28)
-        self.set_style(self.settings_gui_elements['star_mass_label'], pygame.Color(0, 0, 0, 0))
+        # Star
         self.set_style(self.settings_gui_elements['star_color_surface'], self.current_star_color)
-
-        # Star windows
         self.star_color_button = self.settings_gui_elements['star_color_button']
         self.star_color_picker = None
 
-        # -- General -- #
-        self.set_style(self.settings_gui_elements['general_title'], pygame.Color(0, 0, 0, 0), 28)
-        self.set_style(self.settings_gui_elements['grid_label'], pygame.Color(0, 0, 0, 0))
-
+        # General
         self.grid_button = self.settings_gui_elements['grid_button']
         self.set_button_color(self.grid_button, pygame.Color(121, 190, 112))
 
