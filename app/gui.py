@@ -14,7 +14,7 @@ from app.config import *
 class GUI:
     def __init__(self):
         # GUI manager
-        self.manager = UIManager(WINDOW_SIZE, 'data/themes/theme.json')
+        self.manager = UIManager(WINDOW_SIZE, theme_path='data/themes/theme.json')
         self.gui_rect_color = pygame.Color('#0d1419')  # Color
         self.gui_rects = []  # Array with all rects
 
@@ -74,6 +74,16 @@ class GUI:
                 'grid_label': UILabel(relative_rect=pygame.Rect(10, 482.5, 50, 20),
                                       text='Grid: ', manager=self.manager, object_id='#settings_label'),
                 'grid_button': UIButton(relative_rect=pygame.Rect(60, 480, 25, 25),
+                                        text='',
+                                        manager=self.manager),
+                'glow_label': UILabel(relative_rect=pygame.Rect(100, 482.5, 50, 20),
+                                      text='Glow: ', manager=self.manager, object_id='#settings_label'),
+                'glow_button': UIButton(relative_rect=pygame.Rect(150, 480, 25, 25),
+                                        text='',
+                                        manager=self.manager),
+                'trace_label': UILabel(relative_rect=pygame.Rect(10, 507.5, 50, 20),
+                                      text='Trace: ', manager=self.manager, object_id='#settings_label'),
+                'trace_button': UIButton(relative_rect=pygame.Rect(60, 505, 25, 25),
                                         text='',
                                         manager=self.manager),
             }

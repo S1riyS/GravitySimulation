@@ -11,8 +11,8 @@ from pygame.math import Vector2
 from app.config import *
 
 # Surface with some objects of simulation
-simulation_surface = pygame.Surface(WINDOW_SIZE).convert_alpha()
-simulation_surface.fill((0, 0, 0, 0))
+glow_surface = pygame.Surface(WINDOW_SIZE).convert_alpha()
+trace_surface = pygame.Surface(WINDOW_SIZE).convert_alpha()
 
 # Sprite groups
 celestial_bodies = pygame.sprite.Group()
@@ -84,8 +84,8 @@ class CelestialBody(SimulationObject):
 
         # Glow surface
         surface_side = 2 * (self.radius + glow_radius)
-        self.glow_surface = pygame.Surface((surface_side, surface_side)).convert_alpha()
-        self.glow_surface.fill((0, 0, 0, 0))
+        self.current_glow_surface = pygame.Surface((surface_side, surface_side)).convert_alpha()
+        self.current_glow_surface.fill((0, 0, 0, 0))
         center_of_surface = (surface_side // 2, surface_side // 2)
 
         for i in range(glow_layers):
@@ -95,7 +95,7 @@ class CelestialBody(SimulationObject):
             current_glow_color.a = current_glow_alpha  # Setting alpha to current color
 
             pygame.draw.circle(
-                self.glow_surface,  # Surface
+                self.current_glow_surface,  # Surface
                 current_glow_color,  # Color
                 center_of_surface,  # Relative position
                 self.radius + glow_radius * ((glow_layers - i) / glow_layers)  # Glow radius
@@ -103,7 +103,7 @@ class CelestialBody(SimulationObject):
 
         # Drawing glow on a screen
         position = (self.rect.centerx - self.radius - glow_radius, self.rect.centery - self.radius - glow_radius)
-        simulation_surface.blit(self.glow_surface, position)  # Drawing glow on screen
+        glow_surface.blit(self.current_glow_surface, position)  # Drawing glow on screen
 
 
 # Planet class
@@ -186,7 +186,7 @@ class Planet(CelestialBody):
 
         for index, pos in enumerate(self.traces):
             line_thickness = min(index // 100 + 1, 3)  # Calculated value or 3
-            pygame.draw.line(simulation_surface, self.trace_color, previous_pos, pos, line_thickness)  # Drawing line
+            pygame.draw.line(trace_surface, self.trace_color, previous_pos, pos, line_thickness)  # Drawing line
             previous_pos = pos  # Setting previous position
 
     def update(self, *args, **kwargs) -> None:

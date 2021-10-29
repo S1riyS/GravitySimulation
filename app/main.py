@@ -31,15 +31,18 @@ class Game:
         self.grid_surface = pygame.Surface(WINDOW_SIZE).convert_alpha()
         self.grid_surface.fill((0, 0, 0, 0))
 
+        # Simulation surfaces
+        self.is_drawing_glow = True
+        self.is_drawing_trace = True
+
         self.init_gui()  # Initiating GUI
 
     @staticmethod
-    def set_style(element: pygame_gui.elements, bg_color: pygame.Color) -> None:
+    def set_label_color(element: pygame_gui.elements, bg_color: pygame.Color) -> None:
         """
         Static method that applying style to element of GUI
         :param element: element of GUI
         :param bg_color: Background color of element
-        :param font_size: Font size
         :return: None
         """
 
@@ -47,7 +50,7 @@ class Game:
         element.rebuild()
 
     @staticmethod
-    def set_button_color(button: pygame_gui.elements.UIButton, color: pygame.Color):
+    def set_button_color(button: pygame_gui.elements.UIButton, color: pygame.Color) -> None:
         button.colours['normal_bg'] = color
         button.rebuild()
 
@@ -62,12 +65,19 @@ class Game:
 
         return any([rect.collidepoint(mouse_position) for rect in gui_rects])
 
-    def draw_grid(self, surface: pygame.Surface, color: pygame.Color, distance: int):
-        if self.is_drawing_grid:
-            for x in range(int(WIDTH / distance) + 2):
-                pygame.draw.line(surface, color, (x * distance, 0), (x * distance, HEIGHT), 1)
-            for y in range(int(HEIGHT / distance) + 2):
-                pygame.draw.line(surface, color, (0, y * distance), (WIDTH, y * distance), 1)
+    @staticmethod
+    def draw_grid(surface: pygame.Surface, color: pygame.Color, distance: int) -> None:
+        """
+        Static method that draws grid
+        :param surface: The surface on which the grid will be drawn
+        :param color: Color of grid
+        :param distance: Distance between lines of grid
+        :return: None
+        """
+        for x in range(int(WIDTH / distance) + 2):
+            pygame.draw.line(surface, color, (x * distance, 0), (x * distance, HEIGHT), 1)
+        for y in range(int(HEIGHT / distance) + 2):
+            pygame.draw.line(surface, color, (0, y * distance), (WIDTH, y * distance), 1)
 
     def init_gui(self):
         # Statements of window
@@ -86,31 +96,45 @@ class Game:
         self.settings_gui_elements = self.gui.settings_block['elements']
 
         # Planet
-        self.set_style(self.settings_gui_elements['planet_color_surface'], self.current_planet_color)
+        self.set_label_color(self.settings_gui_elements['planet_color_surface'], self.current_planet_color)
         self.planet_color_button = self.settings_gui_elements['planet_color_button']
         self.planet_color_picker = None
 
         # Star
-        self.set_style(self.settings_gui_elements['star_color_surface'], self.current_star_color)
+        self.set_label_color(self.settings_gui_elements['star_color_surface'], self.current_star_color)
         self.star_color_button = self.settings_gui_elements['star_color_button']
         self.star_color_picker = None
 
         # General
         self.grid_button = self.settings_gui_elements['grid_button']
-        self.set_button_color(self.grid_button, GRID_BUTTON_GREEN)
+        self.glow_button = self.settings_gui_elements['glow_button']
+        self.trace_button = self.settings_gui_elements['trace_button']
+
+        # Dictionary that contains {key:value} pairs of the form {button: is_drawing_this_surface}
+        self.general_button_dict = {
+            self.grid_button: True,
+            self.glow_button: True,
+            self.trace_button: True
+        }
+
+        # Making all buttons green
+        for button in self.general_button_dict.keys():
+            self.set_button_color(button, BUTTON_GREEN)
 
     def run(self):
         # Import everything necessary from objects
-        from app.objects import simulation_surface, celestial_bodies, Planet, Star
+        from app.objects import glow_surface, trace_surface, celestial_bodies, Planet, Star
 
         # Game loop
         self.is_running = True
         while self.is_running:
+
             # Checking if any of windows are open
             self.is_dialogue_open = self.is_planet_window_open or self.is_star_window_open
 
             # Filling surfaces
-            simulation_surface.fill((0, 0, 0, 0))
+            glow_surface.fill((0, 0, 0, 0))
+            trace_surface.fill((0, 0, 0, 0))
             self.grid_surface.fill((0, 0, 0, 0))
             self.screen.fill(DARK_BLUE)
 
@@ -147,26 +171,27 @@ class Game:
                                                                           manager=self.gui.manager)
                             self.star_color_button.disable()
 
-                        if event.ui_element == self.grid_button:
-                            if self.is_drawing_grid:
-                                self.set_button_color(self.grid_button, GRID_BUTTON_RED)
+                        # if pressed button in general setting
+                        if event.ui_element in self.general_button_dict:
+                            if self.general_button_dict[event.ui_element]:
+                                self.set_button_color(event.ui_element, BUTTON_RED)
                             else:
-                                self.set_button_color(self.grid_button, GRID_BUTTON_GREEN)
+                                self.set_button_color(event.ui_element, BUTTON_GREEN)
 
-                            self.is_drawing_grid = not self.is_drawing_grid
+                            self.general_button_dict[event.ui_element] = not self.general_button_dict[event.ui_element]
 
                     if event.user_type == pygame_gui.UI_COLOUR_PICKER_COLOUR_PICKED:
                         # If picked color of planet
                         if event.ui_element == self.planet_color_picker:
                             self.current_planet_color = event.colour
-                            self.set_style(self.settings_gui_elements['planet_color_surface'],
-                                           self.current_planet_color)
+                            self.set_label_color(self.settings_gui_elements['planet_color_surface'],
+                                                 self.current_planet_color)
 
                         # If picked color of star
                         if event.ui_element == self.star_color_picker:
                             self.current_star_color = event.colour
-                            self.set_style(self.settings_gui_elements['star_color_surface'],
-                                           self.current_star_color)
+                            self.set_label_color(self.settings_gui_elements['star_color_surface'],
+                                                 self.current_star_color)
 
                     if event.user_type == pygame_gui.UI_WINDOW_CLOSE:
                         # If closed planet's "Colour Picker Dialog"
@@ -247,11 +272,17 @@ class Game:
                                   mouse_y + velocity_vector.y * pv_line_length_coef), pv_line_thickness)
 
             # --- Updating elements of game --- #
-            self.screen.blit(self.grid_surface, (0, 0))  # Drawing grid
+            if self.general_button_dict[self.grid_button]:
+                self.screen.blit(self.grid_surface, (0, 0))  # Drawing grid
 
             # Simulation objects
             celestial_bodies.update()
-            self.screen.blit(simulation_surface, (0, 0))
+
+            if self.general_button_dict[self.glow_button]:
+                self.screen.blit(glow_surface, (0, 0))  # Blit glow surface
+            if self.general_button_dict[self.trace_button]:
+                self.screen.blit(trace_surface, (0, 0))  # Blit trace surface
+
             celestial_bodies.draw(self.screen)
 
             # GUI
@@ -270,6 +301,5 @@ class Game:
 
 if __name__ == "__main__":
     print('Simulation has been started!')
-    print('Logs:')
     game = Game()
     game.run()
