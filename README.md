@@ -31,7 +31,7 @@ Also in the upper right corner it is written with what specific speed the object
 To create star only thing you should do is press **Mouse2**.
 
 In the middle of left side of window you can set mass and color of stars and planets.
-Also there you can turn on/off background grid.
+Also there you can turn on/off **background grid**, **objects' glow** and **traces of planets**.
 
 *New features will be added later...*
 
@@ -47,7 +47,13 @@ To do this write following command in the console:
 
     `pip install -r requirements.txt`
 
-Now you can start `app/main.py` file
+Now you can start `app/main.py` file :
+```python
+if __name__ == "__main__":
+    print('Simulation has been started!')
+    game = Game()
+    game.run()
+```
 
 ## 💻 Modules
 * **[PyGame](https://pypi.org/project/pygame/)** -  is a free and open-source cross-platform library for 
@@ -58,6 +64,7 @@ for games written in PyGame.
 
 ## 🎞 Preview
 ![GIF 1](https://i.postimg.cc/pV1b9kpg/Gravity-Simulation-24-10.gif)
+![Image 1](https://i.postimg.cc/qMHPsShg/29-10-2021-150158.png)
 
 ## 👨‍ Developer
 * **[GitHub Profile](https://github.com/S1riyS)**
