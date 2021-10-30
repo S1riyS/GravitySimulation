@@ -111,14 +111,14 @@ class Game:
         self.trace_button = self.settings_gui_elements['trace_button']
 
         # Dictionary that contains {key:value} pairs of the form {button: is_drawing_this_surface}
-        self.general_button_dict = {
+        self.radio_buttons = {
             self.grid_button: True,
             self.glow_button: True,
             self.trace_button: True
         }
 
         # Making all buttons green
-        for button in self.general_button_dict.keys():
+        for button in self.radio_buttons.keys():
             self.set_button_color(button, BUTTON_GREEN)
 
     def run(self) -> None:
@@ -172,13 +172,13 @@ class Game:
                             self.star_color_button.disable()
 
                         # if pressed button in general setting
-                        if event.ui_element in self.general_button_dict:
-                            if self.general_button_dict[event.ui_element]:
+                        if event.ui_element in self.radio_buttons:
+                            if self.radio_buttons[event.ui_element]:
                                 self.set_button_color(event.ui_element, BUTTON_RED)
                             else:
                                 self.set_button_color(event.ui_element, BUTTON_GREEN)
 
-                            self.general_button_dict[event.ui_element] = not self.general_button_dict[event.ui_element]
+                            self.radio_buttons[event.ui_element] = not self.radio_buttons[event.ui_element]
 
                     if event.user_type == pygame_gui.UI_COLOUR_PICKER_COLOUR_PICKED:
                         # If picked color of planet
@@ -272,15 +272,15 @@ class Game:
                                   mouse_y + velocity_vector.y * pv_line_length_coef), pv_line_thickness)
 
             # --- Updating elements of game --- #
-            if self.general_button_dict[self.grid_button]:
+            if self.radio_buttons[self.grid_button]:
                 self.screen.blit(self.grid_surface, (0, 0))  # Drawing grid
 
             # Simulation objects
             celestial_bodies.update(dt=self.time_delta)
 
-            if self.general_button_dict[self.glow_button]:
+            if self.radio_buttons[self.glow_button]:
                 self.screen.blit(glow_surface, (0, 0))  # Blit glow surface
-            if self.general_button_dict[self.trace_button]:
+            if self.radio_buttons[self.trace_button]:
                 self.screen.blit(trace_surface, (0, 0))  # Blit trace surface
 
             celestial_bodies.draw(self.screen)
