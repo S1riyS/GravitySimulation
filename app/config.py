@@ -29,6 +29,16 @@ K_value = 1
 K = sqrt(K_value)
 max_trace_length = 400  # Max length of planet's trace
 
+# Planet settings
+PLANET_DEFAULT_MASS = 150
+PLANET_MIN_MASS = 50
+PLANET_MAX_MASS = 450
+
+# Star settings
+STAR_DEFAULT_MASS = 20000
+STAR_MIN_MASS = 10000
+STAR_MAX_MASS = 30000
+
 # Planet preview
 pv_radius = 8 // K
 pv_line_length_coef = 20 / K
