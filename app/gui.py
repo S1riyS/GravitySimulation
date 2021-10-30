@@ -93,9 +93,9 @@ class GUI:
 
         # Array of rectangles of  GUI
         rect_array = [element.rect for element in elements_array]
-        # GUI rect with biggest (Y + height) value
+        # GUI element with biggest (Y + height) value
         max_y_rect = sorted(rect_array, key=lambda x: x[1] + x[3])[-1]
-        # GUI rect with biggest (X + width) value
+        # GUI element with biggest (X + width) value
         max_x_rect = sorted(rect_array, key=lambda x: x[0] + x[2])[-1]
 
         rect_x = min([element.rect.x for element in elements_array])  # Top left X
