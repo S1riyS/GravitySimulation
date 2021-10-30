@@ -79,7 +79,7 @@ class Game:
         for y in range(int(HEIGHT / distance) + 2):
             pygame.draw.line(surface, color, (0, y * distance), (WIDTH, y * distance), 1)
 
-    def init_gui(self):
+    def init_gui(self) -> None:
         # Statements of window
         self.is_dialogue_open = False
         self.is_planet_window_open = False
@@ -121,7 +121,7 @@ class Game:
         for button in self.general_button_dict.keys():
             self.set_button_color(button, BUTTON_GREEN)
 
-    def run(self):
+    def run(self) -> None:
         # Import everything necessary from objects
         from app.objects import glow_surface, trace_surface, celestial_bodies, Planet, Star
 
@@ -276,7 +276,7 @@ class Game:
                 self.screen.blit(self.grid_surface, (0, 0))  # Drawing grid
 
             # Simulation objects
-            celestial_bodies.update()
+            celestial_bodies.update(dt=self.time_delta)
 
             if self.general_button_dict[self.glow_button]:
                 self.screen.blit(glow_surface, (0, 0))  # Blit glow surface

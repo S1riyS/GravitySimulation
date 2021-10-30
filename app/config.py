@@ -20,6 +20,7 @@ WIDTH = 1280
 HEIGHT = 720
 WINDOW_SIZE = (WIDTH, HEIGHT)
 FPS = 120
+FPS_CONST = 100
 
 # Simulation variables
 G = 0.0005  # Gravitation constant

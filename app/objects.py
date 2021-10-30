@@ -128,14 +128,30 @@ class Planet(CelestialBody):
 
         planets.add(self)
 
+    @staticmethod
+    def normalize_vector(vector: Vector2, min_length: int, max_length=None) -> Vector2:
+        vector_length = vector.length()
+
+        if vector_length < min_length:
+            new_vector = vector * (min_length / vector_length)
+            return new_vector
+
+        elif max_length is not None:
+            if vector_length > max_length:
+                new_vector = vector * (max_length / vector_length)
+                return new_vector
+
+        return vector
+
     # Updating position
-    def update_position(self):
+    def update_position(self, dt):
         self.forces = Vector2(0, 0)  # Sum of forces ((0, 0) at the beginning)
         self.position_vector = Vector2(self.x, self.y)  # Position vector
 
         for body in celestial_bodies:
             if body.id != self.id:
                 vector_distance = K * (body.position_vector - self.position_vector)
+                vector_distance = self.normalize_vector(vector_distance, min_length=5)
 
                 if vector_distance.length() == 0:
                     print(
@@ -144,18 +160,19 @@ class Planet(CelestialBody):
                     )
                     self.kill()
                     body.kill()
+
                 else:
-                    universal_gravity = ((self.mass * body.mass) / vector_distance.length_squared())
+                    universal_gravity = G * ((self.mass * body.mass) / vector_distance.length_squared())
                     unit_vector = (vector_distance / vector_distance.length())
-                    force = G * universal_gravity * unit_vector  # Gravitational force between this body and another
+                    force = universal_gravity * unit_vector  # Gravitational force between this body and another
 
                     self.forces += force  # Adding this force
 
         self.velocity += self.forces  # Adding forces to velocity
 
         # Applying velocity changes
-        self.x += self.velocity.x
-        self.y += self.velocity.y
+        self.x += self.velocity.x * dt
+        self.y += self.velocity.y * dt
 
         self.rect.centerx = self.x
         self.rect.centery = self.y
@@ -195,11 +212,11 @@ class Planet(CelestialBody):
         self.traces.append(position)
 
         # Updating
-        self.update_position()
+        delta_time = kwargs.get('dt') * FPS_CONST
+        self.update_position(dt=delta_time)
         self.collision_with_stars()
         self.is_out_of_system()
         self.draw_trace()
-
         self.draw_object_glow(glow_radius=self.glow_radius, glow_color=self.glow_color, glow_layers=3)
 
 
