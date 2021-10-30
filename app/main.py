@@ -233,8 +233,7 @@ class Game:
                             Planet(
                                 x=mouse_x,
                                 y=mouse_y,
-                                velocity_x=velocity_vector.x,
-                                velocity_y=velocity_vector.y,
+                                velocity=velocity_vector,
                                 mass=self.settings_gui_elements['planet_mass_slider'].get_current_value(),
                                 color=self.current_planet_color
                             )

@@ -113,7 +113,15 @@ class Planet(CelestialBody):
     Inherited from CelestialBody Class.
     """
 
-    def __init__(self, x, y, velocity_x, velocity_y, mass, color):
+    def __init__(self, x, y, velocity, mass, color):
+        """
+        :param x: Initial X coordinate
+        :param y: Initial Y coordinate
+        :param velocity: 2D vector with initial velocity
+        :param mass: Mass of the planet
+        :param color: Color of the planet
+        """
+
         super().__init__(x, y, mass, color)
         planet_radius = 8 // K * (self.mass / 150) ** (1 / 3)  # Radius of planet
         self.set_rect(radius=planet_radius)
@@ -124,7 +132,7 @@ class Planet(CelestialBody):
 
         self.traces = []  # Array of dots
         self.max_trace_length = 400  # Max size of array
-        self.velocity = Vector2(velocity_x, velocity_y)  # Set initial velocity
+        self.velocity = velocity  # Set initial velocity
 
         planets.add(self)
 
