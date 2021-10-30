@@ -121,9 +121,37 @@ class Game:
         for button in self.radio_buttons.keys():
             self.set_button_color(button, BUTTON_GREEN)
 
+    def restart(self) -> None:
+        # Cleaning groups of sprites
+        self.simulation_manager.stars.empty()
+        self.simulation_manager.planets.empty()
+        self.simulation_manager.celestial_bodies.empty()
+
+        # Initiating beginning colors
+        self.current_planet_color = copy.copy(PLANET_COLOR)
+        self.set_label_color(self.settings_gui_elements['planet_color_surface'], self.current_planet_color)
+        self.current_star_color = copy.copy(STAR_COLOR)
+        self.set_label_color(self.settings_gui_elements['star_color_surface'], self.current_star_color)
+
+        # Resetting UIHorizontalSliders
+        self.settings_gui_elements['planet_mass_slider'].set_current_value(PLANET_DEFAULT_MASS)
+        self.settings_gui_elements['star_mass_slider'].set_current_value(STAR_DEFAULT_MASS)
+
+        # Dictionary that contains {key:value} pairs of the form {button: is_drawing_this_surface}
+        self.radio_buttons = {
+            self.grid_button: True,
+            self.glow_button: True,
+            self.trace_button: True
+        }
+
+        # Making all radio buttons green as a default
+        for button in self.radio_buttons.keys():
+            self.set_button_color(button, BUTTON_GREEN)
+
     def run(self) -> None:
         # Import everything necessary from objects
-        from app.objects import glow_surface, trace_surface, celestial_bodies, Planet, Star
+        from app.objects import simulation_manager, Planet, Star
+        self.simulation_manager = simulation_manager  # Creating 'local copy' of simulation manager
 
         # Game loop
         self.is_running = True
@@ -133,8 +161,8 @@ class Game:
             self.is_dialogue_open = self.is_planet_window_open or self.is_star_window_open
 
             # Filling surfaces
-            glow_surface.fill((0, 0, 0, 0))
-            trace_surface.fill((0, 0, 0, 0))
+            self.simulation_manager.glow_surface.fill((0, 0, 0, 0))
+            self.simulation_manager.trace_surface.fill((0, 0, 0, 0))
             self.grid_surface.fill((0, 0, 0, 0))
             self.screen.fill(DARK_BLUE)
 
@@ -179,6 +207,9 @@ class Game:
                                 self.set_button_color(event.ui_element, BUTTON_GREEN)
 
                             self.radio_buttons[event.ui_element] = not self.radio_buttons[event.ui_element]
+
+                        if event.ui_element == self.settings_gui_elements['restart_button']:
+                            self.restart()
 
                     if event.user_type == pygame_gui.UI_COLOUR_PICKER_COLOUR_PICKED:
                         # If picked color of planet
@@ -275,14 +306,14 @@ class Game:
                 self.screen.blit(self.grid_surface, (0, 0))  # Drawing grid
 
             # Simulation objects
-            celestial_bodies.update(dt=self.time_delta)
+            self.simulation_manager.celestial_bodies.update(dt=self.time_delta)
 
             if self.radio_buttons[self.glow_button]:
-                self.screen.blit(glow_surface, (0, 0))  # Blit glow surface
+                self.screen.blit(self.simulation_manager.glow_surface, (0, 0))  # Blit glow surface
             if self.radio_buttons[self.trace_button]:
-                self.screen.blit(trace_surface, (0, 0))  # Blit trace surface
+                self.screen.blit(self.simulation_manager.trace_surface, (0, 0))  # Blit trace surface
 
-            celestial_bodies.draw(self.screen)
+            self.simulation_manager.celestial_bodies.draw(self.screen)
 
             # GUI
             for rect in self.gui.gui_rects:

@@ -10,14 +10,20 @@ from pygame.math import Vector2
 
 from app.config import *
 
-# Surface with some objects of simulation
-glow_surface = pygame.Surface(WINDOW_SIZE).convert_alpha()
-trace_surface = pygame.Surface(WINDOW_SIZE).convert_alpha()
 
-# Sprite groups
-celestial_bodies = pygame.sprite.Group()
-planets = pygame.sprite.Group()
-stars = pygame.sprite.Group()
+class SimulationManager:
+    def __init__(self):
+        # Surface with some objects of simulation
+        self.glow_surface = pygame.Surface(WINDOW_SIZE).convert_alpha()
+        self.trace_surface = pygame.Surface(WINDOW_SIZE).convert_alpha()
+
+        # Sprite groups
+        self.celestial_bodies = pygame.sprite.Group()
+        self.planets = pygame.sprite.Group()
+        self.stars = pygame.sprite.Group()
+
+
+simulation_manager = SimulationManager()
 
 
 # Main simulation class
@@ -53,7 +59,7 @@ class CelestialBody(SimulationObject):
         self.mass = mass
         self.glow_color = copy.copy(self.color)  # Without alpha
 
-        celestial_bodies.add(self)
+        simulation_manager.celestial_bodies.add(self)
 
     # Set object's surface, rect and image
     def set_rect(self, radius: int):
@@ -103,7 +109,7 @@ class CelestialBody(SimulationObject):
 
         # Drawing glow on a screen
         position = (self.rect.centerx - self.radius - glow_radius, self.rect.centery - self.radius - glow_radius)
-        glow_surface.blit(self.current_glow_surface, position)  # Drawing glow on screen
+        simulation_manager.glow_surface.blit(self.current_glow_surface, position)  # Drawing glow on screen
 
 
 # Planet class
@@ -134,7 +140,7 @@ class Planet(CelestialBody):
         self.max_trace_length = 400  # Max size of array
         self.velocity = velocity  # Set initial velocity
 
-        planets.add(self)
+        simulation_manager.planets.add(self)
 
     @staticmethod
     def normalize_vector(vector: Vector2, min_length: int, max_length=None) -> Vector2:
@@ -156,7 +162,7 @@ class Planet(CelestialBody):
         self.forces = Vector2(0, 0)  # Sum of forces ((0, 0) at the beginning)
         self.position_vector = Vector2(self.x, self.y)  # Position vector
 
-        for body in celestial_bodies:
+        for body in simulation_manager.celestial_bodies:
             if body.id != self.id:
                 vector_distance = K * (body.position_vector - self.position_vector)
                 vector_distance = self.normalize_vector(vector_distance, min_length=5)
@@ -187,7 +193,7 @@ class Planet(CelestialBody):
 
     # Collision with stars
     def collision_with_stars(self):
-        for star in stars:
+        for star in simulation_manager.stars:
             vector_distance = star.position_vector - self.position_vector
             if vector_distance.length() < (star.radius + self.radius):
                 print(f'№{self.id} - killed by collision with star, position: {self.position_vector}')
@@ -211,7 +217,8 @@ class Planet(CelestialBody):
 
         for index, pos in enumerate(self.traces):
             line_thickness = min(index // 100 + 1, 3)  # Calculated value or 3
-            pygame.draw.line(trace_surface, self.trace_color, previous_pos, pos, line_thickness)  # Drawing line
+            pygame.draw.line(simulation_manager.trace_surface, self.trace_color, previous_pos, pos,
+                             line_thickness)  # Drawing line
             previous_pos = pos  # Setting previous position
 
     def update(self, *args, **kwargs) -> None:
@@ -244,7 +251,7 @@ class Star(CelestialBody):
 
         self.draw_object_body()  # Drawing body of Star
 
-        stars.add(self)
+        simulation_manager.stars.add(self)
 
     def update(self, *args, **kwargs) -> None:
         self.draw_object_glow(glow_radius=self.glow_radius, glow_color=self.glow_color, glow_layers=5)
