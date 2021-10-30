@@ -20,6 +20,8 @@ class Game:
         # PyGame screen variables
         self.screen = pygame.display.set_mode(WINDOW_SIZE)  # Initialize screen
         pygame.display.set_caption("Gravity Simulation")  # Caption
+        self.icon = pygame.image.load('data/images/logo.png')  # icon
+        pygame.display.set_icon(self.icon)  # Setting icon
         self.clock = pygame.time.Clock()  # Clock
 
         # Initiating beginning colors
@@ -199,7 +201,7 @@ class Game:
                                                                           manager=self.gui.manager)
                             self.star_color_button.disable()
 
-                        # if pressed button in general setting
+                        # if pressed button in dict of radio buttons
                         if event.ui_element in self.radio_buttons:
                             if self.radio_buttons[event.ui_element]:
                                 self.set_button_color(event.ui_element, BUTTON_RED)
