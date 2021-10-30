@@ -29,6 +29,9 @@ K_value = 1
 K = sqrt(K_value)
 max_trace_length = 400  # Max length of planet's trace
 
+# Simulation objects' settings
+BASE_GLOW_ALPHA = 20
+
 # Planet settings
 PLANET_DEFAULT_MASS = 150
 PLANET_MIN_MASS = 50

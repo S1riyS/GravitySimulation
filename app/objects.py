@@ -94,10 +94,11 @@ class CelestialBody(SimulationObject):
         self.current_glow_surface.fill((0, 0, 0, 0))
         center_of_surface = (surface_side // 2, surface_side // 2)
 
+        current_glow_color = glow_color  # Setting current color
+
         for i in range(glow_layers):
             # Calculating color of glow
-            current_glow_alpha = min(20 * (i + 1), 255)  # Calculated alpha (from 0 to 255)
-            current_glow_color = glow_color  # Setting current color
+            current_glow_alpha = min(BASE_GLOW_ALPHA * (i + 1), 255)  # Calculated alpha (from 0 to 255)
             current_glow_color.a = current_glow_alpha  # Setting alpha to current color
 
             pygame.draw.circle(
