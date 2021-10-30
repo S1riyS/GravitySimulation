@@ -48,5 +48,12 @@
   },
   "#settings_label": {
     "prototype": "#transparent"
+  },
+  "#radio_button": {
+
+    "misc": {
+      "shape": "rounded_rectangle",
+      "shape_corner_radius": "10"
+    }
   }
 }
