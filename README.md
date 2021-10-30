@@ -5,7 +5,7 @@
 ![Alerts](https://img.shields.io/lgtm/alerts/github/S1riyS/GravitySimulation)
 
 ![Gravity-Simulation-Logo](https://i.postimg.cc/j2DPRJDC/Gravity-Simulation-Logo.png)
-⭐ Star us on GitHub — it motivates us a lot!
+⭐ Star me on GitHub — it motivates me a lot!
 
 ## 📝 About project
 
