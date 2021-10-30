@@ -86,6 +86,13 @@ class GUI:
             }
         }
 
+        self.developer_block = {
+            'elements': {
+                'dev_label': UILabel(relative_rect=pygame.Rect(0, 680, 200, 30),
+                                     text='Created by S1riyS', manager=self.manager, object_id="#subtitle"),
+            }
+        }
+
     # GUI rect
     def get_gui_rect(self, gui_dictionary: dict, padding: int) -> pygame.Rect:
         """
