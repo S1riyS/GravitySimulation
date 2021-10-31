@@ -41,6 +41,7 @@ class Game:
         self.simulation_speed = 1
 
         self.init_gui()  # Initiating GUI
+        self.init_modules() # Copying imported variables
 
     @staticmethod
     def set_label_color(element: pygame_gui.elements, bg_color: pygame.Color) -> None:
@@ -130,7 +131,7 @@ class Game:
 
         self.play_button.disable()
 
-        self.play_speed_buttons = {
+        self.multimedia_buttons = {
             self.pause_button: 0,
             self.play_button: 1,
             self.faster_x2_button: 2,
@@ -140,6 +141,12 @@ class Game:
         # Making all buttons green
         for button in self.radio_buttons.keys():
             self.set_button_color(button, BUTTON_GREEN)
+
+    def init_modules(self) -> None:
+        from app.objects import simulation_manager, Planet, Star
+        self.Star = Star
+        self.Planet = Planet
+        self.simulation_manager = simulation_manager
 
     def restart(self) -> None:
         # Cleaning groups of sprites
@@ -165,7 +172,7 @@ class Game:
         }
 
         # Resetting play speed buttons
-        for button in self.play_speed_buttons:
+        for button in self.multimedia_buttons:
             button.enable()
 
         self.simulation_speed = 1
@@ -175,191 +182,196 @@ class Game:
         for button in self.radio_buttons.keys():
             self.set_button_color(button, BUTTON_GREEN)
 
-    def run(self) -> None:
-        # Import everything necessary from objects
-        from app.objects import simulation_manager, Planet, Star
-        self.simulation_manager = simulation_manager  # Creating 'local copy' of simulation manager
+    def fill_surfaces(self) -> None:
+        # Filling surfaces
+        self.simulation_manager.glow_surface.fill((0, 0, 0, 0))
+        self.simulation_manager.trace_surface.fill((0, 0, 0, 0))
+        self.grid_surface.fill((0, 0, 0, 0))
+        self.screen.fill(DARK_BLUE)
 
+    def handle_events(self) -> None:
+        # Checking if any of windows are open
+        self.is_dialogue_open = self.is_planet_window_open or self.is_star_window_open
+
+        # Event loop
+        for event in pygame.event.get():
+            # Quit event
+            if event.type == pygame.QUIT:
+                self.is_running = False
+                print('Simulation has ended')
+
+            # User events
+            if event.type == pygame.USEREVENT:
+                if event.user_type == pygame_gui.UI_BUTTON_PRESSED:
+                    # If pressed planet's "choose color" button
+                    if event.ui_element == self.planet_color_button:
+                        self.is_planet_window_open = True
+                        self.planet_color_picker = UIColourPickerDialog(pygame.Rect(210, 0, 390, 390),
+                                                                        window_title='Planet color ...',
+                                                                        initial_colour=self.current_planet_color,
+                                                                        manager=self.gui.manager)
+                        self.planet_color_button.disable()
+
+                    # If pressed star's "choose color" button
+                    if event.ui_element == self.star_color_button:
+                        self.is_star_window_open = True
+                        self.star_color_picker = UIColourPickerDialog(pygame.Rect(230, 30, 390, 390),
+                                                                      window_title='Star color ...',
+                                                                      initial_colour=self.current_star_color,
+                                                                      manager=self.gui.manager)
+                        self.star_color_button.disable()
+
+                    # if pressed button in dict of radio buttons
+                    if event.ui_element in self.radio_buttons:
+                        if self.radio_buttons[event.ui_element]:
+                            self.set_button_color(event.ui_element, BUTTON_RED)
+                        else:
+                            self.set_button_color(event.ui_element, BUTTON_GREEN)
+
+                        self.radio_buttons[event.ui_element] = not self.radio_buttons[event.ui_element]
+
+                    # If pressed button in dict of multimedia buttons
+                    if event.ui_element in self.multimedia_buttons:
+                        self.simulation_speed = self.multimedia_buttons[event.ui_element]
+                        for button in self.multimedia_buttons:
+                            button.enable()
+                        event.ui_element.disable()
+
+                    # Restart button
+                    if event.ui_element == self.settings_gui_elements['restart_button']:
+                        self.restart()
+
+                if event.user_type == pygame_gui.UI_COLOUR_PICKER_COLOUR_PICKED:
+                    # If picked color of planet
+                    if event.ui_element == self.planet_color_picker:
+                        self.current_planet_color = event.colour
+                        self.set_label_color(self.settings_gui_elements['planet_color_surface'],
+                                             self.current_planet_color)
+
+                    # If picked color of star
+                    if event.ui_element == self.star_color_picker:
+                        self.current_star_color = event.colour
+                        self.set_label_color(self.settings_gui_elements['star_color_surface'],
+                                             self.current_star_color)
+
+                if event.user_type == pygame_gui.UI_WINDOW_CLOSE:
+                    # If closed planet's "Colour Picker Dialog"
+                    if event.ui_element == self.planet_color_picker:
+                        self.is_planet_window_open = False
+                        self.planet_color_button.enable()
+                        self.planet_color_picker = None
+
+                    # If closed star's "Colour Picker Dialog"
+                    if event.ui_element == self.star_color_picker:
+                        self.is_star_window_open = False
+                        self.star_color_button.enable()
+                        self.star_color_picker = None
+
+            # Mouse button down event
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                # Mouse position
+                pressed_mouse_position = pygame.mouse.get_pos()
+                self.mouse_x, self.mouse_y = pressed_mouse_position
+
+                # Checking if mouse on GUI
+                self.is_mouse_on_gui = self.mouse_collision_with_gui(
+                    mouse_position=pressed_mouse_position,
+                    gui_rects=self.gui.gui_rects) or self.is_dialogue_open
+
+                if event.button == 3 and not self.is_mouse_on_gui:
+                    # Creating a star
+                    self.Star(
+                        x=self.mouse_x,
+                        y=self.mouse_y,
+                        mass=self.settings_gui_elements['star_mass_slider'].get_current_value(),
+                        color=self.current_star_color
+                    )
+
+            # Mouse button up event
+            if event.type == pygame.MOUSEBUTTONUP and not self.is_mouse_on_gui:
+                if event.button == 1:
+                    try:
+                        # Creating a planet
+                        self.Planet(
+                            x=self.mouse_x,
+                            y=self.mouse_y,
+                            velocity=self.velocity_vector,
+                            mass=self.settings_gui_elements['planet_mass_slider'].get_current_value(),
+                            color=self.current_planet_color
+                        )
+
+                        # Setting labels
+                        self.info_gui_elements['velocity_x_label'].set_text('X velocity: None')
+                        self.info_gui_elements['velocity_y_label'].set_text('Y velocity: None')
+
+                    except Exception as error:
+                        print(f'Velocity vector is not defined. Error: {error}')
+
+            self.gui.manager.process_events(event)
+
+        # Drawing preview line of velocity of new planet
+        pressed = pygame.mouse.get_pressed()  # Pressed buttons
+        if pressed[0] and not self.is_mouse_on_gui:
+            # Mouse position (x, y)
+            current_mouse_position = pygame.mouse.get_pos()
+            current_mouse_x, current_mouse_y = current_mouse_position
+
+            # Calculating velocity vector
+            current_pos_vector = Vector2(current_mouse_x, current_mouse_y)
+            pressed_pos_vector = Vector2(self.mouse_x, self.mouse_y)
+            self.velocity_vector = -(current_pos_vector - pressed_pos_vector) * pv_velocity_value_coef
+
+            # Setting labels
+            self.info_gui_elements['velocity_x_label'].set_text(f'X velocity: {round(self.velocity_vector.x, 4)}')
+            self.info_gui_elements['velocity_y_label'].set_text(f'Y velocity: {-round(self.velocity_vector.y, 4)}')
+
+            # Drawing preview
+            pygame.draw.circle(self.screen, WHITE, (self.mouse_x, self.mouse_y), pv_radius)
+            pygame.draw.line(self.screen, WHITE,
+                             (self.mouse_x, self.mouse_y),
+                             (self.mouse_x + self.velocity_vector.x * pv_line_length_coef,
+                              self.mouse_y + self.velocity_vector.y * pv_line_length_coef), pv_line_thickness)
+
+    def update(self) -> None:
+        # Drawing grid
+        self.draw_grid(self.grid_surface, grid_color, grid_distance)
+        if self.radio_buttons[self.grid_button]:
+            self.screen.blit(self.grid_surface, (0, 0))  # Drawing grid
+
+        # Simulation objects
+        self.simulation_manager.celestial_bodies.update(dt=self.simulation_speed * self.time_delta)
+
+        if self.radio_buttons[self.glow_button]:
+            self.screen.blit(self.simulation_manager.glow_surface, (0, 0))  # Blit glow surface
+        if self.radio_buttons[self.trace_button]:
+            self.screen.blit(self.simulation_manager.trace_surface, (0, 0))  # Blit trace surface
+
+        self.simulation_manager.celestial_bodies.draw(self.screen)
+
+        # GUI
+        for rect in self.gui.gui_rects:
+            pygame.draw.rect(self.screen, self.gui.gui_rect_color, rect)
+
+        self.info_gui_elements['FPS_counter'].set_text(f'FPS: {int(self.clock.get_fps())}')  # FPS
+        self.gui.manager.update(self.time_delta)
+        self.gui.manager.draw_ui(self.screen)
+
+        # Display
+        pygame.display.flip()
+
+    def run(self) -> None:
         # Game loop
         self.is_running = True
+
         while self.is_running:
-
-            # Checking if any of windows are open
-            self.is_dialogue_open = self.is_planet_window_open or self.is_star_window_open
-
-            # Filling surfaces
-            self.simulation_manager.glow_surface.fill((0, 0, 0, 0))
-            self.simulation_manager.trace_surface.fill((0, 0, 0, 0))
-            self.grid_surface.fill((0, 0, 0, 0))
-            self.screen.fill(DARK_BLUE)
-
-            # Drawing grid
-            self.draw_grid(self.grid_surface, grid_color, grid_distance)
-
             self.clock.tick(FPS)
             self.time_delta = self.clock.tick(FPS) / 1000.0
 
-            # Event loop
-            for event in pygame.event.get():
-                # Quit event
-                if event.type == pygame.QUIT:
-                    self.is_running = False
+            self.fill_surfaces()  # Filling surfaces with matching colors
+            self.handle_events()  # Handling events
+            self.update()  # Updating
 
-                # User events
-                if event.type == pygame.USEREVENT:
-                    if event.user_type == pygame_gui.UI_BUTTON_PRESSED:
-                        # If pressed planet's "choose color" button
-                        if event.ui_element == self.planet_color_button:
-                            self.is_planet_window_open = True
-                            self.planet_color_picker = UIColourPickerDialog(pygame.Rect(210, 0, 390, 390),
-                                                                            window_title='Planet color ...',
-                                                                            initial_colour=self.current_planet_color,
-                                                                            manager=self.gui.manager)
-                            self.planet_color_button.disable()
-
-                        # If pressed star's "choose color" button
-                        if event.ui_element == self.star_color_button:
-                            self.is_star_window_open = True
-                            self.star_color_picker = UIColourPickerDialog(pygame.Rect(230, 30, 390, 390),
-                                                                          window_title='Star color ...',
-                                                                          initial_colour=self.current_star_color,
-                                                                          manager=self.gui.manager)
-                            self.star_color_button.disable()
-
-                        # if pressed button in dict of radio buttons
-                        if event.ui_element in self.radio_buttons:
-                            if self.radio_buttons[event.ui_element]:
-                                self.set_button_color(event.ui_element, BUTTON_RED)
-                            else:
-                                self.set_button_color(event.ui_element, BUTTON_GREEN)
-
-                            self.radio_buttons[event.ui_element] = not self.radio_buttons[event.ui_element]
-
-                        if event.ui_element in self.play_speed_buttons:
-                            self.simulation_speed = self.play_speed_buttons[event.ui_element]
-                            for button in self.play_speed_buttons:
-                                button.enable()
-                            event.ui_element.disable()
-
-                        if event.ui_element == self.settings_gui_elements['restart_button']:
-                            self.restart()
-
-                    if event.user_type == pygame_gui.UI_COLOUR_PICKER_COLOUR_PICKED:
-                        # If picked color of planet
-                        if event.ui_element == self.planet_color_picker:
-                            self.current_planet_color = event.colour
-                            self.set_label_color(self.settings_gui_elements['planet_color_surface'],
-                                                 self.current_planet_color)
-
-                        # If picked color of star
-                        if event.ui_element == self.star_color_picker:
-                            self.current_star_color = event.colour
-                            self.set_label_color(self.settings_gui_elements['star_color_surface'],
-                                                 self.current_star_color)
-
-                    if event.user_type == pygame_gui.UI_WINDOW_CLOSE:
-                        # If closed planet's "Colour Picker Dialog"
-                        if event.ui_element == self.planet_color_picker:
-                            self.is_planet_window_open = False
-                            self.planet_color_button.enable()
-                            self.planet_color_picker = None
-
-                        # If closed star's "Colour Picker Dialog"
-                        if event.ui_element == self.star_color_picker:
-                            self.is_star_window_open = False
-                            self.star_color_button.enable()
-                            self.star_color_picker = None
-
-                # Mouse events
-                if event.type == pygame.MOUSEBUTTONDOWN:
-                    # Mouse position
-                    pressed_mouse_position = pygame.mouse.get_pos()
-                    mouse_x, mouse_y = pressed_mouse_position
-
-                    # Checking if mouse on GUI
-                    is_mouse_on_gui = self.mouse_collision_with_gui(
-                        mouse_position=pressed_mouse_position,
-                        gui_rects=self.gui.gui_rects) or self.is_dialogue_open
-
-                    if event.button == 3 and not is_mouse_on_gui:
-                        # Creating a star
-                        Star(
-                            x=mouse_x,
-                            y=mouse_y,
-                            mass=self.settings_gui_elements['star_mass_slider'].get_current_value(),
-                            color=self.current_star_color
-                        )
-
-                if event.type == pygame.MOUSEBUTTONUP and not is_mouse_on_gui:
-                    if event.button == 1:
-                        try:
-                            # Creating a planet
-                            Planet(
-                                x=mouse_x,
-                                y=mouse_y,
-                                velocity=velocity_vector,
-                                mass=self.settings_gui_elements['planet_mass_slider'].get_current_value(),
-                                color=self.current_planet_color
-                            )
-
-                            # Setting labels
-                            self.info_gui_elements['velocity_x_label'].set_text('X velocity: None')
-                            self.info_gui_elements['velocity_y_label'].set_text('Y velocity: None')
-
-                        except Exception as error:
-                            print(f'Velocity vector is not defined. Error: {error}')
-
-                self.gui.manager.process_events(event)
-
-            # Drawing line of velocity of new planet
-            pressed = pygame.mouse.get_pressed()  # Pressed buttons
-            if pressed[0] and not is_mouse_on_gui:
-                # Mouse position (x, y)
-                current_mouse_position = pygame.mouse.get_pos()
-                current_mouse_x, current_mouse_y = current_mouse_position
-
-                # Calculating velocity vector
-                current_pos_vector = Vector2(current_mouse_x, current_mouse_y)
-                pressed_pos_vector = Vector2(mouse_x, mouse_y)
-                velocity_vector = -(current_pos_vector - pressed_pos_vector) * pv_velocity_value_coef
-
-                # Setting labels
-                self.info_gui_elements['velocity_x_label'].set_text(f'X velocity: {round(velocity_vector.x, 4)}')
-                self.info_gui_elements['velocity_y_label'].set_text(f'Y velocity: {-round(velocity_vector.y, 4)}')
-
-                # Drawing preview
-                pygame.draw.circle(self.screen, WHITE, (mouse_x, mouse_y), pv_radius)
-                pygame.draw.line(self.screen, WHITE,
-                                 (mouse_x, mouse_y),
-                                 (mouse_x + velocity_vector.x * pv_line_length_coef,
-                                  mouse_y + velocity_vector.y * pv_line_length_coef), pv_line_thickness)
-
-            # --- Updating elements of game --- #
-            if self.radio_buttons[self.grid_button]:
-                self.screen.blit(self.grid_surface, (0, 0))  # Drawing grid
-
-            # Simulation objects
-            self.simulation_manager.celestial_bodies.update(dt=self.simulation_speed * self.time_delta)
-
-            if self.radio_buttons[self.glow_button]:
-                self.screen.blit(self.simulation_manager.glow_surface, (0, 0))  # Blit glow surface
-            if self.radio_buttons[self.trace_button]:
-                self.screen.blit(self.simulation_manager.trace_surface, (0, 0))  # Blit trace surface
-
-            self.simulation_manager.celestial_bodies.draw(self.screen)
-
-            # GUI
-            for rect in self.gui.gui_rects:
-                pygame.draw.rect(self.screen, self.gui.gui_rect_color, rect)
-
-            self.info_gui_elements['FPS_counter'].set_text(f'FPS: {int(self.clock.get_fps())}')  # FPS
-            self.gui.manager.update(self.time_delta)
-            self.gui.manager.draw_ui(self.screen)
-
-            # Display
-            pygame.display.flip()
-
-        pygame.quit()
+        pygame.quit()  # Quit
 
 
 if __name__ == "__main__":
