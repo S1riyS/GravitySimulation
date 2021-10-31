@@ -144,7 +144,7 @@ class Planet(CelestialBody):
         simulation_manager.planets.add(self)
 
     @staticmethod
-    def normalize_vector(vector: Vector2, min_length: int, max_length=None) -> Vector2:
+    def scale_vector(vector: Vector2, min_length: int, max_length=None) -> Vector2:
         vector_length = vector.length()
 
         if vector_length < min_length:
@@ -166,7 +166,7 @@ class Planet(CelestialBody):
         for body in simulation_manager.celestial_bodies:
             if body.id != self.id:
                 vector_distance = K * (body.position_vector - self.position_vector)
-                vector_distance = self.normalize_vector(vector_distance, min_length=5)
+                vector_distance = self.scale_vector(vector_distance, min_length=3)
 
                 if vector_distance.length() == 0:
                     print(
