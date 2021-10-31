@@ -4,6 +4,12 @@
       "dark_bg": "#00000000"
     }
   },
+  "#rounded": {
+    "misc": {
+      "shape": "rounded_rectangle",
+      "shape_corner_radius": "5"
+    }
+  },
   "label": {
     "font": {
       "name": "montserrat",
@@ -12,6 +18,7 @@
     }
   },
   "button": {
+    "prototype": "#rounded",
     "font": {
       "name": "montserrat",
       "size": "14",
@@ -50,10 +57,45 @@
     "prototype": "#transparent"
   },
   "#radio_button": {
-
     "misc": {
       "shape": "rounded_rectangle",
       "shape_corner_radius": "10"
+    }
+  },
+  "#pause_button": {
+    "prototype": "#rounded",
+    "images": {
+      "normal_image": {
+        "path": "data/images/multimedia/pause.png",
+        "sub_surface_rect": "0,0,25,25"
+      }
+    }
+  },
+  "#play_button": {
+    "prototype": "#rounded",
+    "images": {
+      "normal_image": {
+        "path": "data/images/multimedia/play.png",
+        "sub_surface_rect": "0,0,25,25"
+      }
+    }
+  },
+  "#faster_x2_button": {
+    "prototype": "#rounded",
+    "images": {
+      "normal_image": {
+        "path": "data/images/multimedia/faster_x2.png",
+        "sub_surface_rect": "0,0,25,25"
+      }
+    }
+  },
+  "#faster_x3_button": {
+    "prototype": "#rounded",
+    "images": {
+      "normal_image": {
+        "path": "data/images/multimedia/faster_x3.png",
+        "sub_surface_rect": "0,0,25,25"
+      }
     }
   }
 }

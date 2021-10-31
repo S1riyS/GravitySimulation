@@ -50,7 +50,7 @@ class GUI:
                 'planet_color_button': UIButton(relative_rect=pygame.Rect(10, 290, 160, 30), text='Choose color',
                                                 manager=self.manager),
                 'planet_color_surface': UILabel(relative_rect=pygame.Rect(177, 290, 30, 30), text='',
-                                                manager=self.manager),
+                                                manager=self.manager, object_id='#color_surface'),
 
                 # Star
                 'star_title': UILabel(relative_rect=pygame.Rect(10, 332, 200, 30), text='Star',
@@ -64,7 +64,7 @@ class GUI:
                 'star_color_button': UIButton(relative_rect=pygame.Rect(10, 400, 160, 30), text='Choose color',
                                               manager=self.manager),
                 'star_color_surface': UILabel(relative_rect=pygame.Rect(177, 400, 30, 30), text='',
-                                              manager=self.manager),
+                                              manager=self.manager, object_id='#color_surface'),
 
                 # General
                 'general_title': UILabel(relative_rect=pygame.Rect(10, 447, 200, 30), text='General',
@@ -81,7 +81,17 @@ class GUI:
                                        manager=self.manager, object_id='#settings_label'),
                 'trace_button': UIButton(relative_rect=pygame.Rect(60, 511, 25, 25), text='',
                                          manager=self.manager, object_id='#radio_button'),
-                'restart_button': UIButton(relative_rect=pygame.Rect(40, 545, 140, 30), text='Restart game',
+
+                # Simulation speed
+                'pause_button': UIButton(relative_rect=pygame.Rect(40, 550, 35, 35), text='',
+                                         manager=self.manager, object_id='#pause_button'),
+                'play_button': UIButton(relative_rect=pygame.Rect(75, 550, 35, 35), text='',
+                                        manager=self.manager, object_id='#play_button'),
+                'faster_x2_button': UIButton(relative_rect=pygame.Rect(110, 550, 35, 35), text='',
+                                             manager=self.manager, object_id='#faster_x2_button'),
+                'faster_x3_button': UIButton(relative_rect=pygame.Rect(145, 550, 35, 35), text='',
+                                             manager=self.manager, object_id='#faster_x3_button'),
+                'restart_button': UIButton(relative_rect=pygame.Rect(40, 590, 140, 30), text='Restart game',
                                            manager=self.manager),
             }
         }

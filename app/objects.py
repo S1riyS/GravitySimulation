@@ -137,7 +137,7 @@ class Planet(CelestialBody):
         self.glow_radius = planet_radius  # Size of glow
         self.trace_color = copy.copy(self.color)
 
-        self.traces = []  # Array of dots
+        self.traces = [(self.x, self.y)]  # Array of dots
         self.max_trace_length = 400  # Max size of array
         self.velocity = velocity  # Set initial velocity
 
@@ -223,12 +223,13 @@ class Planet(CelestialBody):
             previous_pos = pos  # Setting previous position
 
     def update(self, *args, **kwargs) -> None:
+        delta_time = kwargs.get('dt') * FPS_CONST
         # Adding new position to trace array
-        position = (self.rect.centerx, self.rect.centery)
-        self.traces.append(position)
+        if delta_time > 0:
+            position = (self.rect.centerx, self.rect.centery)
+            self.traces.append(position)
 
         # Updating
-        delta_time = kwargs.get('dt') * FPS_CONST
         self.update_position(dt=delta_time)
         self.collision_with_stars()
         self.is_out_of_system()

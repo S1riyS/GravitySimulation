@@ -37,6 +37,9 @@ class Game:
         self.is_drawing_glow = True
         self.is_drawing_trace = True
 
+        # Speed
+        self.simulation_speed = 1
+
         self.init_gui()  # Initiating GUI
 
     @staticmethod
@@ -119,6 +122,21 @@ class Game:
             self.trace_button: True
         }
 
+        # Simulation speed
+        self.pause_button = self.settings_gui_elements['pause_button']
+        self.play_button = self.settings_gui_elements['play_button']
+        self.faster_x2_button = self.settings_gui_elements['faster_x2_button']
+        self.faster_x3_button = self.settings_gui_elements['faster_x3_button']
+
+        self.play_button.disable()
+
+        self.play_speed_buttons = {
+            self.pause_button: 0,
+            self.play_button: 1,
+            self.faster_x2_button: 2,
+            self.faster_x3_button: 3
+        }
+
         # Making all buttons green
         for button in self.radio_buttons.keys():
             self.set_button_color(button, BUTTON_GREEN)
@@ -145,6 +163,13 @@ class Game:
             self.glow_button: True,
             self.trace_button: True
         }
+
+        # Resetting play speed buttons
+        for button in self.play_speed_buttons:
+            button.enable()
+
+        self.simulation_speed = 1
+        self.play_button.disable()
 
         # Making all radio buttons green as a default
         for button in self.radio_buttons.keys():
@@ -209,6 +234,12 @@ class Game:
                                 self.set_button_color(event.ui_element, BUTTON_GREEN)
 
                             self.radio_buttons[event.ui_element] = not self.radio_buttons[event.ui_element]
+
+                        if event.ui_element in self.play_speed_buttons:
+                            self.simulation_speed = self.play_speed_buttons[event.ui_element]
+                            for button in self.play_speed_buttons:
+                                button.enable()
+                            event.ui_element.disable()
 
                         if event.ui_element == self.settings_gui_elements['restart_button']:
                             self.restart()
@@ -308,7 +339,7 @@ class Game:
                 self.screen.blit(self.grid_surface, (0, 0))  # Drawing grid
 
             # Simulation objects
-            self.simulation_manager.celestial_bodies.update(dt=self.time_delta)
+            self.simulation_manager.celestial_bodies.update(dt=self.simulation_speed * self.time_delta)
 
             if self.radio_buttons[self.glow_button]:
                 self.screen.blit(self.simulation_manager.glow_surface, (0, 0))  # Blit glow surface
