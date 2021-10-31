@@ -15,9 +15,9 @@ gravitational interaction
 ## 🤔 How it works?
 My simulation is based on **2 Newton formulas**:
 
-![Newton's second law](https://render.githubusercontent.com/render/math?math={\Large\color{white}\%7B%5Cdisplaystyle%20%5Ctext%7BNewton%27s%5C%20second%5C%20law:%7D%5Cmathit%7B%5C%20%5Cvec%7Ba%7D%20=%5Cfrac%7B%5Csum%20%5Cvec%7BF%7D%7D%7Bm%7D%7D%7D}&mode=inline)
+![Newton's second law](https://render.githubusercontent.com/render/math?math={\large\color{white}\%7B%5Cdisplaystyle%20%5Ctext%7BNewton%27s%5C%20second%5C%20law:%7D%5Cmathit%7B%5C%20%5Cvec%7Ba%7D%20=%5Cfrac%7B%5Csum%20%5Cvec%7BF%7D%7D%7Bm%7D%7D%7D}&mode=inline)
 
-![Universal gravitation](https://render.githubusercontent.com/render/math?math={\Large\color{white}\%7B%5Cdisplaystyle%20%5Ctext%7BNewton%27s%5C%20law%5C%20of%5C%20universal%5C%20gravitation:%7D%5Cmathit%7B%5C%20%5Coverrightarrow%7BF_%7Bg%7D%7D%20%5C%20=%5C%20G%5Cfrac%7Bm_%7B1%7D%20m_%7B2%7D%7D%7BR%5E%7B2%7D%7D%5Cvec%7BR%7D%7D%7D}&mode=inline)
+![Universal gravitation](https://render.githubusercontent.com/render/math?math={\large\color{white}\%7B%5Cdisplaystyle%20%5Ctext%7BNewton%27s%5C%20law%5C%20of%5C%20universal%5C%20gravitation:%7D%5Cmathit%7B%5C%20%5Coverrightarrow%7BF_%7Bg%7D%7D%20%5C%20=%5C%20G%5Cfrac%7Bm_%7B1%7D%20m_%7B2%7D%7D%7BR%5E%7B2%7D%7D%5Cvec%7BR%7D%7D%7D}&mode=inline)
 
 In this simulation all bodies interact with each other, so formulas are beginning more complicated.
 
