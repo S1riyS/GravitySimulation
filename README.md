@@ -85,7 +85,7 @@ for games written in PyGame.
 
 ## 🎞 Preview
 ![GIF 1](https://i.postimg.cc/pV1b9kpg/Gravity-Simulation-24-10.gif)
-![Image 1](https://i.postimg.cc/LskGHcjr/30-10-2021-125222.png)
+![Image 1](https://i.postimg.cc/Lsxn7zxb/31-10-2021-163249.png)
 
 ## 👨‍ Developer
 * **[GitHub Profile](https://github.com/S1riyS)**
