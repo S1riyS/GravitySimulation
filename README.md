@@ -15,29 +15,29 @@ gravitational interaction
 ## 🤔 How it works?
 My simulation is based on **2 Newton formulas**:
 
-![Newton's second law](https://render.githubusercontent.com/render/math?math={\color{white}\%7B%5Cdisplaystyle%20%5Ctext%7BNewton%27s%5C%20second%5C%20law:%7D%5Cmathit%7B%5C%20%5Cvec%7Ba%7D%20=%5Cfrac%7B%5Csum%20%5Cvec%7BF%7D%7D%7Bm%7D%7D%7D}&mode=inline)
+![Newton's second law](https://render.githubusercontent.com/render/math?math={\Large\color{white}\%7B%5Cdisplaystyle%20%5Ctext%7BNewton%27s%5C%20second%5C%20law:%7D%5Cmathit%7B%5C%20%5Cvec%7Ba%7D%20=%5Cfrac%7B%5Csum%20%5Cvec%7BF%7D%7D%7Bm%7D%7D%7D}&mode=inline)
 
-![Universal gravitation](https://render.githubusercontent.com/render/math?math={\color{white}\%7B%5Cdisplaystyle%20%5Ctext%7BNewton%27s%5C%20law%5C%20of%5C%20universal%5C%20gravitation:%7D%5Cmathit%7B%5C%20%5Coverrightarrow%7BF_%7Bg%7D%7D%20%5C%20=%5C%20G%5Cfrac%7Bm_%7B1%7D%20m_%7B2%7D%7D%7BR%5E%7B2%7D%7D%5Cvec%7BR%7D%7D%7D}&mode=inline)
+![Universal gravitation](https://render.githubusercontent.com/render/math?math={\Large\color{white}\%7B%5Cdisplaystyle%20%5Ctext%7BNewton%27s%5C%20law%5C%20of%5C%20universal%5C%20gravitation:%7D%5Cmathit%7B%5C%20%5Coverrightarrow%7BF_%7Bg%7D%7D%20%5C%20=%5C%20G%5Cfrac%7Bm_%7B1%7D%20m_%7B2%7D%7D%7BR%5E%7B2%7D%7D%5Cvec%7BR%7D%7D%7D}&mode=inline)
 
 In this simulation all bodies interact with each other, so formulas are beginning more complicated.
 
 Here is sum of all gravitational forces acting on the body:
 
-![Formula 1](https://render.githubusercontent.com/render/math?math={\color{white}\%7B%5Cdisplaystyle%20%5Csum%20%5Cmathit%7B%5Coverrightarrow%7B%5Cmathit%7B%7B%5Cdisplaystyle%20F_%7Bg%7D%7D%7D%7D%20%5C%20=%7B%5Cdisplaystyle%20%5Csum%20_%7Bi=1%7D%5E%7Bn%7D%20G%5Cfrac%7Bm_%7Bobj%7D%20*m_%7Bi%7D%7D%7BR_%7Bi%7D%5E%7B2%7D%7D%5Coverrightarrow%7BR_%7Bi%7D%7D%7D%7D%7D})
+![Formula 1](https://render.githubusercontent.com/render/math?math={\Large\color{white}\%7B%5Cdisplaystyle%20%5Csum%20%5Cmathit%7B%5Coverrightarrow%7B%5Cmathit%7B%7B%5Cdisplaystyle%20F_%7Bg%7D%7D%7D%7D%20%5C%20=%7B%5Cdisplaystyle%20%5Csum%20_%7Bi=1%7D%5E%7Bn%7D%20G%5Cfrac%7Bm_%7Bobj%7D%20*m_%7Bi%7D%7D%7BR_%7Bi%7D%5E%7B2%7D%7D%5Coverrightarrow%7BR_%7Bi%7D%7D%7D%7D%7D})
 
 Then take out *G (gravitational const)* and 
-*![Object's mass](https://render.githubusercontent.com/render/math?math=%7B%5Cdisplaystyle%20m_%7Bobj%7D%7D) 
+*![Object's mass](https://render.githubusercontent.com/render/math?math={\large\color{white}\%7B%5Cdisplaystyle%20m_%7Bobj%7D%7D}) 
 (object's mass)* from under the sign of sum:
 
-![Formula 2](https://render.githubusercontent.com/render/math?math={\color{white}\%7B%5Cdisplaystyle%20%5Csum%20%5Cmathit%7B%5Coverrightarrow%7B%5Cmathit%7B%7B%5Cdisplaystyle%20F_%7Bg%7D%7D%7D%7D%20%5C%20=Gm_%7Bobj%7D%7D%5Csum%20_%7B%20%5Cbegin%7Barray%7D%7Bl%7D%20i=1%5C%5C%20%5Cend%7Barray%7D%7D%5E%7Bn%7D%5Cmathit%7B%5Cfrac%7Bm_%7Bi%7D%5Cmathit%7B%7B%5Cdisplaystyle%20%5Coverrightarrow%7BR_%7Bi%7D%7D%7D%7D%7D%7BR_%7Bi%7D%5E%7B2%7D%7D%7D%7D})
+![Formula 2](https://render.githubusercontent.com/render/math?math={\Large\color{white}\%7B%5Cdisplaystyle%20%5Csum%20%5Cmathit%7B%5Coverrightarrow%7B%5Cmathit%7B%7B%5Cdisplaystyle%20F_%7Bg%7D%7D%7D%7D%20%5C%20=Gm_%7Bobj%7D%7D%5Csum%20_%7B%20%5Cbegin%7Barray%7D%7Bl%7D%20i=1%5C%5C%20%5Cend%7Barray%7D%7D%5E%7Bn%7D%5Cmathit%7B%5Cfrac%7Bm_%7Bi%7D%5Cmathit%7B%7B%5Cdisplaystyle%20%5Coverrightarrow%7BR_%7Bi%7D%7D%7D%7D%7D%7BR_%7Bi%7D%5E%7B2%7D%7D%7D%7D})
 
 Finally, we can unite formulas:
 
-![Uniting formulas](https://render.githubusercontent.com/render/math?math={\color{white}\%5Cmathit%7B%7B%5Cdisplaystyle%20%5Coverrightarrow%7Ba_%7Bobj%7D%7D%20=%5Cfrac%7B%5Csum%20%5Cvec%7BF%7D%7D%7Bm_%7Bobj%7D%7D%20%5C%20=%5Cfrac%7B%5Cmathit%7BGm_%7Bobj%7D%7B%5Cdisplaystyle%20%5Csum%20_%7B%20%5Cbegin%7Barray%7D%7Bl%7D%20i=1%5C%5C%20%5Cend%7Barray%7D%7D%5E%7Bn%7D%7D%5Cfrac%7Bm_%7Bi%7D%5Cmathit%7B%5Coverrightarrow%7BR_%7Bi%7D%7D%20%5C%20%7D%7D%7BR_%7Bi%7D%5E%7B2%7D%7D%7D%7D%7Bm_%7Bobj%7D%7D%20=G%5Csum%20_%7B%20%5Cbegin%7Barray%7D%7Bl%7D%20i=1%5C%5C%20%5Cend%7Barray%7D%7D%5E%7Bn%7D%5Cfrac%7Bm_%7Bi%7D%7D%7BR_%7Bi%7D%5E%7B2%7D%7D%20*%5Coverrightarrow%7BR_%7Bi%7D%7D%7D%7D})
+![Uniting formulas](https://render.githubusercontent.com/render/math?math={\Large\color{white}\%5Cmathit%7B%7B%5Cdisplaystyle%20%5Coverrightarrow%7Ba_%7Bobj%7D%7D%20=%5Cfrac%7B%5Csum%20%5Cvec%7BF%7D%7D%7Bm_%7Bobj%7D%7D%20%5C%20=%5Cfrac%7B%5Cmathit%7BGm_%7Bobj%7D%7B%5Cdisplaystyle%20%5Csum%20_%7B%20%5Cbegin%7Barray%7D%7Bl%7D%20i=1%5C%5C%20%5Cend%7Barray%7D%7D%5E%7Bn%7D%7D%5Cfrac%7Bm_%7Bi%7D%5Cmathit%7B%5Coverrightarrow%7BR_%7Bi%7D%7D%20%5C%20%7D%7D%7BR_%7Bi%7D%5E%7B2%7D%7D%7D%7D%7Bm_%7Bobj%7D%7D%20=G%5Csum%20_%7B%20%5Cbegin%7Barray%7D%7Bl%7D%20i=1%5C%5C%20%5Cend%7Barray%7D%7D%5E%7Bn%7D%5Cfrac%7Bm_%7Bi%7D%7D%7BR_%7Bi%7D%5E%7B2%7D%7D%20*%5Coverrightarrow%7BR_%7Bi%7D%7D%7D%7D})
 
 And the final formula is:
 
-![Final formula](https://render.githubusercontent.com/render/math?math={\color{white}\%7B%5Cdisplaystyle%20%5Cmathit%7B%5Coverrightarrow%7Ba_%7Bobj%7D%7D%7D%20=%5Cmathit%7BG%5Csum%20_%7B%20%5Cbegin%7Barray%7D%7Bl%7D%20i=1%5C%5C%20%5Cend%7Barray%7D%7D%5E%7Bn%7D%5Cfrac%7Bm_%7Bi%7D%7D%7BR_%7Bi%7D%5E%7B2%7D%7D%20*%5Coverrightarrow%7BR_%7Bi%7D%7D%7D%7D})
+![Final formula](https://render.githubusercontent.com/render/math?math={\Large\color{white}\%7B%5Cdisplaystyle%20%5Cmathit%7B%5Coverrightarrow%7Ba_%7Bobj%7D%7D%7D%20=%5Cmathit%7BG%5Csum%20_%7B%20%5Cbegin%7Barray%7D%7Bl%7D%20i=1%5C%5C%20%5Cend%7Barray%7D%7D%5E%7Bn%7D%5Cfrac%7Bm_%7Bi%7D%7D%7BR_%7Bi%7D%5E%7B2%7D%7D%20*%5Coverrightarrow%7BR_%7Bi%7D%7D%7D%7D})
 
 To see how it works in the code you should to to the 
 [`app/objects.py`](https://github.com/S1riyS/GravitySimulation/blob/master/app/objects.py) 
