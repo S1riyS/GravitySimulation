@@ -31,6 +31,7 @@ max_trace_length = 400  # Max length of planet's trace
 
 # Simulation objects' settings
 BASE_GLOW_ALPHA = 20
+BASE_TRACE_ALPHA = 255
 
 # Planet settings
 PLANET_DEFAULT_MASS = 150

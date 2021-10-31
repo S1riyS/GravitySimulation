@@ -136,6 +136,7 @@ class Planet(CelestialBody):
 
         self.glow_radius = planet_radius  # Size of glow
         self.trace_color = copy.copy(self.color)
+        self.trace_color.a = BASE_TRACE_ALPHA
 
         self.traces = [(self.x, self.y)]  # Array of dots
         self.max_trace_length = 400  # Max size of array
@@ -183,7 +184,7 @@ class Planet(CelestialBody):
 
                     self.accelerations += acceleration  # Adding this force
 
-        self.velocity += G * self.accelerations * dt # Adding forces to velocity
+        self.velocity += G * self.accelerations * dt  # Adding forces to velocity
 
         # Applying velocity changes
         self.x += self.velocity.x * dt
