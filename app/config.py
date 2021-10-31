@@ -23,7 +23,7 @@ FPS = 120
 FPS_CONST = 100
 
 # Simulation variables
-G = 0.0005  # Gravitation constant
+G = 0.075  # Gravitation constant
 # Distance coefficient (square root proportion)
 K_value = 1
 K = sqrt(K_value)

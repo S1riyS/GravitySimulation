@@ -160,7 +160,7 @@ class Planet(CelestialBody):
 
     # Updating position
     def update_position(self, dt):
-        self.forces = Vector2(0, 0)  # Sum of forces ((0, 0) at the beginning)
+        self.accelerations = Vector2(0, 0)  # Sum of forces ((0, 0) at the beginning)
         self.position_vector = Vector2(self.x, self.y)  # Position vector
 
         for body in simulation_manager.celestial_bodies:
@@ -177,13 +177,13 @@ class Planet(CelestialBody):
                     body.kill()
 
                 else:
-                    universal_gravity = G * ((self.mass * body.mass) / vector_distance.length_squared())
+                    universal_gravity = body.mass / vector_distance.length_squared()
                     unit_vector = (vector_distance / vector_distance.length())
-                    force = universal_gravity * unit_vector  # Gravitational force between this body and another
+                    acceleration = universal_gravity * unit_vector  # Gravitational force between this body and another
 
-                    self.forces += force  # Adding this force
+                    self.accelerations += acceleration  # Adding this force
 
-        self.velocity += self.forces  # Adding forces to velocity
+        self.velocity += G * self.accelerations * dt # Adding forces to velocity
 
         # Applying velocity changes
         self.x += self.velocity.x * dt
