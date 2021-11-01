@@ -39,7 +39,7 @@ And the final formula is:
 ![Final formula](https://render.githubusercontent.com/render/math?math={\Large\color{white}\%7B%5Cdisplaystyle%20%5Cmathit%7B%5Coverrightarrow%7Ba_%7Bobj%7D%7D%7D%20=%5Cmathit%7BG%5Csum%20_%7B%20%5Cbegin%7Barray%7D%7Bl%7D%20i=1%5C%5C%20%5Cend%7Barray%7D%7D%5E%7Bn%7D%5Cfrac%7Bm_%7Bi%7D%7D%7BR_%7Bi%7D%5E%7B2%7D%7D%20*%5Coverrightarrow%7BR_%7Bi%7D%7D%7D%7D})
 
 To see how it works in the code go to to the *Planet's class*
-[`update_position(self, dt)`](https://github.com/S1riyS/GravitySimulation/blob/master/app/objects.py#L162) function
+[`update_position(self, dt)`](https://github.com/S1riyS/GravitySimulation/blob/master/app/objects.py#L169) function
 in [`app/objects.py`](https://github.com/S1riyS/GravitySimulation/blob/master/app/objects.py) 
 
 ## 💡 Usage
