@@ -15,8 +15,8 @@ from app.config import *
 # Simulation manager class
 class SimulationManager:
     # Surfaces with elements of simulation
-    glow_surface = pygame.Surface(WINDOW_SIZE).convert_alpha()
-    trace_surface = pygame.Surface(WINDOW_SIZE).convert_alpha()
+    glow_surface = pygame.Surface(Config.WINDOW_SIZE).convert_alpha()
+    trace_surface = pygame.Surface(Config.WINDOW_SIZE).convert_alpha()
 
     # Sprite groups
     celestial_bodies = pygame.sprite.Group()
@@ -100,7 +100,7 @@ class CelestialBody(SimulationObject, ABC):
 
         for i in range(glow_layers):
             # Calculating color of glow
-            current_glow_alpha = min(BASE_GLOW_ALPHA * (i + 1), 255)  # Calculated alpha (from 0 to 255)
+            current_glow_alpha = min(Config.BASE_GLOW_ALPHA * (i + 1), 255)  # Calculated alpha (from 0 to 255)
             current_glow_color.a = current_glow_alpha  # Setting alpha to current color
 
             pygame.draw.circle(
@@ -138,16 +138,16 @@ class Planet(CelestialBody):
 
         self.glow_radius = self.radius  # Size of glow
         self.trace_color = copy.copy(self.color)
-        self.trace_color.a = BASE_TRACE_ALPHA
+        self.trace_color.a = Config.BASE_TRACE_ALPHA
 
         self.traces = [(self.x, self.y)]  # Array of dots
-        self.max_trace_length = 400  # Max size of array
+        self.MAX_TRACE_LENGTH = 400  # Max size of array
         self.velocity = velocity  # Set initial velocity
 
         SimulationManager.planets.add(self)
 
     def get_radius(self, mass: int) -> float:
-        radius = 8 // K * (mass / PLANET_DEFAULT_MASS) ** (1 / 3)
+        radius = 8 // Config.K * (mass / Config.PLANET_DEFAULT_MASS) ** (1 / 3)
         return radius
 
     @staticmethod
@@ -172,7 +172,7 @@ class Planet(CelestialBody):
 
         for body in SimulationManager.celestial_bodies:
             if body.id != self.id:
-                vector_distance = K * (body.position_vector - self.position_vector)
+                vector_distance = Config.K * (body.position_vector - self.position_vector)
                 vector_distance = self.scale_vector(vector_distance, min_length=3)
 
                 if vector_distance.length() == 0:
@@ -190,7 +190,7 @@ class Planet(CelestialBody):
 
                     self.accelerations += acceleration  # Adding this force
 
-        self.velocity += G * self.accelerations * dt  # Adding forces to velocity
+        self.velocity += Config.G * self.accelerations * dt  # Adding forces to velocity
 
         # Applying velocity changes
         self.x += self.velocity.x * dt
@@ -211,15 +211,15 @@ class Planet(CelestialBody):
     # Is planet out of system
     def is_out_of_system(self):
         max_coefficient = 8
-        if abs(self.rect.x) > WIDTH * max_coefficient or abs(self.rect.y) > HEIGHT * max_coefficient:
+        if abs(self.rect.x) > Config.WIDTH * max_coefficient or abs(self.rect.y) > Config.HEIGHT * max_coefficient:
             print(f'№{self.id} - killed by out of system, position: {self.position_vector}')
             self.kill()
 
     # Drawing planet trace
     def draw_trace(self):
         # Deleting unnecessary positions
-        if len(self.traces) > max_trace_length:
-            difference = len(self.traces) - max_trace_length
+        if len(self.traces) > Config.MAX_TRACE_LENGTH:
+            difference = len(self.traces) - Config.MAX_TRACE_LENGTH
             self.traces = self.traces[difference:]
 
         previous_pos = self.traces[0]
@@ -231,7 +231,7 @@ class Planet(CelestialBody):
             previous_pos = pos  # Setting previous position
 
     def update(self, *args, **kwargs) -> None:
-        delta_time = kwargs.get('dt') * STABLE_FPS
+        delta_time = kwargs.get('dt') * Config.STABLE_FPS
         # Adding new position to trace array
         if delta_time > 0:
             position = (self.rect.centerx, self.rect.centery)
@@ -262,11 +262,11 @@ class Star(CelestialBody):
         SimulationManager.stars.add(self)
 
     def get_radius(self, mass: int) -> float:
-        radius = (30 // K) * (mass / STAR_DEFAULT_MASS) ** (1 / 2)
+        radius = (30 // Config.K) * (mass / Config.STAR_DEFAULT_MASS) ** (1 / 2)
         return radius
 
     def devour(self, planet: Planet) -> None:
-        self.mass += DEVOUR_COEFFICIENT * planet.mass
+        self.mass += Config.DEVOUR_COEFFICIENT * planet.mass
 
         self.radius = self.get_radius(self.mass)
         self.glow_radius = self.radius * 0.7  # Size of glow

@@ -8,13 +8,13 @@ import pygame
 from pygame_gui import UIManager
 from pygame_gui.elements import UILabel, UIButton, UIHorizontalSlider
 
-from app.config import *
+from app.config import Config
 
 
 class GUI:
     def __init__(self):
         # GUI manager
-        self.manager = UIManager(WINDOW_SIZE, theme_path='data/themes/theme.json')
+        self.manager = UIManager(Config.WINDOW_SIZE, theme_path='data/themes/theme.json')
         self.gui_rect_color = pygame.Color('#0d1419')  # Color
         self.gui_rects = []  # Array with all rects
 
@@ -27,9 +27,10 @@ class GUI:
                                             manager=self.manager),
                 'velocity_y_label': UILabel(relative_rect=pygame.Rect(10, 80, 200, 20), text='Y velocity: None',
                                             manager=self.manager),
-                'G_label': UILabel(relative_rect=pygame.Rect(10, 105, 200, 20), text=f'G = {G}',
+                'G_label': UILabel(relative_rect=pygame.Rect(10, 105, 200, 20), text=f'G = {Config.G}',
                                    manager=self.manager),
-                'K_label': UILabel(relative_rect=pygame.Rect(10, 130, 200, 20), text=f'Distance coef = {K_value}',
+                'K_label': UILabel(relative_rect=pygame.Rect(10, 130, 200, 20),
+                                   text=f'Distance coef = {Config.K}',
                                    manager=self.manager),
             }
         }
@@ -44,8 +45,8 @@ class GUI:
                 'planet_mass_label': UILabel(relative_rect=pygame.Rect(10, 254, 50, 30), text='Mass:',
                                              manager=self.manager, object_id='#settings_label'),
                 'planet_mass_slider': UIHorizontalSlider(relative_rect=pygame.Rect(65, 260, 145, 20),
-                                                         start_value=PLANET_DEFAULT_MASS,
-                                                         value_range=(PLANET_MIN_MASS, PLANET_MAX_MASS),
+                                                         start_value=Config.PLANET_DEFAULT_MASS,
+                                                         value_range=(Config.PLANET_MIN_MASS, Config.PLANET_MAX_MASS),
                                                          manager=self.manager),
                 'planet_color_button': UIButton(relative_rect=pygame.Rect(10, 290, 160, 30), text='Choose color',
                                                 manager=self.manager),
@@ -58,8 +59,8 @@ class GUI:
                 'star_mass_label': UILabel(relative_rect=pygame.Rect(10, 365, 50, 30), text='Mass:',
                                            manager=self.manager, object_id='#settings_label'),
                 'star_mass_slider': UIHorizontalSlider(relative_rect=pygame.Rect(65, 370, 145, 20),
-                                                       start_value=STAR_DEFAULT_MASS,
-                                                       value_range=(STAR_MIN_MASS, STAR_MAX_MASS),
+                                                       start_value=Config.STAR_DEFAULT_MASS,
+                                                       value_range=(Config.STAR_MIN_MASS, Config.STAR_MAX_MASS),
                                                        manager=self.manager),
                 'star_color_button': UIButton(relative_rect=pygame.Rect(10, 400, 160, 30), text='Choose color',
                                               manager=self.manager),

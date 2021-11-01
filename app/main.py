@@ -9,8 +9,9 @@ import pygame
 from pygame.math import Vector2
 from pygame_gui.elements import UILabel, UIButton
 from pygame_gui.windows import UIColourPickerDialog
+from pygame_gui import UI_BUTTON_PRESSED, UI_COLOUR_PICKER_COLOUR_PICKED, UI_WINDOW_CLOSE
 
-from app.config import *
+from app.config import Config
 from app.gui import GUI  # Importing entire GUI
 
 pygame.init()
@@ -19,19 +20,19 @@ pygame.init()
 class Game:
     def __init__(self):
         # PyGame screen variables
-        self.screen = pygame.display.set_mode(WINDOW_SIZE)  # Initialize screen
+        self.screen = pygame.display.set_mode(Config.WINDOW_SIZE)  # Initialize screen
         pygame.display.set_caption("Gravity Simulation")  # Caption
         self.icon = pygame.image.load('data/images/logo.png')  # icon
         pygame.display.set_icon(self.icon)  # Setting icon
         self.clock = pygame.time.Clock()  # Clock
 
         # Initiating beginning colors
-        self.current_planet_color = copy.copy(PLANET_COLOR)
-        self.current_star_color = copy.copy(STAR_COLOR)
+        self.current_planet_color = copy.copy(Config.PLANET_COLOR)
+        self.current_star_color = copy.copy(Config.STAR_COLOR)
 
         # Grid surface
         self.is_drawing_grid = True
-        self.grid_surface = pygame.Surface(WINDOW_SIZE).convert_alpha()
+        self.grid_surface = pygame.Surface(Config.WINDOW_SIZE).convert_alpha()
         self.grid_surface.fill((0, 0, 0, 0))
 
         # Simulation surfaces
@@ -81,10 +82,10 @@ class Game:
         :param distance: Distance between lines of grid
         :return: None
         """
-        for x in range(int(WIDTH / distance) + 2):
-            pygame.draw.line(surface, color, (x * distance, 0), (x * distance, HEIGHT), 1)
-        for y in range(int(HEIGHT / distance) + 2):
-            pygame.draw.line(surface, color, (0, y * distance), (WIDTH, y * distance), 1)
+        for x in range(int(Config.WIDTH / distance) + 2):
+            pygame.draw.line(surface, color, (x * distance, 0), (x * distance, Config.HEIGHT), 1)
+        for y in range(int(Config.HEIGHT / distance) + 2):
+            pygame.draw.line(surface, color, (0, y * distance), (Config.WIDTH, y * distance), 1)
 
     def init_gui(self) -> None:
         # Statements of window
@@ -141,7 +142,7 @@ class Game:
 
         # Making all buttons green
         for button in self.radio_buttons.keys():
-            self.set_button_color(button, BUTTON_GREEN)
+            self.set_button_color(button, Config.BUTTON_GREEN)
 
     def init_modules(self) -> None:
         from app.objects import SimulationManager, Planet, Star
@@ -156,14 +157,14 @@ class Game:
         self.SimulationManager.celestial_bodies.empty()
 
         # Initiating beginning colors
-        self.current_planet_color = copy.copy(PLANET_COLOR)
+        self.current_planet_color = copy.copy(Config.PLANET_COLOR)
         self.set_label_color(self.settings_gui_elements['planet_color_surface'], self.current_planet_color)
-        self.current_star_color = copy.copy(STAR_COLOR)
+        self.current_star_color = copy.copy(Config.STAR_COLOR)
         self.set_label_color(self.settings_gui_elements['star_color_surface'], self.current_star_color)
 
         # Resetting UIHorizontalSliders
-        self.settings_gui_elements['planet_mass_slider'].set_current_value(PLANET_DEFAULT_MASS)
-        self.settings_gui_elements['star_mass_slider'].set_current_value(STAR_DEFAULT_MASS)
+        self.settings_gui_elements['planet_mass_slider'].set_current_value(Config.PLANET_DEFAULT_MASS)
+        self.settings_gui_elements['star_mass_slider'].set_current_value(Config.STAR_DEFAULT_MASS)
 
         # Dictionary that contains {key:value} pairs of the form {button: is_drawing_this_surface}
         self.radio_buttons = {
@@ -181,14 +182,14 @@ class Game:
 
         # Making all radio buttons green as a default
         for button in self.radio_buttons.keys():
-            self.set_button_color(button, BUTTON_GREEN)
+            self.set_button_color(button, Config.BUTTON_GREEN)
 
     def fill_surfaces(self) -> None:
         # Filling surfaces
         self.SimulationManager.glow_surface.fill((0, 0, 0, 0))
         self.SimulationManager.trace_surface.fill((0, 0, 0, 0))
         self.grid_surface.fill((0, 0, 0, 0))
-        self.screen.fill(DARK_BLUE)
+        self.screen.fill(Config.DARK_BLUE)
 
     def handle_events(self) -> None:
         # Checking if any of windows are open
@@ -203,7 +204,7 @@ class Game:
 
             # User events
             if event.type == pygame.USEREVENT:
-                if event.user_type == pygame_gui.UI_BUTTON_PRESSED:
+                if event.user_type == UI_BUTTON_PRESSED:
                     # If pressed planet's "choose color" button
                     if event.ui_element == self.planet_color_button:
                         self.is_planet_window_open = True
@@ -225,9 +226,9 @@ class Game:
                     # if pressed button in dict of radio buttons
                     if event.ui_element in self.radio_buttons:
                         if self.radio_buttons[event.ui_element]:
-                            self.set_button_color(event.ui_element, BUTTON_RED)
+                            self.set_button_color(event.ui_element, Config.BUTTON_RED)
                         else:
-                            self.set_button_color(event.ui_element, BUTTON_GREEN)
+                            self.set_button_color(event.ui_element, Config.BUTTON_GREEN)
 
                         self.radio_buttons[event.ui_element] = not self.radio_buttons[event.ui_element]
 
@@ -242,7 +243,7 @@ class Game:
                     if event.ui_element == self.settings_gui_elements['restart_button']:
                         self.restart()
 
-                if event.user_type == pygame_gui.UI_COLOUR_PICKER_COLOUR_PICKED:
+                if event.user_type == UI_COLOUR_PICKER_COLOUR_PICKED:
                     # If picked color of planet
                     if event.ui_element == self.planet_color_picker:
                         self.current_planet_color = event.colour
@@ -255,7 +256,7 @@ class Game:
                         self.set_label_color(self.settings_gui_elements['star_color_surface'],
                                              self.current_star_color)
 
-                if event.user_type == pygame_gui.UI_WINDOW_CLOSE:
+                if event.user_type == UI_WINDOW_CLOSE:
                     # If closed planet's "Colour Picker Dialog"
                     if event.ui_element == self.planet_color_picker:
                         self.is_planet_window_open = False
@@ -320,22 +321,23 @@ class Game:
             # Calculating velocity vector
             current_pos_vector = Vector2(current_mouse_x, current_mouse_y)
             pressed_pos_vector = Vector2(self.mouse_x, self.mouse_y)
-            self.velocity_vector = -(current_pos_vector - pressed_pos_vector) * pv_velocity_value_coef
+            self.velocity_vector = -(current_pos_vector - pressed_pos_vector) * Config.PV_VELOCITY_COEF
 
             # Setting labels
             self.info_gui_elements['velocity_x_label'].set_text(f'X velocity: {round(self.velocity_vector.x, 4)}')
             self.info_gui_elements['velocity_y_label'].set_text(f'Y velocity: {-round(self.velocity_vector.y, 4)}')
 
             # Drawing preview
-            pygame.draw.circle(self.screen, WHITE, (self.mouse_x, self.mouse_y), pv_radius)
-            pygame.draw.line(self.screen, WHITE,
+            pygame.draw.circle(self.screen, Config.WHITE, (self.mouse_x, self.mouse_y), Config.PV_RADIUS)
+            pygame.draw.line(self.screen, Config.WHITE,
                              (self.mouse_x, self.mouse_y),
-                             (self.mouse_x + self.velocity_vector.x * pv_line_length_coef,
-                              self.mouse_y + self.velocity_vector.y * pv_line_length_coef), pv_line_thickness)
+                             (self.mouse_x + self.velocity_vector.x * Config.PV_LENGTH_COEF,
+                              self.mouse_y + self.velocity_vector.y * Config.PV_LENGTH_COEF),
+                             Config.PV_LINE_THICKNESS)
 
     def update(self) -> None:
         # Drawing grid
-        self.draw_grid(self.grid_surface, grid_color, grid_distance)
+        self.draw_grid(self.grid_surface, Config.GRID_COLOR, Config.GRID_DISTANCE)
         if self.radio_buttons[self.grid_button]:
             self.screen.blit(self.grid_surface, (0, 0))  # Drawing grid
 
@@ -365,8 +367,8 @@ class Game:
         self.is_running = True
 
         while self.is_running:
-            self.clock.tick(FPS)
-            self.time_delta = self.clock.tick(FPS) / 1000.0
+            self.clock.tick(Config.FPS)
+            self.time_delta = self.clock.tick(Config.FPS) / 1000.0
 
             self.fill_surfaces()  # Filling surfaces with matching colors
             self.handle_events()  # Handling events
