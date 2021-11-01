@@ -5,8 +5,9 @@ Main project file, that containing game loop
 # Modules
 import copy
 
+import pygame
 from pygame.math import Vector2
-import pygame_gui
+from pygame_gui.elements import UILabel, UIButton
 from pygame_gui.windows import UIColourPickerDialog
 
 from app.config import *
@@ -41,10 +42,10 @@ class Game:
         self.simulation_speed = 1
 
         self.init_gui()  # Initiating GUI
-        self.init_modules() # Copying imported variables
+        self.init_modules()  # Copying imported variables
 
     @staticmethod
-    def set_label_color(element: pygame_gui.elements, bg_color: pygame.Color) -> None:
+    def set_label_color(element: UILabel, bg_color: pygame.Color) -> None:
         """
         Static method that applying style to element of GUI
         :param element: element of GUI
@@ -56,7 +57,7 @@ class Game:
         element.rebuild()
 
     @staticmethod
-    def set_button_color(button: pygame_gui.elements.UIButton, color: pygame.Color) -> None:
+    def set_button_color(button: UIButton, color: pygame.Color) -> None:
         button.colours['normal_bg'] = color
         button.rebuild()
 
@@ -143,16 +144,16 @@ class Game:
             self.set_button_color(button, BUTTON_GREEN)
 
     def init_modules(self) -> None:
-        from app.objects import simulation_manager, Planet, Star
+        from app.objects import SimulationManager, Planet, Star
         self.Star = Star
         self.Planet = Planet
-        self.simulation_manager = simulation_manager
+        self.SimulationManager = SimulationManager
 
     def restart(self) -> None:
         # Cleaning groups of sprites
-        self.simulation_manager.stars.empty()
-        self.simulation_manager.planets.empty()
-        self.simulation_manager.celestial_bodies.empty()
+        self.SimulationManager.stars.empty()
+        self.SimulationManager.planets.empty()
+        self.SimulationManager.celestial_bodies.empty()
 
         # Initiating beginning colors
         self.current_planet_color = copy.copy(PLANET_COLOR)
@@ -184,8 +185,8 @@ class Game:
 
     def fill_surfaces(self) -> None:
         # Filling surfaces
-        self.simulation_manager.glow_surface.fill((0, 0, 0, 0))
-        self.simulation_manager.trace_surface.fill((0, 0, 0, 0))
+        self.SimulationManager.glow_surface.fill((0, 0, 0, 0))
+        self.SimulationManager.trace_surface.fill((0, 0, 0, 0))
         self.grid_surface.fill((0, 0, 0, 0))
         self.screen.fill(DARK_BLUE)
 
@@ -339,14 +340,14 @@ class Game:
             self.screen.blit(self.grid_surface, (0, 0))  # Drawing grid
 
         # Simulation objects
-        self.simulation_manager.celestial_bodies.update(dt=self.simulation_speed * self.time_delta)
+        self.SimulationManager.celestial_bodies.update(dt=self.simulation_speed * self.time_delta)
 
         if self.radio_buttons[self.glow_button]:
-            self.screen.blit(self.simulation_manager.glow_surface, (0, 0))  # Blit glow surface
+            self.screen.blit(self.SimulationManager.glow_surface, (0, 0))  # Blit glow surface
         if self.radio_buttons[self.trace_button]:
-            self.screen.blit(self.simulation_manager.trace_surface, (0, 0))  # Blit trace surface
+            self.screen.blit(self.SimulationManager.trace_surface, (0, 0))  # Blit trace surface
 
-        self.simulation_manager.celestial_bodies.draw(self.screen)
+        self.SimulationManager.celestial_bodies.draw(self.screen)
 
         # GUI
         for rect in self.gui.gui_rects:
