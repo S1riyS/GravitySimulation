@@ -3,13 +3,13 @@ Module containing objects classes of simulations objects
 """
 
 # Modules
-import copy
+from copy import copy
 from abc import ABC, abstractmethod
 
 import pygame
 from pygame.math import Vector2
 
-from app.config import *
+from app.config import Config
 
 
 # Simulation manager class
@@ -55,7 +55,7 @@ class CelestialBody(SimulationObject, ABC):
         super().__init__(x, y, color)
 
         self.mass = mass
-        self.glow_color = copy.copy(self.color)  # Without alpha
+        self.glow_color = copy(self.color)  # Without alpha
 
         SimulationManager.celestial_bodies.add(self)
 
@@ -137,7 +137,7 @@ class Planet(CelestialBody):
         self.draw_object_body()
 
         self.glow_radius = self.radius  # Size of glow
-        self.trace_color = copy.copy(self.color)
+        self.trace_color = copy(self.color)
         self.trace_color.a = Config.BASE_TRACE_ALPHA
 
         self.traces = [(self.x, self.y)]  # Array of dots

@@ -86,7 +86,7 @@ class GUI:
                                          tool_tip_text='Turn on/off traces', manager=self.manager,
                                          object_id='#radio_button'),
 
-                # Simulation speed
+                #  Simulation control
                 'pause_button': UIButton(relative_rect=pygame.Rect(40, 550, 35, 35), text='',
                                          tool_tip_text='Pause', manager=self.manager, object_id='#pause_button'),
                 'play_button': UIButton(relative_rect=pygame.Rect(75, 550, 35, 35), text='',
@@ -108,6 +108,23 @@ class GUI:
                                      text='Created by S1riyS', manager=self.manager, object_id="#subtitle"),
             }
         }
+
+    @staticmethod
+    def set_label_color(element: UILabel, bg_color: pygame.Color) -> None:
+        """
+        Static method that applying style to element of GUI
+        :param element: element of GUI
+        :param bg_color: Background color of element
+        :return: None
+        """
+
+        element.bg_colour = pygame.Color(bg_color)
+        element.rebuild()
+
+    @staticmethod
+    def set_button_color(button: UIButton, color: pygame.Color) -> None:
+        button.colours['normal_bg'] = color
+        button.rebuild()
 
     # GUI rect
     def get_gui_rect(self, gui_dictionary: dict, padding: int) -> pygame.Rect:

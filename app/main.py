@@ -3,16 +3,16 @@ Main project file, that containing game loop
 """
 
 # Modules
-import copy
+from copy import copy
 
 import pygame
 from pygame.math import Vector2
-from pygame_gui.elements import UILabel, UIButton
-from pygame_gui.windows import UIColourPickerDialog
-from pygame_gui import UI_BUTTON_PRESSED, UI_COLOUR_PICKER_COLOUR_PICKED, UI_WINDOW_CLOSE
+from pygame_gui.elements import UILabel, UIButton  # Elements
+from pygame_gui.windows import UIColourPickerDialog  # Windows
+from pygame_gui import UI_BUTTON_PRESSED, UI_COLOUR_PICKER_COLOUR_PICKED, UI_WINDOW_CLOSE  # Events
 
-from app.config import Config
-from app.gui import GUI  # Importing entire GUI
+from app.config import Config  # Config
+from app.gui import GUI  # GUI
 
 pygame.init()
 
@@ -27,8 +27,8 @@ class Game:
         self.clock = pygame.time.Clock()  # Clock
 
         # Initiating beginning colors
-        self.current_planet_color = copy.copy(Config.PLANET_COLOR)
-        self.current_star_color = copy.copy(Config.STAR_COLOR)
+        self.current_planet_color = copy(Config.PLANET_COLOR)
+        self.current_star_color = copy(Config.STAR_COLOR)
 
         # Grid surface
         self.is_drawing_grid = True
@@ -40,27 +40,10 @@ class Game:
         self.is_drawing_trace = True
 
         # Speed
-        self.simulation_speed = 1
+        self.animation_speed = 1
 
         self.init_gui()  # Initiating GUI
         self.init_modules()  # Copying imported variables
-
-    @staticmethod
-    def set_label_color(element: UILabel, bg_color: pygame.Color) -> None:
-        """
-        Static method that applying style to element of GUI
-        :param element: element of GUI
-        :param bg_color: Background color of element
-        :return: None
-        """
-
-        element.bg_colour = pygame.Color(bg_color)
-        element.rebuild()
-
-    @staticmethod
-    def set_button_color(button: UIButton, color: pygame.Color) -> None:
-        button.colours['normal_bg'] = color
-        button.rebuild()
 
     @staticmethod
     def mouse_collision_with_gui(mouse_position: tuple, gui_rects: list) -> bool:
@@ -104,12 +87,12 @@ class Game:
         self.settings_gui_elements = self.gui.settings_block['elements']
 
         # Planet
-        self.set_label_color(self.settings_gui_elements['planet_color_surface'], self.current_planet_color)
+        self.gui.set_label_color(self.settings_gui_elements['planet_color_surface'], self.current_planet_color)
         self.planet_color_button = self.settings_gui_elements['planet_color_button']
         self.planet_color_picker = None
 
         # Star
-        self.set_label_color(self.settings_gui_elements['star_color_surface'], self.current_star_color)
+        self.gui.set_label_color(self.settings_gui_elements['star_color_surface'], self.current_star_color)
         self.star_color_button = self.settings_gui_elements['star_color_button']
         self.star_color_picker = None
 
@@ -142,7 +125,7 @@ class Game:
 
         # Making all buttons green
         for button in self.radio_buttons.keys():
-            self.set_button_color(button, Config.BUTTON_GREEN)
+            self.gui.set_button_color(button, Config.BUTTON_GREEN)
 
     def init_modules(self) -> None:
         from app.objects import SimulationManager, Planet, Star
@@ -157,10 +140,10 @@ class Game:
         self.SimulationManager.celestial_bodies.empty()
 
         # Initiating beginning colors
-        self.current_planet_color = copy.copy(Config.PLANET_COLOR)
-        self.set_label_color(self.settings_gui_elements['planet_color_surface'], self.current_planet_color)
-        self.current_star_color = copy.copy(Config.STAR_COLOR)
-        self.set_label_color(self.settings_gui_elements['star_color_surface'], self.current_star_color)
+        self.current_planet_color = copy(Config.PLANET_COLOR)
+        self.gui.set_label_color(self.settings_gui_elements['planet_color_surface'], self.current_planet_color)
+        self.current_star_color = copy(Config.STAR_COLOR)
+        self.gui.set_label_color(self.settings_gui_elements['star_color_surface'], self.current_star_color)
 
         # Resetting UIHorizontalSliders
         self.settings_gui_elements['planet_mass_slider'].set_current_value(Config.PLANET_DEFAULT_MASS)
@@ -177,12 +160,12 @@ class Game:
         for button in self.multimedia_buttons:
             button.enable()
 
-        self.simulation_speed = 1
+        self.animation_speed = 1
         self.play_button.disable()
 
         # Making all radio buttons green as a default
         for button in self.radio_buttons.keys():
-            self.set_button_color(button, Config.BUTTON_GREEN)
+            self.gui.set_button_color(button, Config.BUTTON_GREEN)
 
     def fill_surfaces(self) -> None:
         # Filling surfaces
@@ -226,15 +209,15 @@ class Game:
                     # if pressed button in dict of radio buttons
                     if event.ui_element in self.radio_buttons:
                         if self.radio_buttons[event.ui_element]:
-                            self.set_button_color(event.ui_element, Config.BUTTON_RED)
+                            self.gui.set_button_color(event.ui_element, Config.BUTTON_RED)
                         else:
-                            self.set_button_color(event.ui_element, Config.BUTTON_GREEN)
+                            self.gui.set_button_color(event.ui_element, Config.BUTTON_GREEN)
 
                         self.radio_buttons[event.ui_element] = not self.radio_buttons[event.ui_element]
 
                     # If pressed button in dict of multimedia buttons
                     if event.ui_element in self.multimedia_buttons:
-                        self.simulation_speed = self.multimedia_buttons[event.ui_element]
+                        self.animation_speed = self.multimedia_buttons[event.ui_element]
                         for button in self.multimedia_buttons:
                             button.enable()
                         event.ui_element.disable()
@@ -247,14 +230,14 @@ class Game:
                     # If picked color of planet
                     if event.ui_element == self.planet_color_picker:
                         self.current_planet_color = event.colour
-                        self.set_label_color(self.settings_gui_elements['planet_color_surface'],
-                                             self.current_planet_color)
+                        self.gui.set_label_color(self.settings_gui_elements['planet_color_surface'],
+                                                 self.current_planet_color)
 
                     # If picked color of star
                     if event.ui_element == self.star_color_picker:
                         self.current_star_color = event.colour
-                        self.set_label_color(self.settings_gui_elements['star_color_surface'],
-                                             self.current_star_color)
+                        self.gui.set_label_color(self.settings_gui_elements['star_color_surface'],
+                                                 self.current_star_color)
 
                 if event.user_type == UI_WINDOW_CLOSE:
                     # If closed planet's "Colour Picker Dialog"
@@ -342,7 +325,7 @@ class Game:
             self.screen.blit(self.grid_surface, (0, 0))  # Drawing grid
 
         # Simulation objects
-        self.SimulationManager.celestial_bodies.update(dt=self.simulation_speed * self.time_delta)
+        self.SimulationManager.celestial_bodies.update(dt=self.animation_speed * self.time_delta)
 
         if self.radio_buttons[self.glow_button]:
             self.screen.blit(self.SimulationManager.glow_surface, (0, 0))  # Blit glow surface
