@@ -7,7 +7,6 @@ from copy import copy
 
 import pygame
 from pygame.math import Vector2
-from pygame_gui.elements import UILabel, UIButton  # Elements
 from pygame_gui.windows import UIColourPickerDialog  # Windows
 from pygame_gui import UI_BUTTON_PRESSED, UI_COLOUR_PICKER_COLOUR_PICKED, UI_WINDOW_CLOSE  # Events
 
