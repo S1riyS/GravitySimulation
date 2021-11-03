@@ -11,6 +11,7 @@ class Config:
     STAR_COLOR = Color(255, 255, 17)
     PLANET_COLOR = Color(0, 255, 0)
     DARK_BLUE = Color(0, 6, 15)
+    TRANSPARENT = Color(0, 0, 0, 0)
 
     BUTTON_GREEN = Color(47, 191, 113)
     BUTTON_RED = Color(239, 45, 86)

@@ -163,9 +163,9 @@ class Game:
 
     def clear_surfaces(self) -> None:
         # Filling surfaces
-        SimulationManager.glow_surface.fill((0, 0, 0, 0))
-        SimulationManager.trace_surface.fill((0, 0, 0, 0))
-        self.grid_surface.fill((0, 0, 0, 0))
+        SimulationManager.glow_surface.fill(Config.TRANSPARENT)
+        SimulationManager.trace_surface.fill(Config.TRANSPARENT)
+        self.grid_surface.fill(Config.TRANSPARENT)
         self.screen.fill(Config.DARK_BLUE)
 
     def handle_events(self) -> None:

@@ -62,7 +62,7 @@ class CelestialBody(SimulationObject, ABC):
     # Set object's surface, rect and image
     def set_object_rect(self):
         self.image = pygame.Surface((2 * self.radius, 2 * self.radius)).convert_alpha()
-        self.image.fill((0, 0, 0, 0))
+        self.image.fill(Config.TRANSPARENT)
 
         self.rect = self.image.get_rect()
         self.rect.center = (self.x, self.y)
@@ -87,7 +87,7 @@ class CelestialBody(SimulationObject, ABC):
         # Glow surface
         surface_side = 2 * (self.radius + glow_radius)
         self.current_glow_surface = pygame.Surface((surface_side, surface_side)).convert_alpha()
-        self.current_glow_surface.fill((0, 0, 0, 0))
+        self.current_glow_surface.fill(Config.TRANSPARENT)
         center_of_surface = (surface_side // 2, surface_side // 2)
 
         current_glow_color = glow_color  # Setting current color
