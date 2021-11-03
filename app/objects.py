@@ -119,6 +119,7 @@ class CelestialBody(SimulationObject, ABC):
         """Method, that updates object every tick"""
         pass
 
+
 # Planet class
 class Planet(CelestialBody):
     """
