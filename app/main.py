@@ -11,10 +11,12 @@ from pygame_gui.elements import UILabel, UIButton  # Elements
 from pygame_gui.windows import UIColourPickerDialog  # Windows
 from pygame_gui import UI_BUTTON_PRESSED, UI_COLOUR_PICKER_COLOUR_PICKED, UI_WINDOW_CLOSE  # Events
 
-from app.config import Config  # Config
-from app.gui import GUI  # GUI
-
 pygame.init()
+
+
+from app.gui import GUI  # GUI
+from app.config import Config  # Config
+from app.objects import SimulationManager, Planet, Star # Classes
 
 
 class Game:
@@ -32,8 +34,7 @@ class Game:
 
         # Grid surface
         self.is_drawing_grid = True
-        self.grid_surface = pygame.Surface(Config.WINDOW_SIZE).convert_alpha()
-        self.grid_surface.fill((0, 0, 0, 0))
+        self.grid_surface = pygame.Surface(Config.WINDOW_SIZE, pygame.SRCALPHA)
 
         # Simulation surfaces
         self.is_drawing_glow = True
@@ -43,7 +44,6 @@ class Game:
         self.animation_speed = 1
 
         self.init_gui()  # Initiating GUI
-        self.init_modules()  # Copying imported variables
 
     @staticmethod
     def mouse_collision_with_gui(mouse_position: tuple, gui_rects: list) -> bool:
@@ -127,17 +127,11 @@ class Game:
         for button in self.radio_buttons.keys():
             self.gui.set_button_color(button, Config.BUTTON_GREEN)
 
-    def init_modules(self) -> None:
-        from app.objects import SimulationManager, Planet, Star
-        self.Star = Star
-        self.Planet = Planet
-        self.SimulationManager = SimulationManager
-
     def restart(self) -> None:
         # Cleaning groups of sprites
-        self.SimulationManager.stars.empty()
-        self.SimulationManager.planets.empty()
-        self.SimulationManager.celestial_bodies.empty()
+        SimulationManager.stars.empty()
+        SimulationManager.planets.empty()
+        SimulationManager.celestial_bodies.empty()
 
         # Initiating beginning colors
         self.current_planet_color = copy(Config.PLANET_COLOR)
@@ -167,10 +161,10 @@ class Game:
         for button in self.radio_buttons.keys():
             self.gui.set_button_color(button, Config.BUTTON_GREEN)
 
-    def fill_surfaces(self) -> None:
+    def clear_surfaces(self) -> None:
         # Filling surfaces
-        self.SimulationManager.glow_surface.fill((0, 0, 0, 0))
-        self.SimulationManager.trace_surface.fill((0, 0, 0, 0))
+        SimulationManager.glow_surface.fill((0, 0, 0, 0))
+        SimulationManager.trace_surface.fill((0, 0, 0, 0))
         self.grid_surface.fill((0, 0, 0, 0))
         self.screen.fill(Config.DARK_BLUE)
 
@@ -265,11 +259,11 @@ class Game:
 
                 if event.button == 3 and not self.is_mouse_on_gui:
                     # Creating a star
-                    self.Star(
+                    Star(
                         x=self.mouse_x,
                         y=self.mouse_y,
                         mass=self.settings_gui_elements['star_mass_slider'].get_current_value(),
-                        color=self.current_star_color
+                        color=copy(self.current_star_color)
                     )
 
             # Mouse button up event
@@ -277,12 +271,12 @@ class Game:
                 if event.button == 1:
                     try:
                         # Creating a planet
-                        self.Planet(
+                        Planet(
                             x=self.mouse_x,
                             y=self.mouse_y,
                             velocity=self.velocity_vector,
                             mass=self.settings_gui_elements['planet_mass_slider'].get_current_value(),
-                            color=self.current_planet_color
+                            color=copy(self.current_planet_color)
                         )
 
                         # Setting labels
@@ -325,14 +319,14 @@ class Game:
             self.screen.blit(self.grid_surface, (0, 0))  # Drawing grid
 
         # Simulation objects
-        self.SimulationManager.celestial_bodies.update(dt=self.animation_speed * self.time_delta)
+        SimulationManager.celestial_bodies.update(dt=self.animation_speed * self.time_delta)
 
         if self.radio_buttons[self.glow_button]:
-            self.screen.blit(self.SimulationManager.glow_surface, (0, 0))  # Blit glow surface
+            self.screen.blit(SimulationManager.glow_surface, (0, 0))  # Blit glow surface
         if self.radio_buttons[self.trace_button]:
-            self.screen.blit(self.SimulationManager.trace_surface, (0, 0))  # Blit trace surface
+            self.screen.blit(SimulationManager.trace_surface, (0, 0))  # Blit trace surface
 
-        self.SimulationManager.celestial_bodies.draw(self.screen)
+        SimulationManager.celestial_bodies.draw(self.screen)
 
         # GUI
         for rect in self.gui.gui_rects:
@@ -353,7 +347,7 @@ class Game:
             self.clock.tick(Config.FPS)
             self.time_delta = self.clock.tick(Config.FPS) / 1000.0
 
-            self.fill_surfaces()  # Filling surfaces with matching colors
+            self.clear_surfaces()  # Clearing surfaces
             self.handle_events()  # Handling events
             self.update()  # Updating
 
