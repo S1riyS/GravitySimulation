@@ -15,8 +15,8 @@ from app.config import Config
 # Simulation manager class
 class SimulationManager:
     # Surfaces with elements of simulation
-    glow_surface = pygame.Surface(Config.WINDOW_SIZE).convert_alpha()
-    trace_surface = pygame.Surface(Config.WINDOW_SIZE).convert_alpha()
+    glow_surface = pygame.Surface(Config.WINDOW_SIZE, pygame.SRCALPHA)
+    trace_surface = pygame.Surface(Config.WINDOW_SIZE, pygame.SRCALPHA)
 
     # Sprite groups
     celestial_bodies = pygame.sprite.Group()
@@ -59,13 +59,8 @@ class CelestialBody(SimulationObject, ABC):
 
         SimulationManager.celestial_bodies.add(self)
 
-    @abstractmethod
-    def get_radius(self, mass: int) -> float:
-        """Abstract method, that returns radius, based on object's mass"""
-        pass
-
     # Set object's surface, rect and image
-    def set_rect(self):
+    def set_object_rect(self):
         self.image = pygame.Surface((2 * self.radius, 2 * self.radius)).convert_alpha()
         self.image.fill((0, 0, 0, 0))
 
@@ -73,7 +68,6 @@ class CelestialBody(SimulationObject, ABC):
         self.rect.center = (self.x, self.y)
         self.position_vector = Vector2(self.rect.centerx, self.rect.centery)
 
-    def draw_object_body(self):
         pygame.draw.circle(
             self.image,  # Surface
             self.color,  # Color
@@ -114,6 +108,16 @@ class CelestialBody(SimulationObject, ABC):
         position = (self.rect.centerx - self.radius - glow_radius, self.rect.centery - self.radius - glow_radius)
         SimulationManager.glow_surface.blit(self.current_glow_surface, position)  # Drawing glow on screen
 
+    @staticmethod
+    @abstractmethod
+    def get_radius(mass: int) -> float:
+        """Method, that returns radius, based on object's mass"""
+        pass
+
+    @abstractmethod
+    def update(self, *args, **kwargs) -> None:
+        """Method, that updates object every tick"""
+        pass
 
 # Planet class
 class Planet(CelestialBody):
@@ -133,8 +137,7 @@ class Planet(CelestialBody):
 
         super().__init__(x, y, mass, color)
         self.radius = self.get_radius(self.mass)  # Radius of planet
-        self.set_rect()
-        self.draw_object_body()
+        self.set_object_rect()
 
         self.glow_radius = self.radius  # Size of glow
         self.trace_color = copy(self.color)
@@ -146,7 +149,8 @@ class Planet(CelestialBody):
 
         SimulationManager.planets.add(self)
 
-    def get_radius(self, mass: int) -> float:
+    @staticmethod
+    def get_radius(mass: int) -> float:
         radius = 8 // Config.K * (mass / Config.PLANET_DEFAULT_MASS) ** (1 / 3)
         return radius
 
@@ -204,8 +208,8 @@ class Planet(CelestialBody):
         for star in SimulationManager.stars:
             vector_distance = star.position_vector - self.position_vector
             if vector_distance.length() < (star.radius + self.radius):
-                star.devour(self)  # Start 'devouring this planet'
                 print(f'№{self.id} - killed by collision with star, position: {self.position_vector}')
+                star.devour(self)  # Star 'devouring this planet'
                 self.kill()
 
     # Is planet out of system
@@ -256,12 +260,12 @@ class Star(CelestialBody):
         super().__init__(x, y, mass, color)
         self.radius = self.get_radius(self.mass)
         self.glow_radius = self.radius * 0.7  # Size of glow
-        self.set_rect()
-        self.draw_object_body()  # Drawing body of Star
+        self.set_object_rect()
 
         SimulationManager.stars.add(self)
 
-    def get_radius(self, mass: int) -> float:
+    @staticmethod
+    def get_radius(mass: int) -> float:
         radius = (30 // Config.K) * (mass / Config.STAR_DEFAULT_MASS) ** (1 / 2)
         return radius
 
@@ -270,9 +274,7 @@ class Star(CelestialBody):
 
         self.radius = self.get_radius(self.mass)
         self.glow_radius = self.radius * 0.7  # Size of glow
-
-        self.set_rect()
-        self.draw_object_body()  # Drawing body of Star
+        self.set_object_rect()
 
     def update(self, *args, **kwargs) -> None:
         self.draw_object_glow(glow_radius=self.glow_radius, glow_color=self.glow_color, glow_layers=5)
