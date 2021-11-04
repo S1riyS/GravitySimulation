@@ -15,8 +15,8 @@ from app.config import Config
 # Simulation manager class
 class SimulationManager:
     # Surfaces with elements of simulation
-    glow_surface = pygame.Surface(Config.WINDOW_SIZE, pygame.SRCALPHA)
-    trace_surface = pygame.Surface(Config.WINDOW_SIZE, pygame.SRCALPHA)
+    glow_surface = pygame.Surface(Config.WINDOW_SIZE, pygame.SRCALPHA)  # lgtm [py/call/wrong-arguments]
+    trace_surface = pygame.Surface(Config.WINDOW_SIZE, pygame.SRCALPHA)  # lgtm [py/call/wrong-arguments]
 
     # Sprite groups
     celestial_bodies = pygame.sprite.Group()
@@ -61,7 +61,7 @@ class CelestialBody(SimulationObject, ABC):
 
     # Set object's surface, rect and image
     def set_object_rect(self):
-        self.image = pygame.Surface((2 * self.radius, 2 * self.radius)).convert_alpha()
+        self.image = pygame.Surface((2 * self.radius, 2 * self.radius)).convert_alpha()   # lgtm [py/call/wrong-arguments]
         self.image.fill(Config.TRANSPARENT)
 
         self.rect = self.image.get_rect()
@@ -86,7 +86,7 @@ class CelestialBody(SimulationObject, ABC):
 
         # Glow surface
         surface_side = 2 * (self.radius + glow_radius)
-        self.current_glow_surface = pygame.Surface((surface_side, surface_side)).convert_alpha()
+        self.current_glow_surface = pygame.Surface((surface_side, surface_side)).convert_alpha()  # lgtm [py/call/wrong-arguments]
         self.current_glow_surface.fill(Config.TRANSPARENT)
         center_of_surface = (surface_side // 2, surface_side // 2)
 

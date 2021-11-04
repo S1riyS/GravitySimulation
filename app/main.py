@@ -26,7 +26,7 @@ class Game:
         pygame.display.set_icon(self.icon)  # Setting icon
         self.clock = pygame.time.Clock()  # Clock
 
-        self.grid_surface = pygame.Surface(Config.WINDOW_SIZE, pygame.SRCALPHA)  # Grid surface
+        self.grid_surface = pygame.Surface(Config.WINDOW_SIZE, pygame.SRCALPHA)  # lgtm [py/call/wrong-arguments]
         self.animation_speed = 1  # Speed
 
         self.init_gui()  # Initiating GUI
