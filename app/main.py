@@ -26,20 +26,8 @@ class Game:
         pygame.display.set_icon(self.icon)  # Setting icon
         self.clock = pygame.time.Clock()  # Clock
 
-        # Initiating beginning colors
-        self.current_planet_color = copy(Config.PLANET_COLOR)
-        self.current_star_color = copy(Config.STAR_COLOR)
-
-        # Grid surface
-        self.is_drawing_grid = True
-        self.grid_surface = pygame.Surface(Config.WINDOW_SIZE, pygame.SRCALPHA)
-
-        # Simulation surfaces
-        self.is_drawing_glow = True
-        self.is_drawing_trace = True
-
-        # Speed
-        self.animation_speed = 1
+        self.grid_surface = pygame.Surface(Config.WINDOW_SIZE, pygame.SRCALPHA)  # Grid surface
+        self.animation_speed = 1  # Speed
 
         self.init_gui()  # Initiating GUI
 
@@ -69,6 +57,10 @@ class Game:
             pygame.draw.line(surface, color, (0, y * distance), (Config.WIDTH, y * distance), 1)
 
     def init_gui(self) -> None:
+        # Initiating beginning colors
+        self.current_planet_color = copy(Config.PLANET_COLOR)
+        self.current_star_color = copy(Config.STAR_COLOR)
+
         # Statements of window
         self.is_dialogue_open = False
         self.is_planet_window_open = False
