@@ -4,6 +4,7 @@ Main project file, that containing game loop
 
 # Modules
 from copy import copy
+import random
 
 import pygame
 from pygame.math import Vector2
@@ -51,10 +52,46 @@ class Game:
         :param distance: Distance between lines of grid
         :return: None
         """
+
+        def calculate_acceleration(dot_position: Vector2) -> Vector2:
+            accelerations = Vector2(0, 0)  # Sum of forces ((0, 0) at the beginning)
+            position_vector = dot_position  # Position vector
+
+            for body in SimulationManager.celestial_bodies:
+                vector_distance = (body.position_vector - position_vector) / 2
+
+                if vector_distance.length() != 0 and vector_distance.length() < 100:
+                    universal_gravity = body.mass / vector_distance.length_squared()
+                    unit_vector = (vector_distance / vector_distance.length())
+                    acceleration = universal_gravity * unit_vector  # Gravitational force between this body and another
+
+                    accelerations += acceleration  # Adding this force
+
+            return accelerations
+
+        dots = []
+
         for x in range(int(Config.WIDTH / distance) + 2):
-            pygame.draw.line(surface, color, (x * distance, 0), (x * distance, Config.HEIGHT), 1)
-        for y in range(int(Config.HEIGHT / distance) + 2):
-            pygame.draw.line(surface, color, (0, y * distance), (Config.WIDTH, y * distance), 1)
+            row = []
+            for y in range(int(Config.HEIGHT / distance) + 2):
+                position = Vector2(x * distance, y * distance)
+                offset = calculate_acceleration(position) * 1.5
+                if offset.length() > 15:
+                    offset.scale_to_length(15)
+
+                row.append(position + offset)
+                # pygame.draw.circle(surface, color, position + offset, 3)
+
+            dots.append(row)
+
+        for row in dots:
+            for index in range(len(row) - 1):
+                pygame.draw.line(surface, color, row[index], row[index + 1], 1)
+
+        columns = [[row[i] for row in dots] for i in range(len(dots[0]))]
+        for column in columns:
+            for index in range(len(column) - 1):
+                pygame.draw.line(surface, color, column[index], column[index + 1], 1)
 
     def init_gui(self) -> None:
         # Initiating beginning colors
@@ -304,8 +341,8 @@ class Game:
 
     def update(self) -> None:
         # Drawing grid
-        self.draw_grid(self.grid_surface, Config.GRID_COLOR, Config.GRID_DISTANCE)
         if self.radio_buttons[self.grid_button]:
+            self.draw_grid(self.grid_surface, Config.GRID_COLOR, Config.GRID_DISTANCE)
             self.screen.blit(self.grid_surface, (0, 0))  # Drawing grid
 
         # Simulation objects

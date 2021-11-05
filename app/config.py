@@ -31,7 +31,7 @@ class Config:
 
     # Simulation objects' settings
     BASE_GLOW_ALPHA = 20
-    BASE_TRACE_ALPHA = 255
+    BASE_TRACE_ALPHA = 128
 
     # Planet settings
     PLANET_DEFAULT_MASS = 150
@@ -51,6 +51,7 @@ class Config:
     PV_VELOCITY_COEF = 1 / 80
 
     # Grid settings
-    GRID_DISTANCE = 40 / K
+    GRID_DISTANCE = 30 / K
     GRID_OPACITY = 32
     GRID_COLOR = Color(155, 155, 155, GRID_OPACITY)
+    GRID_CURVATURE = 1.5
