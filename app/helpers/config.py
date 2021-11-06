@@ -1,18 +1,16 @@
-"""
-Module containing general settings of entire project
-"""
+from pygame import Color
 
-# Modules
-from pygame import Color, USEREVENT
 
 class Config:
+    """Config of simulation"""
+
     # Colors
     WHITE = Color(255, 255, 255)
     STAR_COLOR = Color(255, 255, 17)
     PLANET_COLOR = Color(0, 255, 0)
     DARK_BLUE = Color(0, 6, 15)
     TRANSPARENT = Color(0, 0, 0, 0)
-
+    GUI_BG_COLOR = Color(13, 20, 25)
     BUTTON_GREEN = Color(47, 191, 113)
     BUTTON_RED = Color(239, 45, 86)
 
@@ -24,10 +22,8 @@ class Config:
     STABLE_FPS = 100
 
     # Simulation variables
-    G = 0.075  # Gravitation constant
-    # Distance coefficient (square root proportion)
+    G = 0.075
     K = 1
-    MAX_TRACE_LENGTH = 400  # Max length of planet's trace
 
     # Simulation objects' settings
     BASE_GLOW_ALPHA = 20
@@ -37,6 +33,7 @@ class Config:
     PLANET_DEFAULT_MASS = 150
     PLANET_MIN_MASS = 50
     PLANET_MAX_MASS = 450
+    MAX_TRACE_LENGTH = 400
 
     # Star settings
     STAR_DEFAULT_MASS = 20000
@@ -55,5 +52,3 @@ class Config:
     GRID_COLOR = Color(155, 155, 155, GRID_OPACITY)
     GRID_CURVATURE = 15
     MAX_GRID_DOT_OFFSET = 15
-
-
