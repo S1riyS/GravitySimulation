@@ -6,17 +6,17 @@ Main project file, that containing game loop
 from copy import copy
 
 import pygame
-from pygame.math import Vector2
+from pygame.math import Vector2  # 2D vector
 from pygame_gui.windows import UIColourPickerDialog  # Windows
-from pygame_gui import UI_BUTTON_PRESSED, UI_COLOUR_PICKER_COLOUR_PICKED, UI_WINDOW_CLOSE  # Events
+from pygame_gui import UI_BUTTON_PRESSED, UI_COLOUR_PICKER_COLOUR_PICKED, UI_WINDOW_CLOSE  # GUI events
 
 pygame.init()
 
 from app.objects import SimulationManager, Planet, Star  # Classes
-from app.graphic.grid import Grid
+from app.graphic.grid import Grid  # Background grid
 from app.graphic.gui import GUI  # GUI
 from app.helpers.config import Config  # Config
-from app.helpers.events import Events  # Events
+from app.helpers.events import CustomEvents  # Custom events
 
 
 class Game:
@@ -280,7 +280,7 @@ class Game:
                     except Exception as error:
                         print(f'Velocity vector is not defined. Error: {error}')
 
-            elif event.type == Events.ADDED_NEW_STAR or event.type == Events.CHANGED_STAR_MASS:
+            elif event.type == CustomEvents.ADDED_NEW_STAR or event.type == CustomEvents.CHANGED_STAR_MASS:
                 self.grid_dots = self.grid.calculate_grid_dots()  # Calculating dots
 
             self.gui.manager.process_events(event)
