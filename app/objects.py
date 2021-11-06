@@ -246,5 +246,7 @@ class Star(CelestialBody):
         self.set_object_rect(self.radius)
         self.glow_radius = self.radius * 0.7  # Size of glow
 
+        pygame.event.post(pygame.event.Event(Config.CHANGED_STAR_MASS))
+
     def update(self, *args, **kwargs) -> None:
         self.draw_object_glow(glow_radius=self.glow_radius, glow_color=self.glow_color, glow_layers=5)
