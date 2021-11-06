@@ -23,9 +23,9 @@ class Grid:
 
                 # Calculating offset, based on gravity forces
                 offset = Physic.calculate_acceleration(position, SimulationManager.stars) * Config.GRID_CURVATURE
-                offset = Physic.scale_vector(offset, max_length=Config.MAX_GRID_DOT_OFFSET)
+                scaled_offset = Physic.scale_vector(offset, max_length=Config.MAX_GRID_DOT_OFFSET)
 
-                row.append(position + offset)  # Append offset point to row array
+                row.append(position + scaled_offset)  # Append offset point to row array
             dots.append(row)  # Append row to dots array
 
         return dots
