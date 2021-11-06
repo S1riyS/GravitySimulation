@@ -23,10 +23,6 @@ class Config:
     FPS = 120
     STABLE_FPS = 100
 
-    # Events
-    ADDED_NEW_STAR = USEREVENT + 1
-    CHANGED_STAR_MASS = USEREVENT + 2
-
     # Simulation variables
     G = 0.075  # Gravitation constant
     # Distance coefficient (square root proportion)
@@ -60,3 +56,5 @@ class Config:
     GRID_COLOR = Color(155, 155, 155, GRID_OPACITY)
     GRID_CURVATURE = 15
     MAX_GRID_DOT_OFFSET = 15
+
+

@@ -16,6 +16,7 @@ from app.objects import SimulationManager, Planet, Star  # Classes
 from app.graphic.grid import Grid
 from app.graphic.gui import GUI  # GUI
 from app.helpers.config import Config  # Config
+from app.helpers.events import Events  # Events
 
 
 class Game:
@@ -279,7 +280,7 @@ class Game:
                     except Exception as error:
                         print(f'Velocity vector is not defined. Error: {error}')
 
-            elif event.type == Config.ADDED_NEW_STAR or event.type == Config.CHANGED_STAR_MASS:
+            elif event.type == Events.ADDED_NEW_STAR or event.type == Events.CHANGED_STAR_MASS:
                 self.grid_dots = self.grid.calculate_grid_dots()  # Calculating dots
 
             self.gui.manager.process_events(event)
