@@ -9,9 +9,9 @@ from abc import ABC, abstractmethod
 import pygame
 from pygame.math import Vector2
 
-from app.helpers.physic import Physic
-from app.helpers.config import Config
-from app.helpers.events import CustomEvents
+from app.help.physic import Physic
+from app.config import Config
+from app.events import CustomEvents
 
 
 # Simulation manager class

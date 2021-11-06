@@ -15,8 +15,8 @@ pygame.init()
 from app.objects import SimulationManager, Planet, Star  # Classes
 from app.graphic.grid import Grid  # Background grid
 from app.graphic.gui import GUI  # GUI
-from app.helpers.config import Config  # Config
-from app.helpers.events import CustomEvents  # Custom events
+from app.config import Config  # Config
+from app.events import CustomEvents  # Custom events
 
 
 class Game:
@@ -57,6 +57,8 @@ class Game:
         """
 
     def init_gui(self) -> None:
+        self.gui = GUI()  # Creating object of GUI class
+
         # Initiating beginning colors
         self.current_planet_color = copy(Config.PLANET_COLOR)
         self.current_star_color = copy(Config.STAR_COLOR)
@@ -65,8 +67,6 @@ class Game:
         self.is_dialogue_open = False
         self.is_planet_window_open = False
         self.is_star_window_open = False
-
-        self.gui = GUI()  # Creating object of GUI class
 
         # GUI rects
         self.info_gui_rect = self.gui.get_gui_rect(self.gui.info_block, 5)

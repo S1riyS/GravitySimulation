@@ -2,8 +2,8 @@ import pygame
 from pygame.math import Vector2
 
 from app.objects import SimulationManager
-from app.helpers.physic import Physic
-from app.helpers.config import Config
+from app.help.physic import Physic
+from app.config import Config
 
 
 class Grid:

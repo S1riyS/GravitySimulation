@@ -9,7 +9,7 @@ import pygame
 from pygame_gui import UIManager
 from pygame_gui.elements import UILabel, UIButton, UIHorizontalSlider
 
-from app.helpers.config import Config
+from app.config import Config
 
 
 class GUI:
@@ -32,7 +32,7 @@ class GUI:
                 'G_label': UILabel(relative_rect=pygame.Rect(10, 105, 200, 20), text=f'G = {Config.G}',
                                    manager=self.manager),
                 'K_label': UILabel(relative_rect=pygame.Rect(10, 130, 200, 20),
-                                   text=f'Distance coef = {Config.K}',
+                                   text=f'Distance = {100 * Config.K}%',
                                    manager=self.manager),
             }
         }
