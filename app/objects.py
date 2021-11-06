@@ -11,7 +11,7 @@ from pygame.math import Vector2
 
 from app.helpers.physic import Physic
 from app.helpers.config import Config
-from app.helpers.events import Events
+from app.helpers.events import CustomEvents
 
 
 # Simulation manager class
@@ -62,7 +62,7 @@ class CelestialBody(SimulationObject, ABC):
         SimulationManager.celestial_bodies.add(self)
 
     # Set object's surface, rect and image
-    def set_object_rect(self, radius):
+    def set_object_rect(self, radius) -> None:
         self.image = pygame.Surface((2 * radius, 2 * radius)).convert_alpha()  # lgtm [py/call/wrong-arguments]
         self.image.fill(Config.TRANSPARENT)
 
@@ -77,7 +77,7 @@ class CelestialBody(SimulationObject, ABC):
             self.radius  # Object radius
         )
 
-    def draw_object_glow(self, glow_radius: int, glow_color: pygame.Color, glow_layers: int):
+    def draw_object_glow(self, glow_radius: int, glow_color: pygame.Color, glow_layers: int) -> None:
         """
         Method in which the glow is drawn
         :param glow_radius: Max radius of glowing
@@ -113,12 +113,12 @@ class CelestialBody(SimulationObject, ABC):
     @staticmethod
     @abstractmethod
     def get_radius(mass: int) -> float:
-        """Method, that returns radius, based on object's mass"""
+        """Returns radius, based on object's mass"""
         pass
 
     @abstractmethod
     def update(self, *args, **kwargs) -> None:
-        """Method, that updates object every tick"""
+        """Updates object"""
         pass
 
 
@@ -158,7 +158,7 @@ class Planet(CelestialBody):
         return radius
 
     # Updating position
-    def update_position(self, dt):
+    def update_position(self, dt) -> None:
         self.acceleration = Vector2(0, 0)  # Sum of forces ((0, 0) at the beginning)
         self.position_vector = Vector2(self.x, self.y)  # Position vector
 
@@ -174,7 +174,7 @@ class Planet(CelestialBody):
         self.rect.centery = self.y
 
     # Collision with stars
-    def collision_with_stars(self):
+    def collision_with_stars(self) -> None:
         for star in SimulationManager.stars:
             vector_distance = star.position_vector - self.position_vector
             if vector_distance.length() < (star.radius + self.radius):
@@ -183,14 +183,14 @@ class Planet(CelestialBody):
                 self.kill()
 
     # Is planet out of system
-    def is_out_of_system(self):
+    def is_out_of_system(self) -> None:
         max_coefficient = 8
         if abs(self.rect.x) > Config.WIDTH * max_coefficient or abs(self.rect.y) > Config.HEIGHT * max_coefficient:
             print(f'№{self.id} - killed by out of system, position: {self.position_vector}')
             self.kill()
 
     # Drawing planet trace
-    def draw_trace(self):
+    def draw_trace(self) -> None:
         # Deleting unnecessary positions
         if len(self.traces) > Config.MAX_TRACE_LENGTH:
             difference = len(self.traces) - Config.MAX_TRACE_LENGTH
@@ -233,7 +233,7 @@ class Star(CelestialBody):
         self.glow_radius = self.radius * 0.7  # Size of glow
 
         SimulationManager.stars.add(self)
-        pygame.event.post(pygame.event.Event(Events.ADDED_NEW_STAR))
+        pygame.event.post(pygame.event.Event(CustomEvents.ADDED_NEW_STAR))
 
     @staticmethod
     def get_radius(mass: int) -> float:
@@ -247,7 +247,7 @@ class Star(CelestialBody):
         self.set_object_rect(self.radius)
         self.glow_radius = self.radius * 0.7  # Size of glow
 
-        pygame.event.post(pygame.event.Event(Events.CHANGED_STAR_MASS))
+        pygame.event.post(pygame.event.Event(CustomEvents.CHANGED_STAR_MASS))
 
     def update(self, *args, **kwargs) -> None:
         self.draw_object_glow(glow_radius=self.glow_radius, glow_color=self.glow_color, glow_layers=5)
