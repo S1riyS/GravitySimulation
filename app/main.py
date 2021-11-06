@@ -302,7 +302,8 @@ class Game:
             self.info_gui_elements['velocity_y_label'].set_text(f'Y velocity: {-round(self.velocity_vector.y, 4)}')
 
             # Drawing preview
-            pygame.draw.circle(self.screen, Config.WHITE, (self.mouse_x, self.mouse_y), Config.PV_RADIUS)
+            preview_radius = Planet.get_radius(self.settings_gui_elements['planet_mass_slider'].get_current_value())
+            pygame.draw.circle(self.screen, Config.WHITE, (self.mouse_x, self.mouse_y), preview_radius)
             pygame.draw.line(self.screen, Config.WHITE,
                              (self.mouse_x, self.mouse_y),
                              (self.mouse_x + self.velocity_vector.x * Config.PV_LENGTH_COEF,

@@ -45,7 +45,6 @@ class Config:
     DEVOUR_COEFFICIENT = 10
 
     # Planet preview
-    PV_RADIUS = 8 // K
     PV_LENGTH_COEF = 20 / K
     PV_LINE_THICKNESS = 2
     PV_VELOCITY_COEF = 1 / 80
