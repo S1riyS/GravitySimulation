@@ -9,7 +9,8 @@ from abc import ABC, abstractmethod
 import pygame
 from pygame.math import Vector2
 
-from app.config import Config
+from app.helpers.physic import Physic
+from app.helpers.config import Config
 
 
 # Simulation manager class
@@ -60,8 +61,8 @@ class CelestialBody(SimulationObject, ABC):
         SimulationManager.celestial_bodies.add(self)
 
     # Set object's surface, rect and image
-    def set_object_rect(self):
-        self.image = pygame.Surface((2 * self.radius, 2 * self.radius)).convert_alpha()   # lgtm [py/call/wrong-arguments]
+    def set_object_rect(self, radius):
+        self.image = pygame.Surface((2 * radius, 2 * radius)).convert_alpha()  # lgtm [py/call/wrong-arguments]
         self.image.fill(Config.TRANSPARENT)
 
         self.rect = self.image.get_rect()
@@ -86,7 +87,7 @@ class CelestialBody(SimulationObject, ABC):
 
         # Glow surface
         surface_side = 2 * (self.radius + glow_radius)
-        self.current_glow_surface = pygame.Surface((surface_side, surface_side)).convert_alpha()  # lgtm [py/call/wrong-arguments]
+        self.current_glow_surface = pygame.Surface((surface_side, surface_side)).convert_alpha() # lgtm [py/call/wrong-arguments]
         self.current_glow_surface.fill(Config.TRANSPARENT)
         center_of_surface = (surface_side // 2, surface_side // 2)
 
@@ -101,7 +102,7 @@ class CelestialBody(SimulationObject, ABC):
                 self.current_glow_surface,  # Surface
                 current_glow_color,  # Color
                 center_of_surface,  # Relative position
-                self.radius + glow_radius * ((glow_layers - i) / glow_layers)  # Glow radius
+                self.radius + glow_radius * (1 - i / glow_layers)  # Glow radius
             )
 
         # Drawing glow on a screen
@@ -138,7 +139,7 @@ class Planet(CelestialBody):
 
         super().__init__(x, y, mass, color)
         self.radius = self.get_radius(self.mass)  # Radius of planet
-        self.set_object_rect()
+        self.set_object_rect(self.radius)
 
         self.glow_radius = self.radius  # Size of glow
         self.trace_color = copy(self.color)
@@ -155,47 +156,14 @@ class Planet(CelestialBody):
         radius = 8 // Config.K * (mass / Config.PLANET_DEFAULT_MASS) ** (1 / 3)
         return radius
 
-    @staticmethod
-    def scale_vector(vector: Vector2, min_length: int, max_length=None) -> Vector2:
-        vector_length = vector.length()
-
-        if vector_length < min_length:
-            new_vector = vector * (min_length / vector_length)
-            return new_vector
-
-        elif max_length is not None:
-            if vector_length > max_length:
-                new_vector = vector * (max_length / vector_length)
-                return new_vector
-
-        return vector
-
     # Updating position
     def update_position(self, dt):
-        self.accelerations = Vector2(0, 0)  # Sum of forces ((0, 0) at the beginning)
+        self.acceleration = Vector2(0, 0)  # Sum of forces ((0, 0) at the beginning)
         self.position_vector = Vector2(self.x, self.y)  # Position vector
 
-        for body in SimulationManager.celestial_bodies:
-            if body.id != self.id:
-                vector_distance = Config.K * (body.position_vector - self.position_vector)
-                vector_distance = self.scale_vector(vector_distance, min_length=3)
+        self.acceleration = Physic.calculate_acceleration(self.position_vector, SimulationManager.celestial_bodies)
 
-                if vector_distance.length() == 0:
-                    print(
-                        f'№{self.id} and №{body.id} - killed by collision with each other, '
-                        f'position: {self.position_vector}'
-                    )
-                    self.kill()
-                    body.kill()
-
-                else:
-                    universal_gravity = body.mass / vector_distance.length_squared()
-                    unit_vector = (vector_distance / vector_distance.length())
-                    acceleration = universal_gravity * unit_vector  # Gravitational force between this body and another
-
-                    self.accelerations += acceleration  # Adding this force
-
-        self.velocity += Config.G * self.accelerations * dt  # Adding forces to velocity
+        self.velocity += Config.G * self.acceleration * dt  # Adding forces to velocity
 
         # Applying velocity changes
         self.x += self.velocity.x * dt
@@ -260,10 +228,11 @@ class Star(CelestialBody):
     def __init__(self, x, y, mass, color):
         super().__init__(x, y, mass, color)
         self.radius = self.get_radius(self.mass)
+        self.set_object_rect(self.radius)
         self.glow_radius = self.radius * 0.7  # Size of glow
-        self.set_object_rect()
 
         SimulationManager.stars.add(self)
+        pygame.event.post(pygame.event.Event(Config.ADDED_NEW_STAR))
 
     @staticmethod
     def get_radius(mass: int) -> float:
@@ -274,8 +243,8 @@ class Star(CelestialBody):
         self.mass += Config.DEVOUR_COEFFICIENT * planet.mass
 
         self.radius = self.get_radius(self.mass)
+        self.set_object_rect(self.radius)
         self.glow_radius = self.radius * 0.7  # Size of glow
-        self.set_object_rect()
 
     def update(self, *args, **kwargs) -> None:
         self.draw_object_glow(glow_radius=self.glow_radius, glow_color=self.glow_color, glow_layers=5)

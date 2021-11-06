@@ -3,18 +3,20 @@ Module containing GUI elements and other settings
 """
 
 # Modules
-import pygame
+import os
 
+import pygame
 from pygame_gui import UIManager
 from pygame_gui.elements import UILabel, UIButton, UIHorizontalSlider
 
-from app.config import Config
+from app.helpers.config import Config
 
 
 class GUI:
     def __init__(self):
         # GUI manager
-        self.manager = UIManager(Config.WINDOW_SIZE, theme_path='data/themes/theme.json')
+        self.theme_path = os.path.join("data", "themes", "theme.json") # Path to theme
+        self.manager = UIManager(Config.WINDOW_SIZE, self.theme_path) # UI manager
         self.gui_rect_color = pygame.Color('#0d1419')  # Color
         self.gui_rects = []  # Array with all rects
 

@@ -4,7 +4,6 @@ Main project file, that containing game loop
 
 # Modules
 from copy import copy
-import random
 
 import pygame
 from pygame.math import Vector2
@@ -13,9 +12,10 @@ from pygame_gui import UI_BUTTON_PRESSED, UI_COLOUR_PICKER_COLOUR_PICKED, UI_WIN
 
 pygame.init()
 
-from app.gui import GUI  # GUI
-from app.config import Config  # Config
 from app.objects import SimulationManager, Planet, Star  # Classes
+from app.graphic.grid import Grid
+from app.graphic.gui import GUI  # GUI
+from app.helpers.config import Config  # Config
 
 
 class Game:
@@ -27,7 +27,9 @@ class Game:
         pygame.display.set_icon(self.icon)  # Setting icon
         self.clock = pygame.time.Clock()  # Clock
 
-        self.grid_surface = pygame.Surface(Config.WINDOW_SIZE, pygame.SRCALPHA)  # lgtm [py/call/wrong-arguments]
+        self.grid = Grid(Config.GRID_COLOR, Config.GRID_DISTANCE)  # Creating object of Grid class
+        self.grid_dots = self.grid.calculate_grid_dots()  # Calculating dots
+
         self.animation_speed = 1  # Speed
 
         self.init_gui()  # Initiating GUI
@@ -53,11 +55,12 @@ class Game:
         :return: None
         """
 
-        def calculate_acceleration(dot_position: Vector2) -> Vector2:
+        # Calculating acceleration
+        def calculate_acceleration(dot_position: Vector2, objects: pygame.sprite.Group) -> Vector2:
             accelerations = Vector2(0, 0)  # Sum of forces ((0, 0) at the beginning)
             position_vector = dot_position  # Position vector
 
-            for body in SimulationManager.celestial_bodies:
+            for body in objects:
                 vector_distance = (body.position_vector - position_vector) / 2
 
                 if vector_distance.length() != 0 and vector_distance.length() < 100:
@@ -73,14 +76,16 @@ class Game:
 
         for x in range(int(Config.WIDTH / distance) + 2):
             row = []
+
             for y in range(int(Config.HEIGHT / distance) + 2):
                 position = Vector2(x * distance, y * distance)
-                offset = calculate_acceleration(position) * 1.5
+                offset = calculate_acceleration(position, SimulationManager.stars) * Config.GRID_CURVATURE
+
+                # Scale accelerations vector to length 15
                 if offset.length() > 15:
                     offset.scale_to_length(15)
 
                 row.append(position + offset)
-                # pygame.draw.circle(surface, color, position + offset, 3)
 
             dots.append(row)
 
@@ -155,6 +160,7 @@ class Game:
             self.gui.set_button_color(button, Config.BUTTON_GREEN)
 
     def restart(self) -> None:
+
         # Cleaning groups of sprites
         SimulationManager.stars.empty()
         SimulationManager.planets.empty()
@@ -177,12 +183,15 @@ class Game:
             self.trace_button: True
         }
 
-        # Resetting play speed buttons
+        # Resetting media buttons
         for button in self.multimedia_buttons:
             button.enable()
 
         self.animation_speed = 1
         self.play_button.disable()
+
+        # Resetting background grid dots
+        self.grid_dots = self.grid.calculate_grid_dots()
 
         # Making all radio buttons green as a default
         for button in self.radio_buttons.keys():
@@ -192,7 +201,7 @@ class Game:
         # Filling surfaces
         SimulationManager.glow_surface.fill(Config.TRANSPARENT)
         SimulationManager.trace_surface.fill(Config.TRANSPARENT)
-        self.grid_surface.fill(Config.TRANSPARENT)
+        self.grid.surface.fill(Config.TRANSPARENT)
         self.screen.fill(Config.DARK_BLUE)
 
     def handle_events(self) -> None:
@@ -274,7 +283,7 @@ class Game:
                         self.star_color_picker = None
 
             # Mouse button down event
-            if event.type == pygame.MOUSEBUTTONDOWN:
+            elif event.type == pygame.MOUSEBUTTONDOWN:
                 # Mouse position
                 pressed_mouse_position = pygame.mouse.get_pos()
                 self.mouse_x, self.mouse_y = pressed_mouse_position
@@ -294,7 +303,7 @@ class Game:
                     )
 
             # Mouse button up event
-            if event.type == pygame.MOUSEBUTTONUP and not self.is_mouse_on_gui:
+            elif event.type == pygame.MOUSEBUTTONUP and not self.is_mouse_on_gui:
                 if event.button == 1:
                     try:
                         # Creating a planet
@@ -312,6 +321,9 @@ class Game:
 
                     except Exception as error:
                         print(f'Velocity vector is not defined. Error: {error}')
+
+            elif event.type == Config.ADDED_NEW_STAR:
+                self.grid_dots = self.grid.calculate_grid_dots()  # Calculating dots
 
             self.gui.manager.process_events(event)
 
@@ -342,8 +354,8 @@ class Game:
     def update(self) -> None:
         # Drawing grid
         if self.radio_buttons[self.grid_button]:
-            self.draw_grid(self.grid_surface, Config.GRID_COLOR, Config.GRID_DISTANCE)
-            self.screen.blit(self.grid_surface, (0, 0))  # Drawing grid
+            self.grid.draw_grid(self.grid_dots)  # Drawing grid on grid.surface
+            self.screen.blit(self.grid.surface, (0, 0))  # Drawing grid.surface on screen
 
         # Simulation objects
         SimulationManager.celestial_bodies.update(dt=self.animation_speed * self.time_delta)

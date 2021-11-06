@@ -3,7 +3,7 @@ Module containing general settings of entire project
 """
 
 # Modules
-from pygame import Color
+from pygame import Color, USEREVENT
 
 class Config:
     # Colors
@@ -22,6 +22,9 @@ class Config:
     WINDOW_SIZE = (WIDTH, HEIGHT)
     FPS = 120
     STABLE_FPS = 100
+
+    # Events
+    ADDED_NEW_STAR = USEREVENT + 1
 
     # Simulation variables
     G = 0.075  # Gravitation constant
@@ -54,4 +57,5 @@ class Config:
     GRID_DISTANCE = 30 / K
     GRID_OPACITY = 32
     GRID_COLOR = Color(155, 155, 155, GRID_OPACITY)
-    GRID_CURVATURE = 1.5
+    GRID_CURVATURE = 5
+    MAX_GRID_DOT_OFFSET = 15
