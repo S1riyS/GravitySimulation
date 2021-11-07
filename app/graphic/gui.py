@@ -17,10 +17,10 @@ class GUI:
         # GUI manager
         self.theme_path = os.path.join("data", "themes", "theme.json")  # Path to theme
         self.manager = UIManager(Config.WINDOW_SIZE, self.theme_path)  # UI manager
-        self.gui_rect_color = Config.GUI_BG_COLOR  # UGI bg color
-        self.gui_rects = []  # Array with all rects
+        self.gui_rect_color = Config.GUI_BG_COLOR  # BG color
+        self.gui_rects = []  # Array with all BG rects
 
-        self.info_block = {
+        self.info = {
             'elements': {
 
                 'FPS_counter': UILabel(relative_rect=pygame.Rect(10, 10, 200, 40), text='FPS: None',
@@ -37,7 +37,7 @@ class GUI:
             }
         }
 
-        self.settings_block = {
+        self.settings = {
             'elements': {
                 # Planet
                 'title': UILabel(relative_rect=pygame.Rect(10, 180, 200, 40), text='Settings',
@@ -104,10 +104,10 @@ class GUI:
             }
         }
 
-        self.developer_block = {
+        self.developer = {
             'elements': {
-                'dev_label': UILabel(relative_rect=pygame.Rect(0, 680, 200, 30),
-                                     text='Created by S1riyS', manager=self.manager, object_id="#subtitle"),
+                'dev_label': UILabel(relative_rect=pygame.Rect(0, 680, 200, 30), text='Created by S1riyS',
+                                     manager=self.manager, object_id="#subtitle"),
             }
         }
 

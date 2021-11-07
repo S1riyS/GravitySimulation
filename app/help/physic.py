@@ -29,11 +29,11 @@ class Physic:
             vector_distance = Config.K * (body.position_vector - position_vector)
 
             if vector_distance.length() != 0:
-                vector_distance = Physic.scale_vector(vector_distance, min_length=4)
-                universal_gravity = body.mass / vector_distance.length_squared()
-                unit_vector = (vector_distance / vector_distance.length())
-                acceleration = universal_gravity * unit_vector  # Gravitational force between this body and another
+                vector_distance = Physic.scale_vector(vector_distance, min_length=4)  # Scaling vector
+                universal_gravity = body.mass / vector_distance.length_squared()  # Calculating magnitude
+                unit_vector = (vector_distance / vector_distance.length())  # Calculating unit vector
+                acceleration = universal_gravity * unit_vector  # Calculating acceleration
 
-                accelerations += acceleration  # Adding this force
+                accelerations += acceleration  # Adding acceleration
 
         return accelerations

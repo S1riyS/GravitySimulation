@@ -88,7 +88,7 @@ class CelestialBody(SimulationObject, ABC):
 
         # Glow surface
         surface_side = 2 * (self.radius + glow_radius)
-        self.current_glow_surface = pygame.Surface((surface_side, surface_side)).convert_alpha() # lgtm [py/call/wrong-arguments]
+        self.current_glow_surface = pygame.Surface((surface_side, surface_side)).convert_alpha()
         self.current_glow_surface.fill(Config.TRANSPARENT)
         center_of_surface = (surface_side // 2, surface_side // 2)
 
@@ -146,7 +146,7 @@ class Planet(CelestialBody):
         self.trace_color = copy(self.color)
         self.trace_color.a = Config.BASE_TRACE_ALPHA
 
-        self.traces = [(self.x, self.y)]  # Array of dots
+        self.trace = [(self.x, self.y)]  # Array of dots
         self.MAX_TRACE_LENGTH = 400  # Max size of array
         self.velocity = velocity  # Set initial velocity
 
@@ -159,14 +159,14 @@ class Planet(CelestialBody):
 
     # Updating position
     def update_position(self, dt) -> None:
-        self.acceleration = Vector2(0, 0)  # Sum of forces ((0, 0) at the beginning)
-        self.position_vector = Vector2(self.x, self.y)  # Position vector
-
+        # Position vector
+        self.position_vector = Vector2(self.x, self.y)
+        # Calculating acceleration
         self.acceleration = Physic.calculate_acceleration(self.position_vector, SimulationManager.celestial_bodies)
+        # Applying acceleration to velocity
+        self.velocity += Config.G * self.acceleration * dt
 
-        self.velocity += Config.G * self.acceleration * dt  # Adding forces to velocity
-
-        # Applying velocity changes
+        # Applying velocity to coordinates
         self.x += self.velocity.x * dt
         self.y += self.velocity.y * dt
 
@@ -179,7 +179,7 @@ class Planet(CelestialBody):
             vector_distance = star.position_vector - self.position_vector
             if vector_distance.length() < (star.radius + self.radius):
                 print(f'№{self.id} - killed by collision with star, position: {self.position_vector}')
-                star.devour(self)  # Star 'devouring this planet'
+                star.devour(self)  # Star 'devouring' this planet
                 self.kill()
 
     # Is planet out of system
@@ -192,13 +192,13 @@ class Planet(CelestialBody):
     # Drawing planet trace
     def draw_trace(self) -> None:
         # Deleting unnecessary positions
-        if len(self.traces) > Config.MAX_TRACE_LENGTH:
-            difference = len(self.traces) - Config.MAX_TRACE_LENGTH
-            self.traces = self.traces[difference:]
+        if len(self.trace) > Config.MAX_TRACE_LENGTH:
+            difference = len(self.trace) - Config.MAX_TRACE_LENGTH
+            self.trace = self.trace[difference:]
 
-        previous_pos = self.traces[0]
+        previous_pos = self.trace[0]
 
-        for index, pos in enumerate(self.traces):
+        for index, pos in enumerate(self.trace):
             line_thickness = min(index // 100 + 1, 3)  # Calculated value or 3
             pygame.draw.line(SimulationManager.trace_surface, self.trace_color, previous_pos, pos,
                              line_thickness)  # Drawing line
@@ -206,10 +206,11 @@ class Planet(CelestialBody):
 
     def update(self, *args, **kwargs) -> None:
         delta_time = kwargs.get('dt') * Config.STABLE_FPS
-        # Adding new position to trace array
+
+        # Adding new position to trace array if simulation not on pause
         if delta_time > 0:
             position = (self.rect.centerx, self.rect.centery)
-            self.traces.append(position)
+            self.trace.append(position)
 
         # Updating
         self.update_position(dt=delta_time)
@@ -232,6 +233,7 @@ class Star(CelestialBody):
         self.set_object_rect(self.radius)
         self.glow_radius = self.radius * 0.7  # Size of glow
 
+        # Posting event
         SimulationManager.stars.add(self)
         pygame.event.post(pygame.event.Event(CustomEvents.ADDED_NEW_STAR))
 
@@ -247,6 +249,7 @@ class Star(CelestialBody):
         self.set_object_rect(self.radius)
         self.glow_radius = self.radius * 0.7  # Size of glow
 
+        # Posting event
         pygame.event.post(pygame.event.Event(CustomEvents.CHANGED_STAR_MASS))
 
     def update(self, *args, **kwargs) -> None:

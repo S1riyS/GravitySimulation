@@ -7,17 +7,15 @@ from app.config import Config
 
 
 class Grid:
-    def __init__(self, color, distance):
+    def __init__(self, color: pygame.Color, distance: int):
         self.surface = pygame.Surface(Config.WINDOW_SIZE, pygame.SRCALPHA)  # lgtm [py/call/wrong-arguments]
-        self.color: pygame.Color = color  # Grid color
-        self.distance: int = distance  # Distance between dots of grid
+        self.color = color  # Grid color
+        self.distance = distance  # Distance between dots of grid
 
     def calculate_grid_dots(self) -> list:
         dots = []
-
         for x in range(int(Config.WIDTH / self.distance) + 2):
             row = []  # Cleaning up row array
-
             for y in range(int(Config.HEIGHT / self.distance) + 2):
                 position = Vector2(x * self.distance, y * self.distance)  # Position of current dot
 

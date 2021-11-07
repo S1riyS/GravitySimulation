@@ -21,17 +21,18 @@ from app.events import CustomEvents  # Custom events
 
 class Game:
     def __init__(self):
-        # PyGame screen variables
+        # PyGame settings
         self.screen = pygame.display.set_mode(Config.WINDOW_SIZE)  # Initialize screen
-        pygame.display.set_caption("Gravity Simulation")  # Caption
         self.icon = pygame.image.load('data/images/logo.png')  # icon
         pygame.display.set_icon(self.icon)  # Setting icon
+        pygame.display.set_caption("Gravity Simulation")  # Caption
         self.clock = pygame.time.Clock()  # Clock
 
-        self.grid = Grid(Config.GRID_COLOR, Config.GRID_DISTANCE)  # Creating object of Grid class
+        # Grid
+        self.grid = Grid(color=Config.GRID_COLOR, distance=Config.GRID_DISTANCE)  # Creating object of Grid class
         self.grid_dots = self.grid.calculate_grid_dots()  # Calculating dots
 
-        self.animation_speed = 1  # Speed
+        self.animation_speed = 1  # Animation speed
 
         self.init_gui()  # Initiating GUI
 
@@ -59,12 +60,12 @@ class Game:
         self.is_star_window_open = False
 
         # GUI rects
-        self.info_gui_rect = self.gui.get_gui_rect(self.gui.info_block, 5)
-        self.settings_gui_rect = self.gui.get_gui_rect(self.gui.settings_block, 5)
+        self.info_gui_rect = self.gui.get_gui_rect(self.gui.info, 5)
+        self.settings_gui_rect = self.gui.get_gui_rect(self.gui.settings, 5)
 
         # GUI elements
-        self.info_gui_elements = self.gui.info_block['elements']
-        self.settings_gui_elements = self.gui.settings_block['elements']
+        self.info_gui_elements = self.gui.info['elements']
+        self.settings_gui_elements = self.gui.settings['elements']
 
         # Planet
         self.gui.set_label_color(self.settings_gui_elements['planet_color_surface'], self.current_planet_color)

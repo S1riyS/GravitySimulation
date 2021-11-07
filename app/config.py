@@ -35,16 +35,16 @@ class Config:
     PLANET_MAX_MASS = 450
     MAX_TRACE_LENGTH = 400
 
+    # Planet preview
+    PV_LENGTH_COEF = 20 / K
+    PV_LINE_THICKNESS = 2
+    PV_VELOCITY_COEF = 1 / 80
+
     # Star settings
     STAR_DEFAULT_MASS = 20000
     STAR_MIN_MASS = 10000
     STAR_MAX_MASS = 30000
     DEVOUR_COEFFICIENT = 10
-
-    # Planet preview
-    PV_LENGTH_COEF = 20 / K
-    PV_LINE_THICKNESS = 2
-    PV_VELOCITY_COEF = 1 / 80
 
     # Grid settings
     GRID_DISTANCE = 30 / K
