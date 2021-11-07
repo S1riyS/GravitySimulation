@@ -4,6 +4,8 @@
 [![PEP8](https://img.shields.io/badge/code%20style-PEP8-green.svg)](https://www.python.org/dev/peps/pep-0008/)
 ![Quality](https://img.shields.io/lgtm/grade/python/github/S1riyS/GravitySimulation)
 ![Alerts](https://img.shields.io/lgtm/alerts/github/S1riyS/GravitySimulation)
+![Last commit](https://img.shields.io/github/last-commit/S1riyS/GravitySimulation?logo=GitHub)
+![GitHub repo size](https://img.shields.io/github/repo-size/S1riyS/GravitySimulation)
 
 ![Gravity-Simulation-Logo](https://i.postimg.cc/j2DPRJDC/Gravity-Simulation-Logo.png)
 
