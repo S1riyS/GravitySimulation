@@ -88,7 +88,7 @@ class CelestialBody(SimulationObject, ABC):
 
         # Glow surface
         surface_side = 2 * (self.radius + glow_radius)
-        self.current_glow_surface = pygame.Surface((surface_side, surface_side)).convert_alpha()
+        self.current_glow_surface = pygame.Surface((surface_side, surface_side)).convert_alpha()  # lgtm [py/call/wrong-arguments]
         self.current_glow_surface.fill(Config.TRANSPARENT)
         center_of_surface = (surface_side // 2, surface_side // 2)
 
