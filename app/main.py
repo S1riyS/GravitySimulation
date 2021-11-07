@@ -46,16 +46,6 @@ class Game:
 
         return any([rect.collidepoint(mouse_position) for rect in gui_rects])
 
-    @staticmethod
-    def draw_grid(surface: pygame.Surface, color: pygame.Color, distance: int) -> None:
-        """
-        Static method that draws grid
-        :param surface: The surface on which the grid will be drawn
-        :param color: Color of grid
-        :param distance: Distance between lines of grid
-        :return: None
-        """
-
     def init_gui(self) -> None:
         self.gui = GUI()  # Creating object of GUI class
 
