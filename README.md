@@ -9,7 +9,7 @@
 
 *Read documentation in other languages: 
 [English](https://github.com/S1riyS/GravitySimulation/blob/master/README.md), 
-[Russian](https://github.com/S1riyS/GravitySimulation/blob/master/README.ru.md)*
+[Русский](https://github.com/S1riyS/GravitySimulation/blob/master/README.ru.md)*
 
 ## 📝 About project
 [Gravity Simulation](https://github.com/S1riyS/GravitySimulation) is little PyGame project where simulating 

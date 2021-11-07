@@ -7,8 +7,8 @@
 
 ![Gravity-Simulation-Logo](https://i.postimg.cc/j2DPRJDC/Gravity-Simulation-Logo.png)
 
-*Прочитайте это на других языках: 
-[Английский](https://github.com/S1riyS/GravitySimulation/blob/master/README.md), 
+*Прочитайте документацию на других языках: 
+[English](https://github.com/S1riyS/GravitySimulation/blob/master/README.md), 
 [Русский](https://github.com/S1riyS/GravitySimulation/blob/master/README.ru.md)*
 
 ## 📝 О проекте
