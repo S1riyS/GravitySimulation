@@ -1,9 +1,9 @@
 [![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
 
 ![License](https://img.shields.io/github/license/S1riyS/GravitySimulation)
-[![PEP8](https://img.shields.io/badge/code%20style-PEP8-green.svg)](https://www.python.org/dev/peps/pep-0008/)
-![Quality](https://img.shields.io/lgtm/grade/python/github/S1riyS/GravitySimulation)
-![Alerts](https://img.shields.io/lgtm/alerts/github/S1riyS/GravitySimulation)
+[![PEP8](https://img.shields.io/badge/code%20style-PEP8-green?logo=python&logoColor=fff)](https://www.python.org/dev/peps/pep-0008/)
+![Quality](https://img.shields.io/lgtm/grade/python/github/S1riyS/GravitySimulation?logo=LGTM)
+![Alerts](https://img.shields.io/lgtm/alerts/github/S1riyS/GravitySimulation?logo=LGTM)
 ![Last commit](https://img.shields.io/github/last-commit/S1riyS/GravitySimulation?logo=GitHub)
 ![GitHub repo size](https://img.shields.io/github/repo-size/S1riyS/GravitySimulation)
 
