@@ -1,13 +1,13 @@
 [![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
 
 ![License](https://img.shields.io/github/license/S1riyS/GravitySimulation)
-[![PEP8](https://img.shields.io/badge/code%20style-pep8-orange.svg)](https://www.python.org/dev/peps/pep-0008/)
+[![PEP8](https://img.shields.io/badge/code%20style-PEP8-green.svg)](https://www.python.org/dev/peps/pep-0008/)
 ![Quality](https://img.shields.io/lgtm/grade/python/github/S1riyS/GravitySimulation)
 ![Alerts](https://img.shields.io/lgtm/alerts/github/S1riyS/GravitySimulation)
 
 ![Gravity-Simulation-Logo](https://i.postimg.cc/j2DPRJDC/Gravity-Simulation-Logo.png)
 
-*Прочитайте документацию на других языках: 
+*Документация на других языках: 
 [English](https://github.com/S1riyS/GravitySimulation/blob/master/README.md), 
 [Русский](https://github.com/S1riyS/GravitySimulation/blob/master/README.ru.md)*
 
