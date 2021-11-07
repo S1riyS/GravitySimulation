@@ -1,5 +1,3 @@
-English | [Russian](https://github.com/S1riyS/GravitySimulation/blob/master/README.ru.md)
-
 [![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
 
 ![License](https://img.shields.io/github/license/S1riyS/GravitySimulation)
@@ -7,7 +5,10 @@ English | [Russian](https://github.com/S1riyS/GravitySimulation/blob/master/READ
 ![Alerts](https://img.shields.io/lgtm/alerts/github/S1riyS/GravitySimulation)
 
 ![Gravity-Simulation-Logo](https://i.postimg.cc/j2DPRJDC/Gravity-Simulation-Logo.png)
-⭐ Star me on GitHub — it motivates me a lot!
+
+*Read documentation in other languages: 
+[English](https://github.com/S1riyS/GravitySimulation/blob/master/README.md), 
+[Russian](https://github.com/S1riyS/GravitySimulation/blob/master/README.ru.md)*
 
 ## 📝 About project
 [Gravity Simulation](https://github.com/S1riyS/GravitySimulation) is little PyGame project where simulating 

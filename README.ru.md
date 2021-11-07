@@ -1,5 +1,3 @@
-[Английский](https://github.com/S1riyS/GravitySimulation/blob/master/README.md) | Русский
-
 [![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
 
 ![License](https://img.shields.io/github/license/S1riyS/GravitySimulation)
@@ -7,6 +5,10 @@
 ![Alerts](https://img.shields.io/lgtm/alerts/github/S1riyS/GravitySimulation)
 
 ![Gravity-Simulation-Logo](https://i.postimg.cc/j2DPRJDC/Gravity-Simulation-Logo.png)
+
+*Прочитайте это на других языках: 
+[Английский](https://github.com/S1riyS/GravitySimulation/blob/master/README.md), 
+[Русский](https://github.com/S1riyS/GravitySimulation/blob/master/README.ru.md)*
 
 ## 📝 О проекте
 **[GravitySimulation](https://github.com/S1riyS/GravitySimulation)** - это небольшой проект, 
