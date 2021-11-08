@@ -196,13 +196,24 @@ class Planet(CelestialBody):
             difference = len(self.trace) - Config.MAX_TRACE_LENGTH
             self.trace = self.trace[difference:]
 
-        previous_pos = self.trace[0]
+        previous_position = self.trace[0]
 
-        for index, pos in enumerate(self.trace):
+        for index, current_position in enumerate(self.trace):
             line_thickness = min(index // 100 + 1, 3)  # Calculated value or 3
-            pygame.draw.line(SimulationManager.trace_surface, self.trace_color, previous_pos, pos,
-                             line_thickness)  # Drawing line
-            previous_pos = pos  # Setting previous position
+
+            # Calculating color
+            current_trace_color = self.trace_color
+            alpha = (index / len(self.trace))
+            current_trace_color.a = round(alpha * 255)
+
+            # Drawing line
+            pygame.draw.line(SimulationManager.trace_surface,
+                             current_trace_color,
+                             previous_position,
+                             current_position,
+                             line_thickness)
+
+            previous_position = current_position  # Setting previous position
 
     def update(self, *args, **kwargs) -> None:
         delta_time = kwargs.get('dt') * Config.STABLE_FPS
