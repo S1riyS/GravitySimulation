@@ -91,6 +91,10 @@ class Game:
             self.curvature_button: True
         }
 
+        # Making all buttons green
+        for button in self.radio_buttons.keys():
+            self.gui.set_button_color(button, Config.BUTTON_GREEN)
+
         # Simulation speed
         self.pause_button = self.settings_gui_elements['pause_button']
         self.play_button = self.settings_gui_elements['play_button']
@@ -105,10 +109,6 @@ class Game:
             self.faster_x2_button: 2,
             self.faster_x3_button: 3
         }
-
-        # Making all buttons green
-        for button in self.radio_buttons.keys():
-            self.gui.set_button_color(button, Config.BUTTON_GREEN)
 
     def restart(self) -> None:
 
@@ -135,19 +135,19 @@ class Game:
             self.curvature_button: True
         }
 
+        # Making all radio buttons green as a default
+        for button in self.radio_buttons.keys():
+            self.gui.set_button_color(button, Config.BUTTON_GREEN)
+
         # Resetting media buttons
         for button in self.multimedia_buttons:
             button.enable()
 
-        self.animation_speed = 1
         self.play_button.disable()
+        self.animation_speed = 1
 
         # Resetting background grid dots
         self.grid_dots = self.grid.calculate_grid_dots()
-
-        # Making all radio buttons green as a default
-        for button in self.radio_buttons.keys():
-            self.gui.set_button_color(button, Config.BUTTON_GREEN)
 
     def clear_surfaces(self) -> None:
         # Filling surfaces
