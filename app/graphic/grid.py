@@ -28,14 +28,35 @@ class Grid:
 
         return dots
 
-    def draw_grid(self, dots: list) -> None:
+    def draw_normal_grid(self) -> None:
+        # Drawing vertical lines
+        for x in range(int(Config.WIDTH / self.distance) + 2):
+            pygame.draw.line(
+                self.surface,
+                self.color,
+                (x * self.distance, 0),
+                (x * self.distance, Config.HEIGHT),
+                Config.GRID_THICKNESS
+            )
+
+        # drawing horizontal lines
+        for y in range(int(Config.HEIGHT / self.distance) + 2):
+            pygame.draw.line(
+                self.surface,
+                self.color,
+                (0, y * self.distance),
+                (Config.WIDTH, y * self.distance),
+                Config.GRID_THICKNESS
+            )
+
+    def draw_curved_grid(self, dots: list) -> None:
         # Connecting dots from left to right
         for row in dots:
             for index in range(len(row) - 1):
-                pygame.draw.line(self.surface, self.color, row[index], row[index + 1], 1)
+                pygame.draw.line(self.surface, self.color, row[index], row[index + 1], Config.GRID_THICKNESS)
 
         # Connecting dots from top to bottom
         columns = [[row[i] for row in dots] for i in range(len(dots[0]))]
         for column in columns:
             for index in range(len(column) - 1):
-                pygame.draw.line(self.surface, self.color, column[index], column[index + 1], 1)
+                pygame.draw.line(self.surface, self.color, column[index], column[index + 1], Config.GRID_THICKNESS)

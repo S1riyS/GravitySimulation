@@ -81,12 +81,14 @@ class Game:
         self.grid_button = self.settings_gui_elements['grid_button']
         self.glow_button = self.settings_gui_elements['glow_button']
         self.trace_button = self.settings_gui_elements['trace_button']
+        self.curvature_button = self.settings_gui_elements['curvature_button']
 
         # Dictionary that contains {key:value} pairs of the form {button: is_drawing_this_surface}
         self.radio_buttons = {
             self.grid_button: True,
             self.glow_button: True,
-            self.trace_button: True
+            self.trace_button: True,
+            self.curvature_button: True
         }
 
         # Simulation speed
@@ -129,7 +131,8 @@ class Game:
         self.radio_buttons = {
             self.grid_button: True,
             self.glow_button: True,
-            self.trace_button: True
+            self.trace_button: True,
+            self.curvature_button: True
         }
 
         # Resetting media buttons
@@ -304,7 +307,11 @@ class Game:
     def update(self) -> None:
         # Drawing grid
         if self.radio_buttons[self.grid_button]:
-            self.grid.draw_grid(self.grid_dots)  # Drawing grid on grid.surface
+            if self.radio_buttons[self.curvature_button]:
+                self.grid.draw_curved_grid(self.grid_dots)  # Drawing curved grid on grid.surface
+            else:
+                self.grid.draw_normal_grid()  # Drawing normal grid on grid.surface
+
             self.screen.blit(self.grid.surface, (0, 0))  # Drawing grid.surface on screen
 
         # Simulation objects
