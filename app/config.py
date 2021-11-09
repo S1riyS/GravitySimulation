@@ -48,6 +48,7 @@ class Config:
 
     # Grid settings
     GRID_DISTANCE = 30 / K
+    GRID_THICKNESS = 1
     GRID_OPACITY = 32
     GRID_COLOR = Color(155, 155, 155, GRID_OPACITY)
     GRID_CURVATURE = 15
