@@ -23,7 +23,7 @@ class Config:
 
     # Simulation variables
     G = 0.075
-    K = 1
+    K = 1.3
 
     # Simulation objects' settings
     BASE_GLOW_ALPHA = 20
