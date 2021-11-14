@@ -90,7 +90,7 @@ class GUI:
                 'curvature_label': UILabel(relative_rect=pygame.Rect(95, 513.5, 80, 20), text='Curvature: ',
                                        manager=self.manager, object_id='#settings_label'),
                 'curvature_button': UIButton(relative_rect=pygame.Rect(180, 511, 25, 25), text='',
-                                         tool_tip_text='Turn on/off traces', manager=self.manager,
+                                         tool_tip_text='Turn on/off grid curvature', manager=self.manager,
                                          object_id='#radio_button'),
 
                 #  Simulation control
