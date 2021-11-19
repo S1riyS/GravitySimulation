@@ -30,7 +30,7 @@ class Game:
 
         # Grid
         self.grid = Grid(color=Config.GRID_COLOR, distance=Config.GRID_DISTANCE)  # Creating object of Grid class
-        self.grid_dots = self.grid.calculate_grid_dots()  # Calculating dots
+        self.grid.calculate_grid_dots()  # Calculating dots
 
         self.animation_speed = 1  # Animation speed
 
@@ -60,8 +60,8 @@ class Game:
         self.is_star_window_open = False
 
         # GUI rects
-        self.info_gui_rect = self.gui.get_gui_rect(self.gui.info, 5)
-        self.settings_gui_rect = self.gui.get_gui_rect(self.gui.settings, 5)
+        self.gui.get_gui_rect(self.gui.info, 5)
+        self.gui.get_gui_rect(self.gui.settings, 5)
 
         # GUI elements
         self.info_gui_elements = self.gui.info['elements']
@@ -147,7 +147,7 @@ class Game:
         self.animation_speed = 1
 
         # Resetting background grid dots
-        self.grid_dots = self.grid.calculate_grid_dots()
+        self.grid.calculate_grid_dots()
 
     def clear_surfaces(self) -> None:
         # Filling surfaces
@@ -275,7 +275,7 @@ class Game:
                         print(f'Velocity vector is not defined. Error: {error}')
 
             elif event.type == CustomEvents.ADDED_NEW_STAR or event.type == CustomEvents.CHANGED_STAR_MASS:
-                self.grid_dots = self.grid.calculate_grid_dots()  # Calculating dots
+                self.grid.calculate_grid_dots()  # Calculating dots
 
             self.gui.manager.process_events(event)
 
@@ -308,7 +308,7 @@ class Game:
         # Drawing grid
         if self.radio_buttons[self.grid_button]:
             if self.radio_buttons[self.curvature_button]:
-                self.grid.draw_curved_grid(self.grid_dots)  # Drawing curved grid on grid.surface
+                self.grid.draw_curved_grid()  # Drawing curved grid on grid.surface
             else:
                 self.grid.draw_normal_grid()  # Drawing normal grid on grid.surface
 

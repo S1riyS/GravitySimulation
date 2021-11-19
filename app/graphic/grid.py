@@ -12,7 +12,7 @@ class Grid:
         self.color = color  # Grid color
         self.distance = distance  # Distance between dots of grid
 
-    def calculate_grid_dots(self) -> list:
+    def calculate_grid_dots(self) -> None:
         dots = []
         for x in range(int(Config.WIDTH / self.distance) + 2):
             row = []  # Cleaning up row array
@@ -26,7 +26,7 @@ class Grid:
                 row.append(position + scaled_offset)  # Append offset point to row array
             dots.append(row)  # Append row to dots array
 
-        return dots
+        self.dots = dots
 
     def draw_normal_grid(self) -> None:
         # Drawing vertical lines
@@ -49,14 +49,14 @@ class Grid:
                 Config.GRID_THICKNESS
             )
 
-    def draw_curved_grid(self, dots: list) -> None:
+    def draw_curved_grid(self) -> None:
         # Connecting dots from left to right
-        for row in dots:
+        for row in self.dots:
             for index in range(len(row) - 1):
                 pygame.draw.line(self.surface, self.color, row[index], row[index + 1], Config.GRID_THICKNESS)
 
         # Connecting dots from top to bottom
-        columns = [[row[i] for row in dots] for i in range(len(dots[0]))]
+        columns = [[row[i] for row in self.dots] for i in range(len(self.dots[0]))]
         for column in columns:
             for index in range(len(column) - 1):
                 pygame.draw.line(self.surface, self.color, column[index], column[index + 1], Config.GRID_THICKNESS)

@@ -164,4 +164,3 @@ class GUI:
                                )
 
         self.gui_rects.append(gui_rect)
-        return gui_rect
