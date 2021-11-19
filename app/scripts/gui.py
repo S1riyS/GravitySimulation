@@ -9,7 +9,7 @@ import pygame
 from pygame_gui import UIManager
 from pygame_gui.elements import UILabel, UIButton, UIHorizontalSlider
 
-from app.config import Config
+from app.scripts.config import Config
 
 
 class GUI:

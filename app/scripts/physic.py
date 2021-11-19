@@ -1,7 +1,7 @@
 import pygame
 from pygame.math import Vector2
 
-from app.config import Config
+from app.scripts.config import Config
 
 
 class Physic:

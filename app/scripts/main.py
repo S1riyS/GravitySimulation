@@ -12,18 +12,18 @@ from pygame_gui import UI_BUTTON_PRESSED, UI_COLOUR_PICKER_COLOUR_PICKED, UI_WIN
 
 pygame.init()
 
-from app.objects import SimulationManager, Planet, Star  # Classes
-from app.graphic.grid import Grid  # Background grid
-from app.graphic.gui import GUI  # GUI
-from app.config import Config  # Config
-from app.events import CustomEvents  # Custom events
+from app.scripts.objects import SimulationManager, Planet, Star  # Classes
+from app.scripts.grid import Grid  # Background grid
+from app.scripts.gui import GUI  # GUI
+from app.scripts.config import Config  # Config
+from app.scripts.events import CustomEvents  # Custom events
 
 
 class Game:
     def __init__(self):
         # PyGame settings
         self.screen = pygame.display.set_mode(Config.WINDOW_SIZE)  # Initialize screen
-        self.icon = pygame.image.load('data/images/logo.png')  # icon
+        self.icon = pygame.image.load('../data/images/logo.png')  # icon
         pygame.display.set_icon(self.icon)  # Setting icon
         pygame.display.set_caption("Gravity Simulation")  # Caption
         self.clock = pygame.time.Clock()  # Clock
