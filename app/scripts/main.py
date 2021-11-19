@@ -12,7 +12,7 @@ from pygame_gui import UI_BUTTON_PRESSED, UI_COLOUR_PICKER_COLOUR_PICKED, UI_WIN
 
 pygame.init()
 
-from app.scripts.objects import SimulationManager, Planet, Star  # Classes
+from app.scripts.simulation import SimulationManager, Planet, Star  # Classes
 from app.scripts.grid import Grid  # Background grid
 from app.scripts.gui import GUI  # GUI
 from app.scripts.config import Config  # Config

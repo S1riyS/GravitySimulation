@@ -1,7 +1,7 @@
 import pygame
 from pygame.math import Vector2
 
-from app.scripts.objects import SimulationManager
+from app.scripts.simulation import SimulationManager
 from app.scripts.physic import Physic
 from app.scripts.config import Config
 
