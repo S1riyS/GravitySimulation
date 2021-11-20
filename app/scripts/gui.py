@@ -15,7 +15,7 @@ from app.scripts.config import Config
 class GUI:
     def __init__(self):
         # GUI manager
-        self.theme_path = os.path.join("data", "themes", "theme.json")  # Path to theme
+        self.theme_path = os.path.join('..', 'data', 'themes', 'theme.json')  # Path to theme
         self.manager = UIManager(Config.WINDOW_SIZE, self.theme_path)  # UI manager
         self.gui_rect_color = Config.GUI_BG_COLOR  # BG color
         self.gui_rects = []  # Array with all BG rects

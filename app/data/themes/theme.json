@@ -14,7 +14,7 @@
     "font": {
       "name": "montserrat",
       "size": "14",
-      "regular_path": "data/fonts/Montserrat-Regular.ttf"
+      "regular_path": "../data/fonts/Montserrat-Regular.ttf"
     }
   },
   "button": {
@@ -22,7 +22,7 @@
     "font": {
       "name": "montserrat",
       "size": "14",
-      "regular_path": "data/fonts/Montserrat-Regular.ttf"
+      "regular_path": "../data/fonts/Montserrat-Regular.ttf"
     }
   },
   "#fps_counter": {
@@ -33,7 +33,7 @@
       "name": "montserrat",
       "size": "16",
       "bold": "0",
-      "bold_path": "data/fonts/Montserrat-Regular.ttf"
+      "bold_path": "../data/fonts/Montserrat-Regular.ttf"
     }
   },
   "#title": {
@@ -42,7 +42,7 @@
       "name": "montserrat",
       "size": "24",
       "bold": "1",
-      "bold_path": "data/fonts/Montserrat-SemiBold.ttf"
+      "bold_path": "../data/fonts/Montserrat-SemiBold.ttf"
     }
   },
   "#subtitle": {
@@ -50,7 +50,7 @@
     "font": {
       "name": "montserrat",
       "size": "20",
-      "regular_path": "data/fonts/Montserrat-Regular.ttf"
+      "regular_path": "../data/fonts/Montserrat-Regular.ttf"
     }
   },
   "#settings_label": {
@@ -66,7 +66,7 @@
     "prototype": "#rounded",
     "images": {
       "normal_image": {
-        "path": "data/images/multimedia/pause.png",
+        "path": "../data/images/multimedia/pause.png",
         "sub_surface_rect": "0,0,25,25"
       }
     }
@@ -75,7 +75,7 @@
     "prototype": "#rounded",
     "images": {
       "normal_image": {
-        "path": "data/images/multimedia/play.png",
+        "path": "../data/images/multimedia/play.png",
         "sub_surface_rect": "0,0,25,25"
       }
     }
@@ -84,7 +84,7 @@
     "prototype": "#rounded",
     "images": {
       "normal_image": {
-        "path": "data/images/multimedia/faster_x2.png",
+        "path": "../data/images/multimedia/faster_x2.png",
         "sub_surface_rect": "0,0,25,25"
       }
     }
@@ -93,7 +93,7 @@
     "prototype": "#rounded",
     "images": {
       "normal_image": {
-        "path": "data/images/multimedia/faster_x3.png",
+        "path": "../data/images/multimedia/faster_x3.png",
         "sub_surface_rect": "0,0,25,25"
       }
     }
